@@ -1,0 +1,76 @@
+@font-face{
+    src: url('../assets/fonts/Karla-Bold.ttf');
+    font-family: 'bold';
+};
+@font-face{
+    font-family: 'bold-italic';
+    src: url('../assets/fonts/Karla-BoldItalic.ttf');
+}
+@font-face{
+    font-family: 'italic';
+    src: url('../assets/fonts/Karla-Italic.ttf');
+}
+@font-face{
+    font-family: 'perpetua';
+    src: url('../assets/fonts/Perpetua.ttf');
+}
+@font-face {
+    font-family: 'reguler';
+    src: url("../assets/fonts/Karla-Regular.ttf");
+}
+@font-face {
+    font-family: 'moderat-black';
+    src: url("../assets/fonts/Moderat-Black.ttf");
+}
+@font-face {
+    font-family: 'inter-black';
+    src: url("../assets/fonts/Inter-Black.ttf");
+}
+$font-bold: 'bold';
+$font-inter-bold: 'inter-black';
+$font-moderat-bold: 'moderat-black';
+$font-reguler: 'reguler';
+$font-bold-italic: 'bold-italic';
+$font-italic: 'italic';
+$font-perpetua: 'perpetua';
+$background: #fafaf6;
+$primary: #151515;
+$secondary: #0779e4;
+$red: #E83C38;
+$green: #00A19A;
+$soft: #A6D1C9;
+$pink: #F4C4C4;
+$bg: #1b2021;
+$grey: #a6a9b6;
+$bg-grey: #dddddd;
+$yellow: #ffb037;
+
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .5s
+}
+.fade-enter, .fade-leave-to{
+  opacity: 0
+}
+
+
+.slide-leave-active,
+.slide-enter-active {
+  transition: 1s;
+}
+.slide-enter {
+  transform: translate(100%, 0);
+}
+.slide-leave-to {
+  transform: translate(-100%, 0);
+}
+
+.slideback-leave-active,
+.slideback-enter-active {
+  transition: 1s;
+}
+.slideback-enter {
+  transform: translate(-100%, 0);
+}
+.slideback-leave-to {
+  transform: translate(100%, 0);
+}
