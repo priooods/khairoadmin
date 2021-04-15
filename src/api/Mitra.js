@@ -4,6 +4,9 @@ export default {
   allmitra() {
     return client.get("mitra/show");
   },
+  loginmitra(data) {
+    return client.post("mitra/login", data);
+  },
   addmitra(data) {
     return client.post("mitra/add", data);
   },

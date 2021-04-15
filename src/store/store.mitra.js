@@ -1,12 +1,25 @@
 import Mitra from "../api/Mitra";
-
+import cookies from "vue-cookies";
 export default {
   namespaced: true,
   state: {
+    user: [],
     mitrall: [],
     cabangall: [],
   },
   actions: {
+    LoginMitra({ commit }, data) {
+      Mitra.loginmitra(data).then((res) => {
+        if (res.data.error_code == 0) {
+          commit("mitra", data.data.data);
+          cookies.set("type", 0);
+          cookies.set("next", 1);
+          return cookies.set("username", data.data.data.username);
+        }
+        cookies.set("next", 0);
+        return false;
+      });
+    },
     AddMitra({ commit }, data) {
       Mitra.addmitra(data).then((res) => {
         console.log(res);
@@ -59,6 +72,9 @@ export default {
     },
   },
   mutations: {
+    mitra(state, payload) {
+      state.user = payload;
+    },
     mitrall(state, payload) {
       state.mitrall = payload;
     },

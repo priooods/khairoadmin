@@ -123,12 +123,11 @@ html,body,*{
         color: $secondary;
     }
     .lay{
-        background: whitesmoke;
+        background:$bg-grey;
     }
     .navigasiin{
         box-shadow: 0 0 20px rgba(224, 224, 224, 0.75);
     }
-
     .bg{
         padding: 15px;
         border-radius: 8px;
@@ -268,5 +267,9 @@ label,p{
     }
     .navigasiin{
         box-shadow: 0 0 0 transparent !important;
+    }
+    .views, .mitra{
+        max-height: auto;
+        height: auto !important;
     }
 }

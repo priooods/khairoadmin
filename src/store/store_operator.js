@@ -24,24 +24,30 @@ const actions = {
       if (data.data.error_code == 0) {
         commit("userinfo", data.data.data);
         cookies.set("type", 1);
-        cookies.set("username", data.data.data.username);
-        return router.push({ path: "base/home" }, () => {});
+        cookies.set("next", 1);
+        return cookies.set("username", data.data.data.username);
       }
-      console.log(data);
+      cookies.set("next", 0);
       return false;
     });
   },
   addoperator({ commit }, form) {
     Operator.AddOperator(form).then((data) => {
       if (data.data.error_code == 0) {
+        cookies.set("next", 1);
         return commit("newuser", data.data.data);
       }
+      cookies.set("next", 0);
       return false;
     });
   },
   updateOperator({ commit }, username) {
     Operator.UpdateOperator(username).then((dt) => {
-      return commit("updateoperator", dt.data.data);
+      if (dt.data.error_code == 0) {
+        cookies.set("next", 1);
+        return commit("updateoperator", dt.data.data);
+      }
+      return cookies.set("next", 0);
     });
   },
   allOperator({ commit }) {
@@ -50,8 +56,12 @@ const actions = {
     });
   },
   deleteOperator({ commit }, username) {
-    Operator.DeleteOperator(username).then(() => {
-      return commit("deleteoperator", username);
+    Operator.DeleteOperator(username).then((data) => {
+      if (data.data.error_code == 0) {
+        cookies.set("next", 1);
+        return commit("deleteoperator", username);
+      }
+      return cookies.set("next", 0);
     });
   },
   logoutOperator({ commit }, username) {
@@ -59,8 +69,7 @@ const actions = {
       if (data.data.error_code == 0) {
         cookies.keys().forEach((cookie) => cookies.remove(cookie));
         router.push({ path: "/" }, () => {});
-        window.location.reload();
-        return commit(null);
+        return commit("logout");
       }
     });
   },
@@ -104,6 +113,9 @@ const mutations = {
   },
   resetState(state) {
     Object.assign(state, defaultState());
+  },
+  logout(state) {
+    return state;
   },
 };
 

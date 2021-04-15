@@ -57,6 +57,8 @@
 </template>
 
 <script>
+
+import Notifikasi from '../model/Notifikasi';
 export default {
     name: "UserView",
     props: {
@@ -64,6 +66,7 @@ export default {
       datauser: null,
       type: Number
     },
+    mixins: [Notifikasi],
     data(){
       return {
         options: [
@@ -100,24 +103,34 @@ export default {
         return this.$emit('closeable', false);
       },
       updated() {
+        this.helper_loading("Mengirim Permintaan Update..");
         if (this.checknull()) {
-            this.notif();
-        } 
-        return this.$store.dispatch("operat/updateOperator", this.forms);
+          this.loading.close();
+          this.notif();
+        }
+        this.$store.dispatch("operat/updateOperator", this.forms);
+        return this.helper_check_request('success', 3000, 'top-right','Berhasil Melakukan Update !',
+         'Pengguna berhasil di update, kembali untuk melihat data terbaru')
       },
       deleted(){
+        this.helper_loading("Mengirim Permintaan Hapus..");
         if (this.checknull()) {
           this.notif();
         }
         this.$emit('deleteuser', this.datauser.username);
-        return this.$store.dispatch("operat/deleteOperator", this.datauser.username);
+        this.$store.dispatch("operat/deleteOperator", this.datauser.username);
+        return this.helper_check_request('success', 3000, 'top-right','Berhasil Menghapus Pengguna !',
+         'Pengguna berhasil di hapus, kembali untuk melihat data terbaru');
       },
       addnew(){
+        this.helper_loading("Mengirim Permintaan Pengguna Baru..");
         if (this.checknull()) {
           this.notif();
         }
         this.$store.dispatch("operat/addoperator", this.forms);
-        return this.$store.dispatch("operat/allOperator");
+        this.$store.dispatch("operat/allOperator");
+        return this.helper_check_request('success', 3000, 'top-right','Berhasil Menambah Pengguna Baru !',
+         'Pengguna baru berhasil di simpan, kembali untuk melihat data terbaru');
       },
       checknull(){
         return this.forms.password == null || this.forms.username == null || this.forms.fullname == null || this.forms.type == null || this.forms.jabatan == null 

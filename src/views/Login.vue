@@ -15,15 +15,20 @@
                             <b-form-input size="sm" v-model="forms.password" id="password" type="password" required placeholder="Masukan Password">
                             </b-form-input>
                         </b-form-group>
+                        <b-form-checkbox id="checkbox-1" v-model="status" name="checkbox" value="1" unchecked-value="0">
+                            Masuk sebagai Mitra
+                        </b-form-checkbox>
                     </b-form>
-                <vs-button size="default" class="mt-5" v-on:click="login()" block html-type="submit">Login</vs-button>
+                <vs-button size="default" class="mt-3" @click="login" block html-type="submit">Login</vs-button>
             </div>
         </div>
   </div>
 </template>
 
 <script>
+import Notifikasi from '../model/Notifikasi';
 export default {
+    mixins: [Notifikasi],
     name: "Login",
     data() {
         return{
@@ -37,10 +42,41 @@ export default {
         }
     },
     methods:{
-        login(){
+        login() {
+            this.helper_loading("Mencari Akun ..");
             if (this.status == 0) {
-                return this.$store.dispatch("operat/loginoperator", this.forms);
+                this.$store.dispatch("operat/loginoperator", this.forms);
+                setTimeout(()=>{
+                    if(this.$cookies.get("next") == 1){
+                        return this.berhasilPermintaan();
+                    }
+                    return this.gagalPermintaan();
+                },3000)
+            } else {
+                this.$store.dispatch("mitra/LoginMitra", this.forms);
+                setTimeout(()=>{
+                    if(this.$cookies.get("next") == 1){
+                        return this.berhasilPermintaan();
+                    }
+                    return this.gagalPermintaan();
+                },3000)
             }
+        },
+        berhasilPermintaan(){
+            this.loading.close();
+            this.helper_notifikasi(
+                "success", 3000, 
+                'top-right', 
+                "Berhasil Mendapatkan Informasi Akun", 
+                'Selamat Datang kembali, apa kabar kamu hari ini');
+            return this.$router.push({ path: "base/home" }, () => {});
+        },
+        gagalPermintaan(){
+            this.loading.close();
+            return this.helper_notifikasi(
+                "danger", 3000, 'top-left', 
+                'Gagal Melakukan Permintaan',
+                'Periksa Kembali koneksi internet anda dan Informasi Akun anda');
         }
     }
 }

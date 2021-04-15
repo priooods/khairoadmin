@@ -1,5 +1,6 @@
 <template>
-  <div class="Cabang">
+  <div class="cabang views position-relative">
+    <div>
       <h1 class="ml-3">Cabang</h1>
       <div class="mt-3 d-block d-md-flex d-lg-flex d-xl-flex">
         <div class="col mt-2">
@@ -55,6 +56,7 @@
         :data.sync="clickdata"
         @closeable="closingDrawer" 
       ></CabangDrawer>
+    </div>
   </div>
 </template>
 
@@ -117,7 +119,7 @@ export default {
 
 <style lang="scss">
 @import '../assets/fonts/font.scss';
-.Cabang{
+.views{
   height: 100vh;
   .search{
       font-size: 11px;

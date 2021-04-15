@@ -1,10 +1,10 @@
 <template>
-  <div class="mitra pt-3 px-3 h-100">
+  <div class="mitra views px-3 h-100">
       <h1>Mitra</h1>
       <div class="bg my-3">
         <div class="d-md-flex d-lg-flex d-xl-flex justify-content-end">
           <p class="mr-auto">Tambah data mitra baru. Harap masukan semua data yang tersedia pada form</p>
-          <vs-button size="small" class="col-md-2 col" @click="shownew = true">Buat Mitra Baru</vs-button>
+          <vs-button size="small" class="col-md-2 col" @click="shownew = true" v-show="shownew == false">Buat Mitra Baru</vs-button>
         </div>
         <div v-show="shownew">
           <b-form class="w-100 row">
@@ -138,7 +138,7 @@ export default {
 
 <style lang="scss">
 @import '../assets/fonts/font.scss';
-.mitra{
+.views{
   height: 100vh;
   .search{
     font-size: 11px;

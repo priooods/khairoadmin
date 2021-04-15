@@ -1,5 +1,5 @@
 <template>
-  <div class="access pt-3">
+  <div class="access views">
       <h1 class="ml-3">Access Pengguna</h1>
       <div class="d-md-flex d-lg-flex d-xl-flex d-block mt-3">
         <div class="col">
@@ -104,7 +104,7 @@ export default {
         var ind = this.$store.state.operat.userall.findIndex(e => e.username === val);
         this.$store.state.operat.userall.splice(ind,1);
         return this.opened = false;
-      },  
+      },
       showdetail(data){
         if (this.$store.state.operat.user.type == 'SuperExtra' 
         ||this.$store.state.operat.user.type == 'SuperUser') {
@@ -121,7 +121,7 @@ export default {
 
 <style lang="scss">
 @import '../assets/fonts/font.scss';
-.access{
+.views{
   height: 100vh;
   .names{
     h6{

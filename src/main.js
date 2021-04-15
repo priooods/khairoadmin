@@ -23,7 +23,6 @@ Vue.use(VueAxios, axios);
 Vue.use(Vuesax);
 Vue.use(gsap);
 Vue.use(VueCookies);
-
 Vue.config.productionTip = false;
 
 new Vue({
