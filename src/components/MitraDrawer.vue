@@ -7,14 +7,14 @@
           </div>
           <h1 class="mt-2">Detail Mitra</h1>
           <div class="row mt-3">
-              <p class="col-md-4">Code</p>
-              <p class="col-md-8">{{data.code}}</p>
-              <p class="col-md-4">Nama Lengkap</p>
-              <p class="col-md-8">{{data.fullname}}</p>
-              <p class="col-md-4">No Handphone</p>
-              <p class="col-md-8">{{data.no_tlp}}</p>
-              <p class="col-md-4">Alamat</p>
-              <p class="col-md-8">{{data.alamat}}</p>
+              <p class="col-md-6">Code</p>
+              <p class="col-md-6">{{data.code}}</p>
+              <p class="col-md-6">Nama Lengkap</p>
+              <p class="col-md-6">{{data.fullname}}</p>
+              <p class="col-md-6">No Handphone</p>
+              <p class="col-md-6">{{data.no_tlp}}</p>
+              <p class="col-md-6">Alamat</p>
+              <p class="col-md-6">{{data.alamat}}</p>
           </div>
       </div>
   </transition>

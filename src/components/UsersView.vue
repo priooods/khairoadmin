@@ -106,30 +106,30 @@ export default {
         this.helper_loading("Mengirim Permintaan Update..");
         if (this.checknull()) {
           this.loading.close();
-          this.notif();
+          this.helper_global_form_notif();
         }
         this.$store.dispatch("operat/updateOperator", this.forms);
-        return this.helper_check_request('success', 3000, 'top-right','Berhasil Melakukan Update !',
+        return this.helper_check_request('Berhasil Melakukan Update !',
          'Pengguna berhasil di update, kembali untuk melihat data terbaru')
       },
       deleted(){
         this.helper_loading("Mengirim Permintaan Hapus..");
         if (this.checknull()) {
-          this.notif();
+          this.helper_global_form_notif();
         }
         this.$emit('deleteuser', this.datauser.username);
         this.$store.dispatch("operat/deleteOperator", this.datauser.username);
-        return this.helper_check_request('success', 3000, 'top-right','Berhasil Menghapus Pengguna !',
+        return this.helper_check_request('Berhasil Menghapus Pengguna !',
          'Pengguna berhasil di hapus, kembali untuk melihat data terbaru');
       },
       addnew(){
         this.helper_loading("Mengirim Permintaan Pengguna Baru..");
         if (this.checknull()) {
-          this.notif();
+          this.helper_global_form_notif();
         }
         this.$store.dispatch("operat/addoperator", this.forms);
         this.$store.dispatch("operat/allOperator");
-        return this.helper_check_request('success', 3000, 'top-right','Berhasil Menambah Pengguna Baru !',
+        return this.helper_check_request('Berhasil Menambah Pengguna Baru !',
          'Pengguna baru berhasil di simpan, kembali untuk melihat data terbaru');
       },
       checknull(){
@@ -137,17 +137,6 @@ export default {
         || this.forms.password == 0 || this.forms.username == 0 || this.forms.fullname == 0 || this.forms.type == 0 
         || this.forms.jabatan == 0
       },
-      notif(){
-        return this.$vs.notification({
-          color: "danger",
-          duration: 5000,
-          position: "top-left",
-          title: "Gagal melakukan permintaan",
-          text: "Harap lengkapi semua form yang tersedia untuk melakukan aksi !",
-        });
-      }
-    },
-    mounted() {
     },
 }
 </script>

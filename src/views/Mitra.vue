@@ -94,7 +94,9 @@
 
 <script>
 import Mitradrawer from '../components/MitraDrawer';
+import Notifikasi from '../model/Notifikasi';
 export default {
+  mixins: [Notifikasi],
   components: {Mitradrawer},
   name: "Mitra",
   created() {
@@ -130,6 +132,15 @@ export default {
       return this.showdrawer = val;
     },
     submitnewmitra(){
+      this.helper_loading("Menyimpan Data Mitra...");
+      if(this.forms.username.length == 0 ||this.forms.password.length == 0 ||this.forms.fullname.length == 0 ||
+      this.forms.no_tlp.length == 0 ||this.forms.alamat.length == 0 ||this.forms.cabang_id == null || this.forms.code_agent == null){
+        this.loading.close();
+        this.helper_notifikasi("Gagal Mengirim Permintaan","Harap lengkapi semua form yang tersedia untuk melakukan aksi !")
+        return false;
+      }
+      this.loading.close();
+      this.helper_check_request("success", 3000, 'top-right' );
       return this.$store.dispatch('mitra/AddMitra', this.forms);
     }
   }

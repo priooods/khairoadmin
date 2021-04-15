@@ -44,40 +44,18 @@ export default {
     methods:{
         login() {
             this.helper_loading("Mencari Akun ..");
-            if (this.status == 0) {
-                this.$store.dispatch("operat/loginoperator", this.forms);
-                setTimeout(()=>{
-                    if(this.$cookies.get("next") == 1){
-                        return this.berhasilPermintaan();
-                    }
-                    return this.gagalPermintaan();
-                },3000)
+            if(this.forms.username.length == 0 || this.forms.password.length == 0){
+                return this.helper_global_form_notif();
             } else {
-                this.$store.dispatch("mitra/LoginMitra", this.forms);
-                setTimeout(()=>{
-                    if(this.$cookies.get("next") == 1){
-                        return this.berhasilPermintaan();
-                    }
-                    return this.gagalPermintaan();
-                },3000)
+                if (this.status == 0) {
+                    this.$store.dispatch("operat/loginoperator", this.forms);
+                    return this.helper_login_request('Selamat Datang', 'Selamat Datang Kembali, Bagaimana kabar kamu hari ini');
+                } else {
+                    this.$store.dispatch("mitra/LoginMitra", this.forms);
+                    return this.helper_login_request('Selamat Datang', 'Selamat Datang Kembali, Bagaimana kabar kamu hari ini');
+                }
             }
         },
-        berhasilPermintaan(){
-            this.loading.close();
-            this.helper_notifikasi(
-                "success", 3000, 
-                'top-right', 
-                "Berhasil Mendapatkan Informasi Akun", 
-                'Selamat Datang kembali, apa kabar kamu hari ini');
-            return this.$router.push({ path: "base/home" }, () => {});
-        },
-        gagalPermintaan(){
-            this.loading.close();
-            return this.helper_notifikasi(
-                "danger", 3000, 'top-left', 
-                'Gagal Melakukan Permintaan',
-                'Periksa Kembali koneksi internet anda dan Informasi Akun anda');
-        }
     }
 }
 </script>
