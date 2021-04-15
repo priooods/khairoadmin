@@ -1,4 +1,5 @@
 import Umrah from "../api/Umrah";
+import cookies from "vue-cookies";
 export default {
   namespaced: true,
   state: {
@@ -8,8 +9,18 @@ export default {
   actions: {
     AddHotel({ commit }, form) {
       Umrah.hoteladd(form).then((data) => {
-        console.log(data.data);
-        return commit("newhotel", data.data.data);
+        console.log(data);
+        if (data.data.error_code == 0) {
+          cookies.set("next", 1);
+          return commit("newhotel", data.data.data);
+        }
+        return cookies.set("next", 0);
+      });
+    },
+    AllHotel({ commit }) {
+      Umrah.allhotel().then((data) => {
+        console.log(data);
+        return commit("allhotel", data.data.data);
       });
     },
   },
@@ -18,7 +29,7 @@ export default {
       state.hotelall.push(payload);
     },
     allhotel(state, payload) {
-      state.umrahall = payload;
+      state.hotelall = payload;
     },
   },
 };

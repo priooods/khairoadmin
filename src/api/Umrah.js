@@ -8,6 +8,6 @@ export default {
     return client.post("hotel/add");
   },
   allhotel() {
-    return client.post("hotel/show");
+    return client.get("hotel/show");
   },
 };

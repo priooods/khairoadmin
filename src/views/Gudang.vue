@@ -1,18 +1,18 @@
 <template>
-  <div class="gudang views position-relative">
+  <div class="gudang views px-3">
     <div>
       <h1 class="ml-3">Gudang</h1>
-      <div class="mt-3 d-md-flex d-block d-xl-flex d-lg-flex">
-        <div class="mt-2 mx-2 col bg h-100">
+      <div class="mt-3 row">
+        <div class="mt-2 mx-1 col bg h-100">
           <p>Lihat semua data gudang</p>
           <!-- <canvas class="mt-2 w-100" id="chartgudang"></canvas> -->
         </div>
-        <div class="col-md-4 mx-2 bg mt-2">
+        <div class="col-md-4 mx-1 bg mt-2">
           <p>Lihat semua hitory belanja anda</p>
-          <div class="d-xl-flex d-lg-flex d-md-flex justify-content-end" 
+          <div class="d-flex justify-content-end" 
           v-show="$store.state.operat.user.type === 'Operator' || $store.state.operat.user.type === 'SuperUser'
             || $store.state.operat.user.type === 'SuperExtra'">
-            <vs-button @click="Opendrawer = true; Typedrawer = 1">Belanja Persediaan</vs-button>
+            <vs-button size="small" @click="Opendrawer = true; Typedrawer = 1">Belanja Persediaan</vs-button>
           </div>
           <ul class="list-unstyled mt-3" v-for="(data, i) in $store.state.gudang.belanja" v-bind:key="i">
             <li>
@@ -60,9 +60,11 @@
 
 <script>
 import GudangDrawer from '../components/GudangDrawer';
+import Notifikasi from '../model/Notifikasi';
 export default {
     name: "Gudang",
     components: {GudangDrawer},
+    mixins: [Notifikasi],
     data(){
       return{
         Opendrawer: false,
@@ -86,9 +88,11 @@ export default {
         this.$set(this.muncul, va , !vs);
       },
       Canceled(val, va){
+        this.helper_loading("Cancel Belanja...")
         var vs = this.muncul[va];
         this.$set(this.muncul, va , !vs);
-        return this.$store.dispatch('gudang/CancelBelanja', val);
+        this.$store.dispatch('gudang/CancelBelanja', val);
+        return this.helper_check_request("Berhasil Menghapus Data", 'Permintaan belanja anda berhasil di cancel');
       }
     }
 }

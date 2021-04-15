@@ -7,33 +7,33 @@
             </div>
             <div v-if="type == 1">
                 <p>Tambah Persediaan Baru</p>
-                <div class="mt-1">
-                    <div class="row mx-1 mb-2" v-for="(input,k) in inputs.belanja" v-bind:key="k">
-                        <b-form-input class="search col my-auto" size="sm"
-                                v-model="input.nama" id="nama" type="text" 
-                                required placeholder="Nama Barang">
-                            </b-form-input>
-                        <b-form-input class="search col mx-2 my-auto" size="sm" 
-                                v-model="input.total" id="total" type="number" 
-                                required placeholder="Jumlah Barang">
+                <div class="row mx-1 mb-2" v-for="(input,k) in inputs.belanja" v-bind:key="k">
+                    <b-form-input class="search col my-auto" size="sm"
+                            v-model="input.nama" id="nama" type="text" 
+                            required placeholder="Nama Barang">
                         </b-form-input>
-                        <b-form-input class="search col my-auto" size="sm" 
-                                v-model="input.harga" id="harga" type="number" 
-                                required placeholder="Harga Satuan">
-                        </b-form-input>
-                        <div class="col-1 pointers" @click="remove(k)" v-show="k || (!k && input.length > 1)"><i class="bx bx-minus"></i></div>
-                        <div class="col-1 pointers" @click="add(k)" v-show="k == inputs.belanja.length - 1"><i class="bx bx-plus"></i></div>
-                    </div>
-                    <vs-button class="w-100 h-50 mt-4" @click="sending" size="small" square>Simpan</vs-button>
+                    <b-form-input class="search col mx-2 my-auto" size="sm" 
+                            v-model="input.total" id="total" type="number" 
+                            required placeholder="Jumlah Barang">
+                    </b-form-input>
+                    <b-form-input class="search col my-auto" size="sm" 
+                            v-model="input.harga" id="harga" type="number" 
+                            required placeholder="Harga Satuan">
+                    </b-form-input>
+                    <div class="col-1 pointers" @click="remove(k)" v-show="k || (!k && input.length > 1)"><i class="bx bx-minus"></i></div>
+                    <div class="col-1 pointers" @click="add(k)" v-show="k == inputs.belanja.length - 1"><i class="bx bx-plus"></i></div>
                 </div>
+                <vs-button block class="w-100 h-50 mt-4" @click="sending" size="small" square>Simpan</vs-button>
             </div>
         </div>
     </transition>
 </template>
 
 <script>
+import Notifikasi from '../model/Notifikasi';
 export default {
     name: "gudangdrawer",
+    mixins: [Notifikasi],
     props:{
         show: Boolean,
         data: null,
@@ -61,7 +61,13 @@ export default {
             return this.inputs.belanja.splice(index, 1);
         },
         sending(){
+            this.helper_loading("Mengirim Data Belanja...");
+            if(this.inputs.belanja.nama == null || this.inputs.belanja.harga == null  || this.inputs.belanja.total == null ){
+                this.loading.close();
+                return this.helper_global_form_notif();
+            }
             this.$store.dispatch('gudang/AddBelanja', this.inputs);
+            this.helper_check_request("Berhasil Menambah Barang", 'Data belanja anda telah disimpan. Refresh halaman apabila data belum dapat dilihat');
             return this.backpresed();
         },
         backpresed(){

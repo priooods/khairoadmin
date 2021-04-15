@@ -1,53 +1,70 @@
 <template>
-    <div class="Hotel">
-        <div class="bg mt-3">
-            <b-form class="w-100 row mt-2">
-                <b-form-group id="lay-name" class="col-md-4 col-12">
-                    <label for="nama">Nama Hotel</label>
-                    <b-form-input class="search" size="sm" 
-                        v-model="form.nama" id="nama" type="text" 
-                        required placeholder="Masukan Nama Hotel">
-                    </b-form-input>
-                </b-form-group>
-                <b-form-group id="lay-name" class="col-md-4 col-12">
-                    <label for="nama">Nama Kota</label>
-                    <b-form-input class="search" size="sm" 
-                        v-model="form.kota" id="nama" type="text" 
-                        required placeholder="Masukan Kota Hotel">
-                    </b-form-input>
-                </b-form-group>
-                <b-form-group id="lay-durasi" class="col-md-4 col-12">
-                    <label for="durasi">Alamat</label>
-                    <b-form-input class="search" size="sm" 
-                        v-model="form.alamat" id="durasi" type="text" 
-                        required placeholder="Masukan Alamat Hotel">
-                    </b-form-input>
-                </b-form-group>
-            </b-form>
-            <div class="d-flex justify-content-start">
-                <vs-button size="small" @click="simpan">Simpan</vs-button>
-                <vs-button danger size="small" @click="resets">Reset</vs-button>
+    <transition name="fade" mode="out-in">
+        <div class="hotel py-3 px-3" v-show="show">
+            <div class="back d-flex justify-content-start col-1" @click="backpresed">
+              <i class='bx bx-left-arrow-alt ml-n3'></i>
+              <h2 class="ml-1">Tutup</h2>
             </div>
+            <div class="mt-3">
+                <b-form class="w-100 row mt-2">
+                    <b-form-group id="lay-name" class="col-12">
+                        <label for="nama">Nama Hotel</label>
+                        <b-form-input class="search" size="sm" 
+                            v-model="form.nama" id="nama" type="text" 
+                            required placeholder="Masukan Nama Hotel">
+                        </b-form-input>
+                    </b-form-group>
+                    <b-form-group id="lay-name" class="col-12">
+                        <label for="nama">Nama Kota</label>
+                        <b-form-input class="search" size="sm" 
+                            v-model="form.kota" id="nama" type="text" 
+                            required placeholder="Masukan Kota Hotel">
+                        </b-form-input>
+                    </b-form-group>
+                    <b-form-group id="lay-durasi" class="col-12">
+                        <label for="durasi">Alamat</label>
+                        <b-form-input class="search" size="sm" 
+                            v-model="form.alamat" id="durasi" type="text" 
+                            required placeholder="Masukan Alamat Hotel">
+                        </b-form-input>
+                    </b-form-group>
+                </b-form>
+                <div class="d-flex justify-content-start">
+                    <vs-button size="small" @click="simpan">Simpan</vs-button>
+                    <vs-button danger size="small" @click="resets">Reset</vs-button>
+                </div>
+            </div>
+            
         </div>
-        
-    </div>
+    </transition>
 </template>
 
 <script>
+import Notifikasi from '../model/Notifikasi';
 export default {
     name: "hotel",
-    data(){
-        return{
-            form:{
-                alamat: null,
-                nama: null,
-                kota: null
-            }
+    mixins: [Notifikasi],
+    props:{
+        show: Boolean,
+        data:null,
+    },
+    computed: {
+        form(){
+            return {...this.data};
         }
     },
     methods:{
+        backpresed(){
+            return this.$emit('closeable', false);
+        },
         simpan(){
+            this.helper_loading("Menyimpan Hotel..")
+            if(this.form.nama == null || this.form.alamat == null ||this.form.kota == null ) {
+                this.loading.close();
+                return this.helper_global_form_notif();
+            } 
             this.$store.dispatch('umrah/AddHotel', this.form);
+            return this.helper_check_request("Berhasil Menyimpan Hotel", "Hotel baru berhasil disimpan. Refresh ulang halaman apabila data pada table belum bertambah");
         },
         resets(){
             this.form.alamat = null
@@ -58,6 +75,38 @@ export default {
 }
 </script>
 
-<style>
-
+<style lang="scss">
+@import "@/assets/fonts/font.scss";
+.hotel{
+  position: fixed;
+  right: 0;
+  top: 0;
+  width: 400px;
+  bottom: 0;
+  height: 100vh;
+  overflow-y: auto;
+  z-index: 2;
+  h1{
+    font-size: 16px;
+    font-family: $font-bold;
+  }
+  .back{
+    h2{
+      font-size: 14px;
+      font-family: $font-bold;
+    }
+  }
+  .back:hover{
+    color: $yellow;
+    cursor: pointer;
+    h2{
+      color: $yellow;
+    }
+  }
+}
+@media (max-width: 700px){
+  .hotel{
+    width: 100%;
+  }
+}
 </style>

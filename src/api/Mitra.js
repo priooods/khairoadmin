@@ -10,6 +10,9 @@ export default {
   addmitra(data) {
     return client.post("mitra/add", data);
   },
+  deletemitra(username) {
+    return client.post("mitra/delete", { username: username });
+  },
   addCabang(data) {
     return client.post("cabang/add", data);
   },

@@ -2,20 +2,20 @@
     <div class="umrah views position-relative h-100">
         <div class="px-3">
             <h1>Umrah</h1>
-            <div class="d-md-flex d-lg-flex d-xl-flex">
-                <vs-button size="small" class="col-md-2 col-12" @click="showinput = 1; showform=1">Buat Paket Umrah</vs-button>
-                <vs-button size="small" class="col-md-2 col-12" @click="showinput = 2; showform=1">Tambah Hotel</vs-button>
-                <vs-button size="small" class="col-md-2 col-12" @click="showinput = !showinput">Tambah Maskapai</vs-button>
-                <vs-button size="small" v-show="showform == 1" danger class="col-md-2 col-12" @click="showform = 4">Tutup form</vs-button>
+            <div class="row">
+                <vs-button block size="small" class="col-md-2" @click="showinput = 1; showform=1">Detail Umrah</vs-button>
+                <vs-button block size="small" class="col-md-2" @click="openedhotel = true">Detail Hotel</vs-button>
+                <!-- <vs-button size="small" class="col-md-2 col-6" @click="showinput = !showinput">Detail Maskapai</vs-button> -->
+                <!-- <vs-button size="small" v-show="showform == 1" danger class="col-md-2 col-10" @click="showform = 4">Tutup form</vs-button> -->
             </div>
-            <div v-if="showform == 1">
+            <!-- <div v-if="showform == 1">
                     <div v-if="showinput == 1">
                         <UmrahLay></UmrahLay>
                     </div>
                     <div v-if="showinput == 2">
                         <Hotellay></Hotellay>
                     </div>
-            </div>
+            </div> -->
             <div class="tables px-3 bg mt-3">
                 <p>Lihat semua data paket umrah</p>
                 <table>
@@ -42,11 +42,15 @@
                 </table>
             </div>
         </div>
+        <Hotellay
+            :show.sync="openedhotel"
+            @closeable="closehotel" 
+        ></Hotellay>
     </div>
 </template>
 
 <script>
-import UmrahLay from '../components/Umrahlay';
+// import UmrahLay from '../components/Umrahlay';
 import Hotellay from '../components/Hotellay';
 // import UmrahLay from '../components/Umrahlay';
 export default {
@@ -54,10 +58,19 @@ export default {
     data(){
         return{
             showinput: 0,
+            openedhotel: false,
             showform: 0,
         }
     },
-    components: {UmrahLay,Hotellay}
+    components: {Hotellay},
+    methods:{
+        closehotel(){
+            return this.openedhotel = false;
+        }
+    },
+    mounted() {
+      this.$store.dispatch('umrah/AllHotel');  
+    },
 }
 </script>
 

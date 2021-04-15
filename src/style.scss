@@ -160,7 +160,7 @@ html,body,*{
         font-family: $font-moderat-bold;
         font-size: 25px;
     }
-    .userview, .cabangdrawer, .gudangdrawer, .mitradrawer{
+    .userview, .cabangdrawer, .gudangdrawer, .mitradrawer, .hotel{
         background: $background;
     }
 }
@@ -268,7 +268,7 @@ label,p{
     .navigasiin{
         box-shadow: 0 0 0 transparent !important;
     }
-    .views, .mitra{
+    .views{
         max-height: auto;
         height: auto !important;
     }

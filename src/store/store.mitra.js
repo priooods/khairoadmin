@@ -20,13 +20,23 @@ export default {
         return false;
       });
     },
-    AddMitra({ commit }, data) {
+    AddMitra({ dispatch }, data) {
       Mitra.addmitra(data).then((res) => {
-        console.log(res);
         if (res.data.error_code == 0) {
-          commit("newmitra");
+          cookies.set("next", 1);
+          return dispatch("AllMitra");
         }
+        cookies.set("next", 0);
         return false;
+      });
+    },
+    DeleteMitra({ dispatch }, data) {
+      Mitra.deletemitra(data).then((res) => {
+        if (res.data.error_code == 0) {
+          cookies.set("next", 1);
+          return dispatch("AllMitra");
+        }
+        return cookies.set("next", 0);
       });
     },
     AllMitra({ commit }) {
@@ -36,38 +46,34 @@ export default {
     },
     AllCabang({ commit }) {
       Mitra.allCabang().then((data) => {
-        console.log(data.data.data);
         return commit("cabangall", data.data.data);
       });
     },
-    AddCabang({ commit }, form) {
+    AddCabang({ dispatch }, form) {
       Mitra.addCabang(form).then((data) => {
         if (data.data.error_code == 0) {
-          console.log("Berhasil");
-          return commit("newcabang", data.data.data);
+          cookies.set("next", 1);
+          return dispatch("AllCabang");
         }
-        console.log("Gagal");
-        return false;
+        return cookies.set("next", 0);
       });
     },
     UpdateCabang({ commit }, form) {
       Mitra.updateCabang(form).then((data) => {
         if (data.data.error_code == 0) {
-          console.log("Berhasil update");
+          cookies.set("next", 1);
           return commit("updatecabang", data.data.data);
         }
-        console.log("Gagal");
-        return false;
+        return cookies.set("next", 0);
       });
     },
     DeleteCabang({ commit }, form) {
       Mitra.deleteCabang(form).then((data) => {
         if (data.data.error_code == 0) {
-          console.log("Berhasil delete");
+          cookies.set("next", 1);
           return commit("deletecabang", form);
         }
-        console.log("Gagal");
-        return false;
+        return cookies.set("next", 0);
       });
     },
   },
@@ -78,15 +84,8 @@ export default {
     mitrall(state, payload) {
       state.mitrall = payload;
     },
-    newmitra(state) {
-      this.dispatch("AllMitra");
-      return state;
-    },
     cabangall(state, payload) {
       state.cabangall = payload;
-    },
-    newcabang(state, payload) {
-      state.cabangall.push(payload);
     },
     updatecabang(state, payload) {
       var index = state.cabangall.findIndex((x) => x.id === payload.id);

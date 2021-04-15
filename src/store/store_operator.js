@@ -27,8 +27,7 @@ const actions = {
         cookies.set("next", 1);
         return cookies.set("username", data.data.data.username);
       }
-      cookies.set("next", 0);
-      return false;
+      return cookies.set("next", 0);
     });
   },
   addoperator({ commit }, form) {
