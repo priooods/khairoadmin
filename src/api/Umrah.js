@@ -4,8 +4,8 @@ export default {
   allpaket() {
     return client.get("umrah/all");
   },
-  hoteladd() {
-    return client.post("hotel/add");
+  hoteladd(data) {
+    return client.post("hotel/add", data);
   },
   allhotel() {
     return client.get("hotel/show");

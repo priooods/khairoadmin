@@ -80,9 +80,9 @@
                     <td data-label="Code Agent">{{data.code_agent ? data.code_agent : "--"}}</td>
                     <td data-label="Nama Lengkap">{{data.fullname}}</td>
                     <td data-label="No Hp">{{data.no_tlp}}</td>
-                    <td data-label="Nama Cabang">{{data.cabang.name}}</td>
-                    <td data-label="Kota Cabang">{{data.cabang.kota}}</td>
-                    <td data-label="Prov Cabang">{{data.cabang.provinsi}}</td>
+                    <td data-label="Nama Cabang">{{data.cabang ? data.cabang.name : "--"}}</td>
+                    <td data-label="Kota Cabang">{{data.cabang ? data.cabang.kota : "--"}}</td>
+                    <td data-label="Prov Cabang">{{data.cabang ? data.cabang.provinsi : "--"}}</td>
                     <td data-label="Alamat">{{data.alamat}}</td>
                   </tr>
                 </tbody>

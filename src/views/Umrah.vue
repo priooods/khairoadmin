@@ -4,7 +4,7 @@
             <h1>Umrah</h1>
             <div class="row">
                 <vs-button block size="small" class="col-md-2" @click="showinput = 1; showform=1">Detail Umrah</vs-button>
-                <vs-button block size="small" class="col-md-2" @click="openedhotel = true">Detail Hotel</vs-button>
+                <vs-button block size="small" class="col-md-2" @click="openedhotel = true; clickdata = []">Detail Hotel</vs-button>
                 <!-- <vs-button size="small" class="col-md-2 col-6" @click="showinput = !showinput">Detail Maskapai</vs-button> -->
                 <!-- <vs-button size="small" v-show="showform == 1" danger class="col-md-2 col-10" @click="showform = 4">Tutup form</vs-button> -->
             </div>
@@ -44,6 +44,7 @@
         </div>
         <Hotellay
             :show.sync="openedhotel"
+            :data.sync="clickdata"
             @closeable="closehotel" 
         ></Hotellay>
     </div>
@@ -60,6 +61,7 @@ export default {
             showinput: 0,
             openedhotel: false,
             showform: 0,
+            clickdata: null
         }
     },
     components: {Hotellay},
@@ -68,7 +70,7 @@ export default {
             return this.openedhotel = false;
         }
     },
-    mounted() {
+    created(){
       this.$store.dispatch('umrah/AllHotel');  
     },
 }
