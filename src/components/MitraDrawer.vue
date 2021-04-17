@@ -8,19 +8,34 @@
           <h1 class="mt-2">Detail Mitra</h1>
           <div class="row mt-3">
               <p class="col-md-6 col-4">Code</p>
-              <p class="col-md-6 col-8">{{data.code}}</p>
+              <p class="col-md-6 col-8">{{data.code ? data.code : '--'}}</p>
+              <p class="col-md-6 col-4">Code Agent</p>
+              <p class="col-md-6 col-8">{{data.agent ? data.agent.code : '---'}}</p>
               <p class="col-md-6 col-4">Nama Lengkap</p>
               <p class="col-md-6 col-8">{{data.fullname}}</p>
               <p class="col-md-6 col-4">No Handphone</p>
               <p class="col-md-6 col-8">{{data.no_tlp}}</p>
               <p class="col-md-6 col-4">Alamat</p>
               <p class="col-md-6 col-8">{{data.alamat}}</p>
+              <p class="col-md-6 col-4">Jumlah Jamaah</p>
+              <p class="col-md-6 col-8">{{data.pesanan_count}}</p>
+              <p class="col-md-6 col-4">Fee Total</p>
+              <p class="col-md-6 col-8">{{data.fee}}</p>
+              <p class="col-12">Data Jamaah</p>
+              <div class="col-12">
+                <div v-for="(ds,i) in data.jamaah" v-bind:key="i" class="list-unstyled">
+                   <div class="row">
+                    <p class="col-md-6 col-4">Nama Jamaah</p>
+                    <p class="col-md-6 col-8">{{ds.nama_lengkap}}</p>
+                  </div>
+                </div>
+              </div>
           </div>
           <vs-button block size="small" v-show="checkAccess == 1 && showaction == false" @click="showaction = !showaction">Lakukan Aksi</vs-button>
           <div class="row justify-content-center" v-show="showaction">
             <vs-button danger class="col-5" block size="small" @click="hapusData">Hapus Mitra</vs-button>
             <!-- <vs-button warn class="col-5" block size="small">Edit Mitra</vs-button> -->
-            <vs-button class="col-10" block size="small" @click="showaction = !showaction">Cancel</vs-button>
+            <vs-button class="col-5" block size="small" @click="showaction = !showaction">Cancel</vs-button>
           </div>
       </div>
   </transition>

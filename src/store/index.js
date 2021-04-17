@@ -5,8 +5,9 @@ import operat from "./store_operator";
 import mitra from "./store.mitra";
 import gudang from "./store_gudang";
 import umrah from "./store_umrah";
+import jamaah from "./store_jamaah";
 Vue.use(Vuex);
 export default new Vuex.Store({
   plugins: [createPersistedState()],
-  modules: { mitra, operat, gudang, umrah },
+  modules: { mitra, operat, gudang, jamaah, umrah },
 });

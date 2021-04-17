@@ -2,7 +2,7 @@ import client from "./index";
 
 export default {
   allmitra() {
-    return client.get("mitra/show");
+    return client.post("mitra/show", { fee: 2000000, mitra_fee: 200000 });
   },
   loginmitra(data) {
     return client.post("mitra/login", data);

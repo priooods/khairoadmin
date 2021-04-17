@@ -62,10 +62,11 @@ export default {
         },
         sending(){
             this.helper_loading("Mengirim Data Belanja...");
-            // if(this.inputs.belanja.nama == null || this.inputs.belanja.harga == null  || this.inputs.belanja.total == null ){
-            //     this.loading.close();
-            //     return this.helper_global_form_notif();
-            // }
+            if(this.inputs.belanja[0].nama.length == 0 
+            || this.inputs.belanja[0].harga.length == 0   || this.inputs.belanja[0].total.length == 0  ){
+                this.loading.close();
+                return this.helper_global_form_notif();
+            }
             this.$store.dispatch('gudang/AddBelanja', this.inputs);
             this.helper_check_request("Berhasil Menambah Barang", 'Data belanja anda telah disimpan. Refresh halaman apabila data belum dapat dilihat');
             return this.backpresed();

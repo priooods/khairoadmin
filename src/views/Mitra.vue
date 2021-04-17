@@ -8,7 +8,7 @@
             <vs-button size="small" class="col-md-2 col" @click="shownew = true" v-show="shownew == false">Buat Mitra Baru</vs-button>
           </div>
           <div v-show="shownew">
-            <b-form class="w-100 row">
+            <b-form>
                 <b-form-group id="lay-cd" class="col-md-4 col-12">
                     <label for="cd">Pilih Agent</label>
                     <b-form-select v-model="forms.code_agent"
@@ -77,7 +77,7 @@
                   <tr v-for="(data, i) in filterMitra" v-bind:key="i" @click="showdrawer = !showdrawer; detailmitra = data">
                     <td data-label="No">{{i + 1}}</td>
                     <td data-label="Code">{{data.code}}</td>
-                    <td data-label="Code Agent">{{data.code_agent ? data.code_agent : "--"}}</td>
+                    <td data-label="Code Agent">{{data.agent ? data.agent.code : "--"}}</td>
                     <td data-label="Nama Lengkap">{{data.fullname}}</td>
                     <td data-label="No Hp">{{data.no_tlp}}</td>
                     <td data-label="Nama Cabang">{{data.cabang ? data.cabang.name : "--"}}</td>
@@ -92,7 +92,7 @@
         <Mitradrawer :show="showdrawer" :data="detailmitra"  @closeable="closedrawer"></Mitradrawer>
       </div>
   </div>
-</template>
+</template> 
 
 <script>
 import Mitradrawer from '../components/MitraDrawer';

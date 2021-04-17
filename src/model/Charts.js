@@ -9,6 +9,12 @@ export default {
         },
         labels: ["Admin", "Operator"],
       },
+      chartHotel: {
+        chart: {
+          type: "column",
+        },
+        series: [],
+      },
     };
   },
   computed: {

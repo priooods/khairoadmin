@@ -45,6 +45,7 @@ $bg: #1b2021;
 $grey: #a6a9b6;
 $bg-grey: #dddddd;
 $yellow: #ffb037;
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;700;800&display=swap');
 html,body,*{
     padding: 0;
     margin: 0;
@@ -102,7 +103,12 @@ html,body,*{
         font-family: $font-moderat-bold;
         font-size: 25px;
     }
-    .userview, .cabangdrawer,.gudangdrawer{
+    .navigasiin{
+        top: 0;
+        bottom: 0;
+        background-color: #151515;
+    }
+    .userview, .cabangdrawer, .gudangdrawer, .mitradrawer, .hotel, .umrahdrawer{
         background: $primary;
     }
 }
@@ -115,8 +121,9 @@ html,body,*{
         cursor: pointer;
         text-decoration: none;
         span{
-            font-size: 16px;
-            font-family: $font-moderat-bold;
+            font-size: 12px;
+            font-weight: 800;
+            font-family: 'Montserrat', sans-serif;
         }
     }
     a.active{
@@ -160,14 +167,20 @@ html,body,*{
         font-family: $font-moderat-bold;
         font-size: 25px;
     }
-    .userview, .cabangdrawer, .gudangdrawer, .mitradrawer, .hotel{
+    .navigasiin{
+        top: 0;
+        bottom: 0;
+        background-color: $background;
+    }
+    .userview, .cabangdrawer, .gudangdrawer, .mitradrawer, .hotel, .umrahdrawer{
         background: $background;
     }
 }
 
 label,p{
-    font-size: 13px;
-    font-family: $font-reguler;
+    font-size: 11px;
+    font-weight: 400;
+    font-family: 'Montserrat', sans-serif;
 }
 .bgs{
     border-radius: 8px;

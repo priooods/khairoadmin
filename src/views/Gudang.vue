@@ -1,25 +1,25 @@
 <template>
   <div class="gudang views px-3">
     <div>
-      <h1 class="ml-3">Gudang</h1>
-      <div class="mt-3 row">
-        <div class="mt-2 mx-1 col bg h-100">
-          <p>Lihat semua data gudang</p>
-          <!-- <canvas class="mt-2 w-100" id="chartgudang"></canvas> -->
-        </div>
-        <div class="col-md-4 mx-1 bg mt-2">
-          <p>Lihat semua hitory belanja anda</p>
-          <div class="d-flex justify-content-end" 
+      <h1>Gudang</h1>
+      <div class="d-flex justify-content-end mt-2" 
           v-show="$store.state.operat.user.type === 'Operator' || $store.state.operat.user.type === 'SuperUser'
             || $store.state.operat.user.type === 'SuperExtra'">
             <vs-button size="small" @click="Opendrawer = true; Typedrawer = 1">Belanja Persediaan</vs-button>
           </div>
+      <div class="mt-3 row">
+        <div class="mt-2 mx-2 col bg h-100">
+          <p>Lihat semua data gudang</p>
+          <!-- <canvas class="mt-2 w-100" id="chartgudang"></canvas> -->
+        </div>
+        <div class="col-md-4 mx-2 bg mt-2">
+          <p>Lihat semua hitory belanja anda</p>
           <ul class="list-unstyled mt-3" v-for="(data, i) in $store.state.gudang.belanja" v-bind:key="i">
             <li>
               <div class="d-flex justify-content-end">
                 <p class="my-auto mr-auto">{{data.created_at | moment("DD MMMM YYYY,  hh:mm")}} WIB</p>
-                <div class="cursor-pointer" v-show="muncul[i]" @click="hiden(i)"><i class="bx bx-minus"></i></div>
-                <div class="cursor-pointer" v-show="!muncul[i]" @click="show(i)"><i class="bx bx-plus"></i></div>
+                <div class="cursor-pointer" v-show="muncul[i]" @click="hiden(i)"><i class="bx bxs-up-arrow"></i></div>
+                <div class="cursor-pointer" v-show="!muncul[i]" @click="show(i)"><i class="bx bxs-down-arrow"></i></div>
               </div>
               <div class="mt-3 row" v-show="muncul[i]">
                 <p class="col-4">Total Barang</p>

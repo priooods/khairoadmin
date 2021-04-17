@@ -26,6 +26,13 @@
                         </router-link>
                     </li>
                     <li class="mt-3">
+                        <router-link to="/base/jamaah">
+                            <div class="d-flex">
+                                <i class='bx bx-group bx-sm' ></i><span class="my-auto ml-3">Jamaah</span>
+                            </div>
+                        </router-link>
+                    </li>
+                    <li class="mt-3">
                         <router-link to="/base/cabang">
                             <div class="d-flex">
                                 <i class='bx bx-building bx-sm' ></i><span class="my-auto ml-3">Cabang</span>
@@ -77,6 +84,13 @@
                             <router-link to="/base/umrah" v-on:click.native="closeable">
                                 <div class="d-flex">
                                     <i class='bx bx-building bx-sm'></i><span class="my-auto ml-3">Paket Umrah</span>
+                                </div>
+                            </router-link>
+                        </li>
+                        <li class="mt-3">
+                            <router-link to="/base/jamaah" v-on:click.native="closeable">
+                                <div class="d-flex">
+                                    <i class='bx bx-group bx-sm'></i><span class="my-auto ml-3">Jamaah</span>
                                 </div>
                             </router-link>
                         </li>
