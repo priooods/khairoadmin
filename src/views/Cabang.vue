@@ -83,10 +83,7 @@ export default {
       filteredCabang() {
         const search = this.searching.toLowerCase().trim();
         if (!search) return this.listCabang;
-        this.listCabang.filter(a => {
-          console.log(a.name === 'kota');
-        });
-        return this.listCabang.filter((e) => { e.kota.toLowerCase().indexOf(search) > -1});
+        return this.listCabang.filter(c => c.name.toLowerCase().indexOf(search) > -1);
       },
     },
     methods: {

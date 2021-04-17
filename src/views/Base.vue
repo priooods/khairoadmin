@@ -44,6 +44,9 @@ export default {
       font-size: 15px;
     }
   }
+  .lay{
+    height: auto;
+  }
   // .navigasiin{
   //   z-index: 2;
   // }

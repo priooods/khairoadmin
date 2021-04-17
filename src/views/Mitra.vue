@@ -8,7 +8,7 @@
             <vs-button size="small" class="col-md-2 col" @click="shownew = true" v-show="shownew == false">Buat Mitra Baru</vs-button>
           </div>
           <div v-show="shownew">
-            <b-form>
+            <b-form class="row"> 
                 <b-form-group id="lay-cd" class="col-md-4 col-12">
                     <label for="cd">Pilih Agent</label>
                     <b-form-select v-model="forms.code_agent"
@@ -123,10 +123,16 @@ export default {
     }
   },
   computed:{
+    listmitra(){
+      return this.$store.state.mitra.mitrall;
+    },
     filterMitra(){
-      const cari = this.searching.toLowerCase().trim();
-      if (!cari) return this.$store.state.mitra.mitrall;
-      return this.$store.state.mitra.mitrall.filter((oj) => {oj.fullname.toLowerCase().indexOf(cari) > -1});
+        const search = this.searching.toLowerCase().trim();
+        if (!search) return this.listmitra;
+        return this.listmitra.filter(c => c.fullname.toLowerCase().indexOf(search) > -1);
+      // const cari = this.searching.toLowerCase().trim();
+      // if (!cari) return this.$store.state.mitra.mitrall;
+      // return this.$store.state.mitra.mitrall.filter((oj) => {oj.fullname.toLowerCase().indexOf(cari) > -1});
     }
   },
   methods:{

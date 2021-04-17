@@ -1,5 +1,5 @@
 <template>
-    <div class="umrah views h-100">
+    <div class="umrah views">
         <div class="mx-3">
             <h1>Umrah</h1>
             <div class="row px-1 mb-3">
@@ -7,7 +7,7 @@
                 <vs-button :class="{'active-btn': btnactive == 2}" block size="small" class="col-md-2 btns" @click="btnactive = 2">Hotel & Maskapai</vs-button>
             </div>
             <div v-show="btnactive == 1">
-                <UmrahDetail @formumrah="bukaformumrah"></UmrahDetail>
+                <UmrahDetail @formumrah="bukaformumrah" @showdata="showingData"></UmrahDetail>
             </div>
             <div v-show="btnactive == 2">
                 <HotelDetail 
@@ -26,6 +26,11 @@
             :data.sync="data.umrah"
             @tutupumrah="closeumrah"
         ></UmrahDrawer>
+        <UmrahAksi 
+           :show.sync="opened.umrahaksi"
+           :data.sync="data.umrahdetail"
+           @closeable="tutupumrahaksi"
+        ></UmrahAksi>
     </div>
 </template>
 
@@ -33,6 +38,7 @@
 import HotelDetail from '../components/HotelDetail';
 import HotelDrawer from '../components/HotelDrawer';
 import UmrahDetail from '../components/UmrahDetail';
+import UmrahAksi from '../components/UmrahAksi';
 import UmrahDrawer from '../components/UmrahDrawer';
 export default {
     name: "Umrah",
@@ -42,16 +48,18 @@ export default {
             showform: 0,
             data:{
                 hotel: null,
-                umrah: null
+                umrah: null,
+                umrahdetail: null
             },
             btnactive: 1,
             opened: {
                 openhotel: false,
                 openumrah: false,
+                umrahaksi: false
             }
         }
     },
-    components: {HotelDrawer,HotelDetail,UmrahDetail, UmrahDrawer},
+    components: {HotelDrawer,HotelDetail,UmrahDetail, UmrahDrawer, UmrahAksi},
     methods:{
         detailhotel(value){
             this.data.hotel = value;
@@ -70,6 +78,13 @@ export default {
         bukaformumrah(){
             this.opened.openumrah = true;
             this.data.umrah = null
+        },
+        showingData(value){
+            this.opened.umrahaksi = true;
+            this.data.umrahdetail = value;
+        },
+        tutupumrahaksi(val){
+            this.opened.umrahaksi = val;
         }
     },
     created(){
@@ -83,7 +98,7 @@ export default {
 <style lang="scss">
 @import '../assets/fonts/font.scss';
 .views{
-    height: 100vh;
+    height: auto;
     .search{
       font-size: 11px;
       font-family: $font-reguler;

@@ -1,6 +1,7 @@
 <template>
-  <div id="Home">
-      <h1>Hallo world</h1>
+  <div class="Home views">
+      <h1 class="ml-3">Dashboard</h1>
+      
   </div>
 </template>
 
@@ -13,6 +14,29 @@ export default {
 }
 </script>
 
-<style>
-
+<style lang="scss">
+@import '../assets/fonts/font.scss';
+.views{
+  height: 100vh !important;
+  .names{
+    h6{
+      line-height: 14px;
+      font-size: 15px;
+    }
+    .updt{
+      line-height: 11px;
+      font-size: 12px;
+      color: $red;
+      font-family: $font-moderat-bold;
+      cursor: pointer;
+    }
+  }
+  .search{
+      font-size: 11px;
+      font-family: $font-reguler;
+  }
+  .buton{
+    max-height: 30px;
+  }
+}
 </style>

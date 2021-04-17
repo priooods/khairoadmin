@@ -5,6 +5,9 @@ export default {
     };
   },
   methods: {
+    helper_fail_export() {
+      return console.log("Failure Export to Excel");
+    },
     helper_notifikasi(title, desc) {
       return this.$vs.notification({
         color: "danger",

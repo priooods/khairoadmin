@@ -4,6 +4,7 @@ export default {
   namespaced: true,
   state: {
     jamaahall: [],
+    jamaahbayar: [],
   },
   actions: {
     AddJamaah({ commit }, form) {
@@ -17,8 +18,12 @@ export default {
     },
     Alljamaah({ commit }) {
       Jamaah.alljamaah().then((data) => {
-        console.log(data.data.data);
         return commit("alljamaah", data.data.data);
+      });
+    },
+    JamaahBelumBayar({ commit }) {
+      Jamaah.jamaahbelumbayar().then((data) => {
+        return commit("jamaahbayar", data.data.data);
       });
     },
     // AddMaskapai({ commit }, form) {
@@ -75,9 +80,9 @@ export default {
     alljamaah(state, payload) {
       state.jamaahall = payload;
     },
-    // newmaskapai(state, payload) {
-    //   state.maskapaiall.push(payload);
-    // },
+    jamaahbayar(state, payload) {
+      state.jamaahbayar = payload;
+    },
     // allmaskapai(state, payload) {
     //   state.maskapaiall = payload;
     // },

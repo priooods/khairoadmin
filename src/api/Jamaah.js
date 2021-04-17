@@ -7,4 +7,7 @@ export default {
   alljamaah() {
     return client.get("jamaah/show");
   },
+  jamaahbelumbayar() {
+    return client.get("jamaah/tagihan");
+  },
 };

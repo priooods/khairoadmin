@@ -67,7 +67,7 @@ const actions = {
     Operator.LogoutOperator(username).then((data) => {
       if (data.data.error_code == 0) {
         cookies.keys().forEach((cookie) => cookies.remove(cookie));
-        router.push({ path: "/" }, () => {});
+        router.push({ path: "/khairo" }, () => {});
         return commit("logout");
       }
     });

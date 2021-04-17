@@ -31,7 +31,7 @@
                 </div>
               </div>
           </div>
-          <vs-button block size="small" v-show="checkAccess == 1 && showaction == false" @click="showaction = !showaction">Lakukan Aksi</vs-button>
+          <!-- <vs-button block size="small" v-show="checkAccess == 1 && showaction == false" @click="showaction = !showaction">Lakukan Aksi</vs-button> -->
           <div class="row justify-content-center" v-show="showaction">
             <vs-button danger class="col-5" block size="small" @click="hapusData">Hapus Mitra</vs-button>
             <!-- <vs-button warn class="col-5" block size="small">Edit Mitra</vs-button> -->

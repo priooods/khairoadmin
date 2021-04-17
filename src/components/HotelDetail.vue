@@ -1,5 +1,5 @@
 <template>
-  <div class="detail-hotel">
+  <div class="detail-hotel h-100">
         <div class="row">
             <div class="col">
                 <div class="bg mb-2">
@@ -94,6 +94,8 @@ export default {
 }
 </script>
 
-<style>
-
+<style lang="scss">
+.detail-hotel{
+    height: 100vh;
+}
 </style>

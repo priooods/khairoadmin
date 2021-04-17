@@ -13,8 +13,13 @@ import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap-vue/dist/bootstrap-vue.css";
 import "boxicons/css/boxicons.min.css";
 import "locomotive-scroll/dist/locomotive-scroll.min.css";
+import Vue2Filters from "vue2-filters";
 import VueApexCharts from "vue-apexcharts";
 import moment from "vue-moment";
+import JsonExcel from "vue-json-excel";
+
+Vue.component("downloadExcel", JsonExcel);
+Vue.use(Vue2Filters);
 Vue.use(VueApexCharts);
 Vue.use(moment);
 Vue.component("apexchart", VueApexCharts);

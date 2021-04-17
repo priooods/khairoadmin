@@ -1,6 +1,9 @@
 import client from "./index";
 
 export default {
+  filterpaket() {
+    return client.get("umrah/show");
+  },
   allpaket() {
     return client.get("umrah/show");
   },

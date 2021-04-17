@@ -36,7 +36,7 @@
                 </b-form-group>
                 <b-form-group id="lay-no-KTP" class="col-md-4 col-12">
                     <label for="no-KTP">No KTP <span>*</span></label>
-                    <b-form-input class="search" size="sm" 
+                    <b-form-input class="search" size="sm" :state="ktpState"
                         v-model="form.no_ktp" id="no-KTP" type="number" 
                         required placeholder="Masukan no KTP Jamaah">
                     </b-form-input>
@@ -48,11 +48,11 @@
                         required placeholder="Masukan Nama Lengkap pada Passport">
                     </b-form-input>
                 </b-form-group>
-                <b-form-group id="lay-pasport-nama-ayah" class="col-md-4 col-12">
-                    <label for="pasport-nama-ayah">Nama Ayah</label>
-                    <b-form-input class="search" size="sm" 
-                        v-model="form.nama_ayah" id="nama-ayah" type="text" 
-                        required placeholder="Masukan Nama Ayah Jamaah">
+                <b-form-group id="lay-passport-No" class="col-md-4 col-12" v-show="showpassport">
+                    <label for="passport-No">No Passport <span>*</span></label>
+                    <b-form-input class="search" size="sm" :state="passportState"
+                        v-model="passport.nomor" id="passport-No" type="text" 
+                        required placeholder="Masukan No pada Passport">
                     </b-form-input>
                 </b-form-group>
                 <b-form-group id="lay-passport-kota" class="col-md-4 col-12" v-show="showpassport">
@@ -75,6 +75,13 @@
                         v-model="passport.tgl_habis" id="passport-habis"
                         required placeholder="Waktu Habis Berlaku Passport">
                     </b-form-datepicker>
+                </b-form-group>
+                <b-form-group id="lay-pasport-nama-ayah" class="col-md-4 col-12">
+                    <label for="pasport-nama-ayah">Nama Ayah</label>
+                    <b-form-input class="search" size="sm" 
+                        v-model="form.nama_ayah" id="nama-ayah" type="text" 
+                        required placeholder="Masukan Nama Ayah Jamaah">
+                    </b-form-input>
                 </b-form-group>
                 <b-form-group id="lay-tgl-lahir" class="col-md-4 col-12">
                     <label for="tgl-lahir">Tempat, Tanggal Lahir<span>*</span></label>
@@ -219,7 +226,7 @@ export default {
                 {value: 'Lain-lain', text: 'Lain-lain'},
             ],
             genderoption:[
-                {value: 'Pria', text: 'Laki-Laki'},
+                {value: 'Pria', text: 'Pria'},
                 {value: 'Wanita', text: 'Wanita'},
             ],
             darahoption: [
@@ -289,9 +296,28 @@ export default {
                 nama: '',
                 kota: '',
                 tgl_habis: '',
+                nomor: '',
                 tgl_keluar: '',
             },
             showpassport: false
+        }
+    },
+    computed:{
+        ktpState(){
+            if(this.form.no_ktp.length < 16){
+                return false;
+            } else if(this.form.no_ktp.length == 0){
+                return true;
+            }
+            return this.form.no_ktp.length > 16 ? false :  true
+        },
+        passportState(){
+            if(this.passport.nomor.length < 7){
+                return false;
+            } else if(this.passport.nomor.length == 0){
+                return true;
+            }
+            return this.passport.nomor.length > 7 ? false :  true
         }
     },
     methods:{
@@ -326,7 +352,6 @@ export default {
             }
             this.form.ttl = this.ttl.tempat + ',' + this.ttl.tanggal;
             this.form.no_telp = parseInt(this.form.no_telp);
-            console.log(this.form);
             this.$store.dispatch('jamaah/AddJamaah', this.form);
             this.helper_check_request('Berhasil Menyimpan', 'Data Jamaah baru berhasil disimpan, refresh ulang halaman apabila jamaah baru tidak muncul di table');
         },

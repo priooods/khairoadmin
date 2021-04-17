@@ -122,7 +122,7 @@ export default {
 <style lang="scss">
 @import '../assets/fonts/font.scss';
 .views{
-  height: 100vh;
+  height: 100vh !important;
   .names{
     h6{
       line-height: 14px;
