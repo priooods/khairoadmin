@@ -13,16 +13,22 @@ export default {
   deletemitra(username) {
     return client.post("mitra/delete", { username: username });
   },
+  updatemitra(data) {
+    return client.post("mitra/update", data);
+  },
   addCabang(data) {
     return client.post("cabang/add", data);
   },
-  allCabang() {
-    return client.get("cabang/show");
+  allCabang(data) {
+    return client.post("cabang/show", data);
   },
   updateCabang(data) {
     return client.post("cabang/update", data);
   },
   deleteCabang(data) {
     return client.post("cabang/delete", data);
+  },
+  logoutMitra(data) {
+    return client.post("mitra/logout", {  username: data  });
   },
 };

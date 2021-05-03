@@ -1,15 +1,18 @@
 import client from "./index";
 export default {
-  allgudang() {
-    return client.get("gudang/all");
+  allgudang(data) {
+    return client.post("gudang/show", { page: data });
   },
   addbelanja(data) {
     return client.post("belanja/add", data);
   },
-  allbelanja() {
-    return client.get("belanja/show");
+  allbelanja(data) {
+    return client.post("belanja/show", data);
   },
   cancelbelanja(data) {
     return client.post("belanja/cancel", { id: data });
+  },
+  akuntan() {
+    return client.get("akuntan/show");
   },
 };

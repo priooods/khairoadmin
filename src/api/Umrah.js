@@ -4,23 +4,26 @@ export default {
   filterpaket() {
     return client.get("umrah/show");
   },
-  allpaket() {
-    return client.get("umrah/show");
+  allpaket(data) {
+    return client.post("umrah/show", data);
   },
   umrahadd(data) {
     return client.post("umrah/add", data);
   },
+  umrahdetail(data) {
+    return client.post("umrah/show", { id: data });
+  },
   maskapaiadd(data) {
     return client.post("maskapai/add", data);
   },
-  allmaskapai() {
-    return client.get("maskapai/show");
+  allmaskapai(data) {
+    return client.post("maskapai/show", data);
   },
   hoteladd(data) {
     return client.post("hotel/add", data);
   },
-  allhotel() {
-    return client.get("hotel/show");
+  allhotel(data) {
+    return client.post("hotel/show", data);
   },
   hoteldelete(id) {
     return client.post("hotel/delete", { id: id });

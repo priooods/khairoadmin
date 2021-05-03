@@ -74,5 +74,14 @@ export default {
         return this.helper_global_error_notif();
       }, 3000);
     },
+    formSubmit(ref) {
+      this.$refs[ref].validate((valid) => {
+        if (valid) {
+          this.$Message.success("Success!");
+        } else {
+          return false;
+        }
+      });
+    },
   },
 };

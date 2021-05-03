@@ -1,103 +1,58 @@
 <template>
-  <transition name="fade" mode="out-in">
-      <div class="umrahdrawer px-3 py-3" v-show="show">
-          <div class="back d-flex justify-content-start col-1" @click="backpresed">
-              <i class='bx bx-left-arrow-alt ml-n3'></i>
-              <h2 class="ml-1">Tutup</h2>
-            </div>
-            <p class="my-3">Harap lengkapi semua form yang tersedia pada form dibawah</p>
-          <b-form class="row w-100 mt-2">
-            <b-form-group id="lay-paket" class="col-md-6 col-12">
-                <label for="paket">Nama Paket</label>
-                <b-form-input class="search" size="sm" 
-                    v-model="form.nama" id="paket" type="text" 
-                    required placeholder="Masukan Nama Paket">
-                </b-form-input>
-            </b-form-group>
-            <b-form-group id="lay-durasi" class="col-md-6 col-12">
-                <label for="durasi">Durasi ( Hari )</label>
-                <b-form-input class="search" size="sm" 
-                    v-model="form.durasi" id="durasi" type="number" 
-                    required placeholder="Masukan Durasi Paket">
-                </b-form-input>
-            </b-form-group>
-            <b-form-group id="lay-jenis_paket" class="col-md-6 col-12">
-                <label for="jenis_paket">Nama Jenis Paket</label>
-                <b-form-input class="search" size="sm" 
-                    v-model="form.jenis_paket" id="jenis_paket" type="text" 
-                    required placeholder="Masukan Jenis Paket">
-                </b-form-input>
-            </b-form-group>
-            <b-form-group id="lay-tahun" class="col-md-6 col-12">
-                <label for="tahun">Tahun ( Hijriah )</label>
-                <b-form-input class="search" size="sm" 
-                    v-model="form.tahun" id="tahun" type="number" 
-                    required placeholder="Masukan Tahun">
-                </b-form-input>
-            </b-form-group>
-            <b-form-group id="lay-kuota" class="col-md-6 col-12">
-                <label for="kuota">Kuota Paket ( Jamaah )</label>
-                <b-form-input class="search" size="sm" 
-                    v-model="form.kuota" id="kuota" type="number" 
-                    required placeholder="Masukan Kuota Paket">
-                </b-form-input>
-            </b-form-group>
-            <b-form-group id="lay-biaya" class="col-md-6 col-12">
-                <label for="biaya">Biaya Paket</label>
-                <b-form-input class="search" size="sm" 
-                    v-model="form.biaya" id="biaya" type="number" 
-                    required placeholder="Masukan biaya Paket">
-                </b-form-input>
-            </b-form-group>
-            <b-form-group id="lay-tanggal_berangkat" class="col-md-6 col-12">
-                <label for="tanggal_berangkat">Tanggal Berangkat</label>
-                <b-form-datepicker class="search col my-auto" size="sm"
-                    v-model="tanggal.tanggal.berangkat" id="tanggal_berangkat"
-                    required placeholder="Tanggal Berangkat Umrah">
-                </b-form-datepicker>
-            </b-form-group>
-            <b-form-group id="lay-tanggal_pulang" class="col-md-6 col-12">
-                <label for="tanggal_pulang">Tanggal Pulang</label>
-                <b-form-datepicker class="search col my-auto" size="sm"
-                    v-model="tanggal.tanggal.pulang" id="tanggal_pulang"
-                    required placeholder="Tanggal Pulang Umrah">
-                </b-form-datepicker>
-            </b-form-group>
-            <div class="col-md-6 col-12">
-                <label >Maskapai</label>
-                <div class="row mx-1 mb-2" v-for="(mas, index) in maskapai.maskapai" v-bind:key="'mas' + index">
-                    <b-form-select class="col search" v-model="mas.maskapai_id"
-                        size="sm" required id="maskapai_paket" placeholder="Pilih Maskapai Paket">
-                            <b-form-select-option 
-                                v-for="(data,st) in datamaskapai" v-bind:key="st" 
-                                :value="data.id">{{data.nama}}
-                            </b-form-select-option>
-                    </b-form-select>
-                    <div class="col-md-1 col-1 my-auto pointers" @click="removemaskapai(index)" v-show="index || (!index && mas.maskapai_id.length > 1)"><i class="bx bx-minus"></i></div>
-                    <div class="col-md-1 col-1 my-auto pointers" v-show="index == maskapai.maskapai.length - 1" @click="addmaskapai(index)"><i class="bx bx-plus"></i></div>
-                </div> 
-            </div>
-            <div class="col-md-6 col-12">
-                <label>Hotel</label>
-                <div class="row mx-1 mb-2" v-for="(data, i) in hotel.hotel" v-bind:key="i">
-                    <b-form-select class="col search" v-model="data.hotel_id"
-                        size="sm" required id="hotel_paket" placeholder="Pilih Hotel Paket">
-                            <b-form-select-option 
-                                v-for="(ds,index) in datahotel" v-bind:key="index" 
-                                :value="ds.id">{{ds.nama}}
-                            </b-form-select-option>
-                    </b-form-select>
-                    <div class="col-md-1 col-1 my-auto pointers" @click="removehotel(i)" v-show="i || (!i && data.hotel_id.length > 1)"><i class="bx bx-minus"></i></div>
-                    <div class="col-md-1 col-1 my-auto pointers" v-show="i == hotel.hotel.length - 1" @click="addhotel(i)"><i class="bx bx-plus"></i></div>
-                </div>
-            </div>
-        </b-form>
-        <div class="my-3 d-flex">
-            <vs-button size="small" @click="buatumrah">Simpan Paket</vs-button>
-            <!-- <vs-button danger size="small">Reset Form</vs-button> -->
+    <div class="block" v-show="show == 2">
+        <div class="cursor-pointer hover:text-red-500" @click="backpresed">
+            <i class='bx bx-left-arrow-alt inline'></i>
+            <h2 class="inline">Tutup</h2>
         </div>
-      </div>
-  </transition>
+        <p class="text-md mt-3 md:mt-5">Harap lengkapi semua form yang tersedia pada form dibawah</p>
+        <div class="mt-4">
+            <p class="font-semibold text-sm">Informasi Umum</p>
+            <Form class="md:grid md:w-4/6 grid-cols-2 md:gap-2">
+                <FormItem label="Nama Paket" :model="form" :rules="formRules">
+                    <Input v-model="form.nama" type="text" placeholder="Masukan Nama Paket"></Input>
+                </FormItem>
+                <FormItem label="Durasi Paket">
+                    <Input v-model="form.durasi" type="number" placeholder="Masukan Durasi Paket"></Input>
+                </FormItem>
+                <FormItem label="Tahun Paket ( Hijriah )">
+                    <Input v-model="form.tahun" type="number" placeholder="contoh: 1976"></Input>
+                </FormItem>
+                <FormItem label="Kuota Paket">
+                    <Input v-model="form.kuota" type="number" placeholder="Masukan Kuota Paket"></Input>
+                </FormItem>
+                <FormItem label="Biaya Paket">
+                    <Input v-model="form.biaya" type="number" placeholder="Masukan biaya Paket"></Input>
+                </FormItem>
+                <FormItem label="Tanggal Berangkat">
+                    <DatePicker type="date" v-model="tanggal.berangkat" placeholder="Tanggal Berangkat Umrah" class="w-full"></DatePicker>
+                </FormItem>
+                <FormItem label="Tanggal Pulang">
+                    <DatePicker type="date" v-model="tanggal.pulang" placeholder="Tanggal Pulang Umrah" class="w-full"></DatePicker>
+                </FormItem>
+                <FormItem label="Maskapai">
+                    <Input v-model="form.maskapai" type="text" placeholder="Masukan Maskapai Umrah"></Input>
+                </FormItem>
+            </Form>
+        </div>
+        <!-- <div class="mt-3">
+            <p class="text-sm font-semibold">Informasi Hotel</p>
+            <Form :model="formhotel" class="md:grid grid-cols-1 md:gap-2">
+                Hotels Input
+                <FormItem label="Nama Hotel">
+                    <Input v-model="formhotel.nama" type="text" placeholder="Masukan Nama Hotel"></Input>
+                </FormItem>
+                <FormItem label="Kota Hotel">
+                    <Input v-model="formhotel.kota" type="text" placeholder="Masukan Kota Hotel"></Input>
+                </FormItem>
+                <FormItem label="Alamat Hotel">
+                    <Input v-model="formhotel.alamat" type="text" placeholder="Masukan Alamat Hotel"></Input>
+                </FormItem>
+            </Form>
+        </div> -->
+        <div class="mt-3">
+            <Button type="primary" @click="buatumrah">Simpan Paket</Button>
+        </div>
+    </div>
 </template>
 
 <script>
@@ -106,39 +61,62 @@ export default {
     name: "UmrahDrawer",
     mixins: [Notifikasi],
     props:{
-        show: Boolean,
+        show: Number,
         data: null
     },
     data() {
         return {
-            hotel:{
-                hotel: [
-                    { hotel_id: '' }
-                ]
-            },
-            
-            maskapai:{
-                maskapai: [
-                    { maskapai_id: '' }
-                ]
-            },
-            tanggal:{
-                tanggal:{
-                    berangkat:null,
-                    pulang:null
-                }
-            },
             formsUmrah: {
                 nama: null,
                 durasi: null,
-                jenis_paket: null,
                 tahun: null,
                 kuota: null,
                 biaya: null,
                 tanggal: null,
-                hotel: null,
                 maskapai: null,
-
+            },
+            tanggal: {
+                berangkat: '',
+                pulang: ''
+            },
+            formhotel:{ 
+                nama: null,
+                kota: null,
+                alamat: null,
+                kamar: [
+                    {
+                        kapasitas: '2',
+                        harga: '',
+                    },
+                    {
+                        kapasitas: '3',
+                        harga: '',
+                    },
+                    {
+                        kapasitas: '4',
+                        harga: '',
+                    }
+                ]
+            },
+            formRules:{
+                nama:[
+                    { required: true, message: 'Harap Lengkapi Nama Paket', trigger: 'blur' }
+                ],
+                durasi:[
+                    { required: true, message: 'Harap Masukan Durasi Paket', trigger: 'blur' }
+                ],
+                tahun:[
+                    { required: true, message: 'Harap Lengkapi Tahun Paket', trigger: 'blur' }
+                ],
+                kuota:[
+                    { required: true, message: 'Harap Lengkapi Kouta Paket', trigger: 'blur' }
+                ],
+                biaya:[
+                    { required: true, message: 'Harap Masukan Biaya Paket', trigger: 'blur' }
+                ],
+                maskapai:[
+                    { required: true, message: 'Harap Lengkapi Maskapai', trigger: 'blur' }
+                ]
             }
         }
     },
@@ -182,7 +160,7 @@ export default {
 
         },
         backpresed(){
-            return this.$emit('tutupumrah', false);
+            return this.$emit('tutupumrah', 1);
         },
         checknull(){
             return this.form.nama == null ||this.form.durasi == null ||this.form.jenis_paket == null ||this.form.tahun == null ||

@@ -5,29 +5,42 @@ export default {
   state: {
     gudang: [],
     belanja: [],
+    akuntan: [],
   },
   actions: {
     AddBelanja({ dispatch }, form) {
       Gudang.addbelanja(form).then((data) => {
         if (data.data.error_code == 0) {
-          cookies.set('next', 1);
+          cookies.set("next", 1);
+          dispatch("AllGudang");
           return dispatch("AllBelanja");
         }
         return cookies.set("next", 0);
       });
     },
-    AllBelanja({ commit }) {
-      Gudang.allbelanja().then((data) => {
+    AllBelanja({ commit }, form) {
+      Gudang.allbelanja(form).then((data) => {
         return commit("allbelanja", data.data.data);
       });
     },
     CancelBelanja({ dispatch }, id) {
       Gudang.cancelbelanja(id).then((data) => {
         if (data.data.error_code == 0) {
-          cookies.set('next', 1);
+          cookies.set("next", 1);
+          dispatch("AllGudang");
           return dispatch("AllBelanja");
         }
         return cookies.set("next", 0);
+      });
+    },
+    AllGudang({ commit }, page) {
+      Gudang.allgudang(page).then((data) => {
+        return commit("AllGudang", data.data.data);
+      });
+    },
+    AllAkuntan({ commit }) {
+      Gudang.akuntan().then((data) => {
+        return commit("AllAkuntan", data.data.data);
       });
     },
   },
@@ -35,9 +48,11 @@ export default {
     allbelanja(state, payload) {
       state.belanja = payload;
     },
-    // cancelbelanja(state, payload) {
-    //   var ind = state.belanja.filter((es) => es.id === payload.id);
-    //   state.belanja.splice(ind, 1);
-    // },
+    AllGudang(state, payload) {
+      state.gudang = payload;
+    },
+    AllAkuntan(state, payload) {
+      state.akuntan = payload;
+    },
   },
 };

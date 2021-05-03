@@ -9,6 +9,7 @@ import Cabang from "../views/Cabang.vue";
 import Mitra from "../views/Mitra.vue";
 import Umrah from "../views/Umrah.vue";
 import Jamaah from "../views/Jamaah.vue";
+import Akuntan from "../views/Akuntan.vue";
 Vue.use(VueRouter);
 
 const routes = [
@@ -56,6 +57,11 @@ const routes = [
         path: "/base/jamaah",
         name: "Jamaah",
         component: Jamaah,
+      },
+      {
+        path: "/base/akuntan",
+        name: "Akuntan",
+        component: Akuntan,
       },
     ],
   },

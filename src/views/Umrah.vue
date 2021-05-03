@@ -1,44 +1,41 @@
 <template>
-    <div class="umrah views">
-        <div class="mx-3">
-            <h1>Umrah</h1>
-            <div class="row px-1 mb-3">
-                <vs-button :class="{'active-btn': btnactive == 1}" block size="small" class="col-md-2 btns" @click="btnactive = 1">Detail Umrah</vs-button>
-                <vs-button :class="{'active-btn': btnactive == 2}" block size="small" class="col-md-2 btns" @click="btnactive = 2">Hotel & Maskapai</vs-button>
-            </div>
-            <div v-show="btnactive == 1">
-                <UmrahDetail @formumrah="bukaformumrah" @showdata="showingData"></UmrahDetail>
-            </div>
+    <div class="umrah">
+        <div v-show="opens == 1">
+            <h1 class="hidden md:block">Umrah</h1>
+            <UmrahDetail class="mt-4" @formumrah="bukaformumrah" @showdata="showingData"></UmrahDetail>
             <div v-show="btnactive == 2">
-                <HotelDetail 
+                <!-- <HotelDetail 
                     @formhotel="bukaformhotel"
                     @detailhotel="detailhotel"
-                ></HotelDetail>
+                ></HotelDetail> -->
             </div>
         </div>
-        <HotelDrawer
+        <!-- <HotelDrawer
             :show.sync="opened.openhotel"
             :data.sync="data.hotel"
-            @closeable="closehotel" 
-        ></HotelDrawer>
-        <UmrahDrawer
-            :show.sync="opened.openumrah"
+            @closeable="closehotel"
+            :showby='showbyhotel'
+        ></HotelDrawer> -->
+        <div v-show="opens == 2">
+            <UmrahDrawer
+            :show.sync="opens"
             :data.sync="data.umrah"
             @tutupumrah="closeumrah"
         ></UmrahDrawer>
-        <UmrahAksi 
+        </div>
+        <!-- <UmrahAksi 
            :show.sync="opened.umrahaksi"
            :data.sync="data.umrahdetail"
            @closeable="tutupumrahaksi"
-        ></UmrahAksi>
+        ></UmrahAksi> -->
     </div>
 </template>
 
 <script>
-import HotelDetail from '../components/HotelDetail';
-import HotelDrawer from '../components/HotelDrawer';
+// import HotelDetail from '../components/HotelDetail';
+// import HotelDrawer from '../components/HotelDrawer';
 import UmrahDetail from '../components/UmrahDetail';
-import UmrahAksi from '../components/UmrahAksi';
+// import UmrahAksi from '../components/UmrahAksi';
 import UmrahDrawer from '../components/UmrahDrawer';
 export default {
     name: "Umrah",
@@ -46,6 +43,8 @@ export default {
         return{
             showinput: 0,
             showform: 0,
+            opens: 1,
+            showbyhotel: 0,
             data:{
                 hotel: null,
                 umrah: null,
@@ -59,9 +58,10 @@ export default {
             }
         }
     },
-    components: {HotelDrawer,HotelDetail,UmrahDetail, UmrahDrawer, UmrahAksi},
+    components: {UmrahDetail,UmrahDrawer},
     methods:{
         detailhotel(value){
+            this.showbyhotel = 2;
             this.data.hotel = value;
             return this.opened.openhotel = true;
         },
@@ -69,15 +69,16 @@ export default {
             return this.opened.openhotel = val;
         },
         closeumrah(val){
-            return this.opened.openumrah = val;
+            return this.opens = val;
         },
         bukaformhotel(){
+            this.showbyhotel = 1;
             this.opened.openhotel = true; 
             this.data.hotel = null
         },
         bukaformumrah(){
-            this.opened.openumrah = true;
-            this.data.umrah = null
+            this.opens = 2;
+            this.data.umrah = null;
         },
         showingData(value){
             this.opened.umrahaksi = true;
@@ -91,6 +92,9 @@ export default {
       this.$store.dispatch('umrah/AllHotel');
       this.$store.dispatch('umrah/AllUmrah');
       this.$store.dispatch('umrah/AllMaskapai');
+    },
+    mounted() {
+        console.log(this.$store.state.umrah.umrahall);
     },
 }
 </script>

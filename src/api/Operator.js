@@ -3,8 +3,8 @@ export default {
   LoginOperator(data) {
     return client.post("operator/login", data);
   },
-  AllOperator() {
-    return client.get("operator/show");
+  AllOperator(data) {
+    return client.post("operator/show", data);
   },
   LogoutOperator(username) {
     return client.post("operator/logout", { username: username });

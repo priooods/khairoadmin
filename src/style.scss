@@ -46,9 +46,13 @@ $grey: #a6a9b6;
 $bg-grey: #dddddd;
 $yellow: #ffb037;
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;700;800&display=swap');
-html,body,*{
-    padding: 0;
-    margin: 0;
+// html,body,*{
+//     padding: 0;
+//     margin: 0;
+// }
+.add-style{
+    border: 0px !important;
+    border-width: 0 !important;
 }
 #app.theme-dark{
     background: $primary;
@@ -115,6 +119,7 @@ html,body,*{
 
 #app.theme-light{
     background: $background;
+    min-height: 100vh;
     color: $primary;
     a,.logout{
         color: $grey;
@@ -129,12 +134,12 @@ html,body,*{
     a.active{
         color: $secondary;
     }
-    .lay{
-        background:$bg-grey;
-    }
-    .navigasiin{
-        box-shadow: 0 0 20px rgba(224, 224, 224, 0.75);
-    }
+    // .lay{
+    //     background:$bg-grey;
+    // }
+    // .navigasiin{
+    //     box-shadow: 0 0 20px rgba(224, 224, 224, 0.75);
+    // }
     .bg{
         padding: 15px;
         border-radius: 8px;
@@ -167,32 +172,32 @@ html,body,*{
         font-family: $font-moderat-bold;
         font-size: 25px;
     }
-    .navigasiin{
-        top: 0;
-        bottom: 0;
-        background-color: $background;
-    }
+    // .navigasiin{
+    //     top: 0;
+    //     bottom: 0;
+    //     background-color: $background;
+    // }
     .userview, .cabangdrawer, .gudangdrawer, .mitradrawer, .hotel, .umrahdrawer, .umrah-aksi, .jamaah-aksi{
         background: $background;
     }
 }
 
-label,p{
-    font-size: 11px;
-    font-weight: 400;
-    font-family: 'Montserrat', sans-serif;
-}
-.bgs{
-    border-radius: 8px;
-    h6{
-        font-size: 15px;
-        font-family: $font-moderat-bold;
-    }
-    span{
-        line-height: 10px;
-        font-size: 12px;
-    }
-}
+// label,p{
+//     font-size: 11px;
+//     font-weight: 400;
+//     font-family: 'Montserrat', sans-serif;
+// }
+// .bgs{
+//     border-radius: 8px;
+//     h6{
+//         font-size: 15px;
+//         font-family: $font-moderat-bold;
+//     }
+//     span{
+//         line-height: 10px;
+//         font-size: 12px;
+//     }
+// }
 .btn-success{
     background: $green;
     color: $background;
@@ -251,38 +256,59 @@ label,p{
     align-items: center;
     text-align: center;
     margin: auto;
+    
     color: $background !important;
     font-family: $font-bold;
     font-size: 15px;
 }
-
+// table{
+//     border-collapse: collapse;
+//     tr th{
+//         background: #0779e4;
+//         padding: 4px 0 4px 0;
+//         color: $background;
+//     }
+//     tr td{
+//         font-size: 13px;
+//         padding: 4px 0 4px 1px;
+//     }
+// }
 @media (max-width: 700px){
-    table thead{
-        display: none;
-    }
-    table tbody,table tr,table td, table{
-        display: block;
-        width: 100%;
-    }
-    table td{
-        text-align: right !important;
-        padding-left: 50%;
-        position: relative;
-    }
-    table td::before{
-        content: attr(data-label);
-        font-family: $font-moderat-bold;
-        position: absolute;
-        text-align: left;
-        left: 0;
-        width: 50%;
-        padding-left: 15px;
-    }
-    .navigasiin{
-        box-shadow: 0 0 0 transparent !important;
-    }
-    .views{
-        max-height: auto;
-        height: auto !important;
-    }
+    // table thead{
+    //     display: none;
+    // }
+    // table tbody,table tr,table td, table{
+    //     display: block;
+    //     width: 100%;
+    // }
+    // table td{
+    //     text-align: right !important;
+    //     padding-left: 50%;
+    //     position: relative;
+    // }
+    // table td::before{
+    //     content: attr(data-label);
+    //     font-family: $font-moderat-bold;
+    //     position: absolute;
+    //     text-align: left;
+    //     left: 0;
+    //     width: 50%;
+    //     padding-left: 15px;
+    // }
+    // .navigasiin{
+    //     box-shadow: 0 0 0 transparent !important;
+    // }
+    // .views{
+    //     max-height: auto;
+    //     height: auto !important;
+    // }
+}
+
+a,.logout{
+    color: $background;
+    cursor: pointer;
+    text-decoration: none;
+}
+a.active{
+    color: $secondary;
 }

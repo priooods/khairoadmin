@@ -5,15 +5,16 @@ export default {
   state: {
     hotelall: [],
     umrahall: [],
+    umrahdetail: [],
     maskapaiall: [],
   },
   actions: {
-    AddUmrah({ commit }, form) {
+    AddUmrah({ dispatch }, form) {
       Umrah.umrahadd(form).then((data) => {
         console.log(data);
         if (data.data.error_code == 0) {
           cookies.set("next", 1);
-          return commit("newumrah", data.data.data);
+          return dispatch("AllUmrah");
         }
         return cookies.set("next", 0);
       });
@@ -37,11 +38,12 @@ export default {
         return commit("allmaskapai", data.data.data);
       });
     },
-    AddHotel({ commit }, form) {
+    AddHotel({ dispatch }, form) {
       Umrah.hoteladd(form).then((data) => {
+        console.log(data.data);
         if (data.data.error_code == 0) {
           cookies.set("next", 1);
-          return commit("newhotel", data.data.data);
+          return dispatch("AllHotel");
         }
         return cookies.set("next", 0);
       });
@@ -69,6 +71,16 @@ export default {
         return cookies.set("next", 0);
       });
     },
+    FindUmrah({ commit }, form) {
+      Umrah.umrahdetail(form).then((data) => {
+        console.log(data.data.data);
+        if (data.data.error_code == 0) {
+          cookies.set("next", 1);
+          return commit("detailumrah", data.data.data);
+        }
+        return cookies.set("next", 0);
+      });
+    },
   },
   mutations: {
     newhotel(state, payload) {
@@ -88,6 +100,9 @@ export default {
     },
     allumrah(state, payload) {
       state.umrahall = payload;
+    },
+    detailumrah(state, payload) {
+      state.umrahdetail = payload;
     },
   },
 };

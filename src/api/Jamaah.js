@@ -4,10 +4,16 @@ export default {
   addjamaah(data) {
     return client.post("jamaah/add", data);
   },
-  alljamaah() {
-    return client.get("jamaah/show");
+  alljamaah(data) {
+    return client.post("jamaah/show", data);
   },
   jamaahbelumbayar() {
     return client.get("jamaah/tagihan");
   },
+  jamaahbayar(data) {
+    return client.post("jamaah/bayar", data);
+  },
+  jamaahPesanan(data) {
+    return client.post('pesanan/update', data);
+  }
 };

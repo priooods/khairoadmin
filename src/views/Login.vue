@@ -1,25 +1,20 @@
 <template>
   <div id="login">
-        <div class="d-flex justify-content-center align-items-center h-100">
-            <div class="col-md-4">
-                <h4 class="text-uppercase">Khairo Tour</h4>
-                <h6>Login to your account <br> Hubungi administrator apabila anda lupa dengan informasi account anda</h6>
-                    <b-form class="w-100">
-                        <b-form-group id="lay-username">
-                            <label for="username">Username</label>
-                            <b-form-input size="sm" v-model="forms.username" id="username" type="text" required placeholder="Masukan Username">
-                            </b-form-input>
-                        </b-form-group>
-                        <b-form-group id="lay-password">
-                            <label for="password">Password</label>
-                            <b-form-input size="sm" v-model="forms.password" id="password" type="password" required placeholder="Masukan Password">
-                            </b-form-input>
-                        </b-form-group>
-                        <b-form-checkbox id="checkbox-1" v-model="status" name="checkbox" value="1" unchecked-value="0">
-                            Masuk sebagai Mitra
-                        </b-form-checkbox>
-                    </b-form>
-                <vs-button size="default" class="mt-3" @click="login" block html-type="submit">Login</vs-button>
+        <div class="flex justify-center items-center h-screen">
+            <div>
+                <img class="lgo" src="../assets/logos.jpg"/>
+                <h4 class="uppercase font-bold text-lg">Khairo Tour</h4>
+                <h6 class="mb-3 text-sm">Login to your account. Hubungi administrator <br>  apabila anda lupa dengan informasi account anda</h6>
+                <Form ref="formInline" :model="formInline" :rules="ruleInline">
+                    <FormItem prop="username" label="Username">
+                        <Input type="text" v-model="formInline.username" placeholder="Username"></Input>
+                    </FormItem>
+                    <FormItem prop="password" label="Password">
+                        <Input type="password" v-model="formInline.password" placeholder="Password"></Input>
+                    </FormItem>
+                </Form>
+                <Checkbox v-model="checklog">Masuk sebagai mitra</Checkbox>
+                <Button type="primary" @click="login" long class="mt-5">Login</Button>
             </div>
         </div>
   </div>
@@ -32,29 +27,38 @@ export default {
     name: "Login",
     data() {
         return{
-            forms: {
+            formInline: {
                 username: '',
                 password: ''
             },
-            status: 0,
-            show: false,
-            valid: true
+            checklog: false,
+            ruleInline: {
+                username: [
+                    { required: true, message: 'Harap Lengkapi Username Anda', trigger: 'blur' }
+                ],
+                password: [
+                    { required: true, message: 'Harap Lengkapi Password Anda', trigger: 'blur' },
+                    { type: 'string', min: 6, message: 'The password length cannot be less than 6 char', trigger: 'blur' }
+                ]
+            }
         }
     },
     methods:{
         login() {
             this.helper_loading("Mencari Akun ..");
-            if(this.forms.username.length == 0 || this.forms.password.length == 0){
-                return this.helper_global_form_notif();
-            } else {
-                if (this.status == 0) {
-                    this.$store.dispatch("operat/loginoperator", this.forms);
+            this.$refs['formInline'].validate((valid) => {
+                if (valid) {
+                    if(!this.checklog){
+                        this.$store.dispatch("operat/loginoperator", this.formInline);
+                        return this.helper_login_request('Selamat Datang', 'Selamat Datang Kembali, Bagaimana kabar kamu hari ini');
+                    }
+                    this.$store.dispatch("mitra/LoginMitra", this.formInline);
                     return this.helper_login_request('Selamat Datang', 'Selamat Datang Kembali, Bagaimana kabar kamu hari ini');
                 } else {
-                    this.$store.dispatch("mitra/LoginMitra", this.forms);
-                    return this.helper_login_request('Selamat Datang', 'Selamat Datang Kembali, Bagaimana kabar kamu hari ini');
+                    this.loading.close();
+                    return false;
                 }
-            }
+            });
         },
     }
 }
@@ -64,17 +68,20 @@ export default {
 @import '@/assets/fonts/font.scss';
 #login{
     height: 100vh;
+    .lgo{
+        width: 80px;
+        height: 80px;
+    }
     .ant-form-item-label label{
         margin-bottom: -90px;
     }
     .d-flex{
         width: 100%;
         h4{
-            font-family: $font-moderat-bold;
             font-size: 25px;
+            font-weight: 700;
         }
         h6{
-            font-family: $font-reguler;
             font-size: 14px;
             line-height: 15px;
         }

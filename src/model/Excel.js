@@ -11,7 +11,7 @@ export default {
         "TANGGAL LAHIR": "lahir",
         RELATION: "nama_mahram",
         "NO TELP/HP": "no_telp",
-        EMAIL: "",
+        EMAIL: "email",
         PEKERJAAN: "pekerjaan",
         "PENDIDIKAN TERAKHIR": "pendidikan",
         "NO PASPOR": "passport.nomor",

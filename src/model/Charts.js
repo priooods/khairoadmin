@@ -18,10 +18,20 @@ export default {
     };
   },
   computed: {
+    admin() {
+      return store.state.operat.userall.filter((e) => {
+        return e.type == "Admin";
+      })
+    },
+    operator() {
+      return store.state.operat.userall.filter((e) => {
+        return e.type == "Operator";
+      });
+    },
     series() {
       return [
-        store.state.operat.admin.length,
-        store.state.operat.operator.length,
+        this.admin.length,
+        this.operator.length,
       ];
     },
   },

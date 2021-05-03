@@ -1,58 +1,33 @@
 <template>
-  <div class="access views">
-      <h1 class="ml-3">Access Pengguna</h1>
-      <div class="d-md-flex d-lg-flex d-xl-flex d-block mt-3">
-        <div class="col">
-            <div class="mt-2 bg">
-              <div class="row justify-content-end mt-2">
-                <div class="col-12 col-md-8 row mr-auto">
-                  <vs-avatar circle size="25" class="mx-3">
+  <div class="access md:pb-0 pb-5">
+      <div v-show="!opened">
+        <h1 class="md:block hidden">Access Pengguna</h1>
+        <div class="md:flex mt-5">
+          <div class="md:w-4/6 w-full">
+              <div class="bg-gray-100 py-3 px-3 md:rounded-md">
+                <div class="flex">
+                  <vs-avatar circle size="35" class="mr-3">
                     <img src="../assets/avatar.png" alt="">
                   </vs-avatar>
-                  <div class="names" v-if="$store.state.operat.user">
-                    <h6>{{$store.state.operat.user.fullname}}</h6>
-                    <p>{{$store.state.operat.user.type}} <br>
-                      <span class="updt" @click="opened = true; typedetail = 3; datas = $store.state.operat.user">Update Profile</span>
-                    </p>
+                  <div v-if="$store.state.operat.user">
+                    <h6 class="font-semibold text-base">{{$store.state.operat.user.fullname}}</h6>
+                    <p class="font-semibold text-red-500">{{$store.state.operat.user.type}} </p>
                   </div>
                 </div>
-                <vs-button v-if="$store.state.operat.user.type == 'SuperUser' 
-                || $store.state.operat.user.type == 'SuperExtra'" 
-                class="col-md-3 mx-3 buton" 
-                @click="opened = true; typedetail = 1; datas = []">Tambah Baru</vs-button>
+                <div class="flex justify-end mt-5">
+                  <Button class="mr-2" type="success" @click="opened = true; typedetail = 3; datas = $store.state.operat.user">Update Profile</Button>
+                  <Button @click="createnew" v-if="$store.state.operat.user.type == 'SuperUser' || $store.state.operat.user.type == 'Admin'" type="primary">Tambah Baru</Button>
+                </div>
+                <p class="mt-3">Lihat semua data access pengguna, tap item untuk melihat detail</p>  
+                <TableGlobal @clickrow="rowclick" :keys="'fullname'" :placeholder="'Cari Nama Operator'" 
+                :totalpage="operatorUser.length/5 * 10" :data="operatorUser" :column="Operator"></TableGlobal>
               </div>
-              <div class="mt-5">
-                <p>Lihat semua data access pengguna, tap item untuk melihat detail</p>  
-              </div>
-              <b-form-input class="search my-3 w-100" size="sm" v-model="searchtable" type="text" placeholder="Cari Nama Operator"></b-form-input>
-              <div class="tables mt-1">
-                <table>
-                  <thead>
-                    <tr>
-                      <th>No</th>
-                      <th class="th-sm">Nama</th>
-                      <th class="th-sm">Jabatan</th>
-                      <th class="th-sm">Access</th>
-                      <th class="th-sm">Status</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr v-for="(data, i) in filteredClients" v-bind:key="i" @click="showdetail(data)">
-                      <td data-label="No">{{i + 1}}</td>
-                      <td data-label="Nama">{{data.fullname}}</td>
-                      <td data-label="Jabatan">{{data.jabatan ? data.jabatan : '--'}}</td>
-                      <td data-label="Access">{{data.type}}</td>
-                      <td data-label="Status" :class="{'unactive': data.log == 0 }">{{data.log ? "Aktif" : "Tidak Aktif"}}</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
+          </div>
+          <div class="md:w-2/6 w-full md:ml-2 md:mt-0 mt-4">
+            <div class="bg-gray-100 py-3 px-3 ">
+              <p class="mb-3 font-semibold">Chart Users Access</p>
+              <apexchart type="donut" :options="chartOptions" :series="series"></apexchart>
             </div>
-        </div>
-        <div class="col-md-4 col-12">
-          <div class="mt-2 bg h-75">
-            <h6 class="mb-3 mt-1">Chart Users Access</h6>
-            <apexchart type="donut" :options="chartOptions" :series="series"></apexchart>
           </div>
         </div>
       </div>
@@ -61,7 +36,7 @@
         :type.sync="typedetail"
         @closeable="closingDrawer"
         @deleteuser="deleteuser"
-        :datauser.sync="datas">
+        :datauser="datas">
       </UsersDetail>
   </div>
 </template>
@@ -69,51 +44,52 @@
 <script>
 import UsersDetail from '../components/UsersView';
 import Charts from '../model/Charts';
+import TableGlobal from '../components/TableGlobal';
+import TableData from '../plugins/TableData';
 export default {
     name: "Access",
-    components: {UsersDetail},
-    mixins: [Charts],
+    components: {UsersDetail, TableGlobal},
+    mixins: [Charts, TableData],
     data(){
       return {
         opened: false,
         typedetail: 1,
         datas: [],
-        searchtable: '',
+        formNew: {
+          username: '',
+          password: '',
+          type: '',
+          fullname: '',
+          jabatan: '',
+        },
       }
     },
     created(){
       this.$store.dispatch("operat/allOperator");
     },
-    computed:{
-      listaccess(){
-        return this.$store.state.operat.userall.filter(c => {
-          return c.type !== 'SuperExtra' && c.type !== 'SuperUser'
-        }); 
-      },
-      filteredClients() {
-        const search = this.searchtable.toLowerCase().trim();
-        if (!search) return this.listaccess;
-        return this.listaccess.filter(c => c.fullname.toLowerCase().indexOf(search) > -1);
-      },
-    },
     methods:{
       closingDrawer(value){
         this.opened = value;
+      },
+      rowclick(value){
+        if (this.$store.state.operat.user.type == 'Admin' 
+        ||this.$store.state.operat.user.type == 'SuperUser') {
+          this.datas = value; 
+          this.opened = true; 
+          this.typedetail = 2;
+          return;
+        }
+        return this.opened = false; 
       },
       deleteuser(val){
         var ind = this.$store.state.operat.userall.findIndex(e => e.username === val);
         this.$store.state.operat.userall.splice(ind,1);
         return this.opened = false;
       },
-      showdetail(data){
-        if (this.$store.state.operat.user.type == 'SuperExtra' 
-        ||this.$store.state.operat.user.type == 'SuperUser') {
-          this.datas = data; 
-          this.opened = true; 
-          this.typedetail = 2;
-          return;
-        }
-        return this.opened = false; 
+      createnew(){
+        this.opened = true; 
+        this.typedetail = 1; 
+        this.datas = this.formNew;
       },
     }
 }

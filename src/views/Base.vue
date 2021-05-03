@@ -1,18 +1,18 @@
 <template>
   <div class="Base">
-      <div class="d-md-flex position-relative">
-        <div class="py-3 px-3 d-flex d-md-none d-lg-none d-xl-none justify-content-end">
-          <h1 class="mr-auto text-uppercase my-auto tops">Khairo Tour</h1>
-          <i class='bx bx-menu bx-sm my-auto' v-if="!opened" @click="opened = true"></i>
-          <i class='bx bx-x bx-sm my-auto' v-if="opened" @click="opened = false"></i>
+    <div class="relative md:flex justify-start">
+      <div class="sider bg-black static md:h-screen md:block md:fixed md:z-10 md:w-1/6 px-3">
+        <div class="md:hidden justify-start flex py-2 text-gray-50">
+          <h2 class="font-bold text-lg">Khairo Tour</h2>
+          <i class='bx bx-menu bx-sm my-auto ml-auto' v-if="!opened" @click="opened = true"></i>
+          <i class='bx bx-x bx-sm my-auto ml-auto' v-if="opened" @click="opened = false"></i>
         </div>
-        <div class="col-md-2 navigasiin">
-          <navigasi :showing="opened" @backpres="backpres"/>
-        </div>
-        <div class="w-100 ly">
-          <router-view class="lay pt-2 pb-3"></router-view>
-        </div>
+        <navigasi class="md:block" :class="{'hidden': opened == false}" @backpres="backpres"/>
       </div>
+      <div class="relative md:min-h-screen ml-auto md:w-5/6 w-screen md:px-4 md:px-3 px-2">
+        <router-view class="md:py-4"></router-view>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -33,32 +33,3 @@ export default {
   components: {navigasi}
 }
 </script>
-
-<style lang="scss">
-
-.Base{
-  height: 100vh;
-  .view{
-    width: 100%;
-    .tops{
-      font-size: 15px;
-    }
-  }
-  .lay{
-    height: auto;
-  }
-  // .navigasiin{
-  //   z-index: 2;
-  // }
-
-}
-@media (max-width: 700px){
-  .Base{
-    .view{
-      .lay{
-        height: auto;
-      }
-    }
-  }
-}
-</style>

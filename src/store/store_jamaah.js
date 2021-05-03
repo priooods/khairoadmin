@@ -7,17 +7,18 @@ export default {
     jamaahbayar: [],
   },
   actions: {
-    AddJamaah({ commit }, form) {
+    AddJamaah({ dispatch }, form) {
       Jamaah.addjamaah(form).then((data) => {
         if (data.data.error_code == 0) {
           cookies.set("next", 1);
-          return commit("newjamaah", data.data.data);
+          return dispatch("Alljamaah");
         }
         return cookies.set("next", 0);
       });
     },
-    Alljamaah({ commit }) {
-      Jamaah.alljamaah().then((data) => {
+    Alljamaah({ commit }, form) {
+      Jamaah.alljamaah(form).then((data) => {
+        console.log(data.data.data);
         return commit("alljamaah", data.data.data);
       });
     },
@@ -26,15 +27,21 @@ export default {
         return commit("jamaahbayar", data.data.data);
       });
     },
-    // AddMaskapai({ commit }, form) {
-    //   Umrah.maskapaiadd(form).then((data) => {
-    //     if (data.data.error_code == 0) {
-    //       cookies.set("next", 1);
-    //       return commit("newmaskapai", data.data.data);
-    //     }
-    //     return cookies.set("next", 0);
-    //   });
-    // },
+    PesananUpdate({ dispatch },  form) {
+      Jamaah.jamaahPesanan(form).then((data) => {
+        console.log(data.data.data);
+        return dispatch("Alljamaah");
+      });
+    },
+    BayarJamaah({ dispatch }, form) {
+      Jamaah.jamaahbayar(form).then((data) => {
+        if (data.data.error_code == 0) {
+          cookies.set("next", 1);
+          return dispatch("Alljamaah");
+        }
+        return cookies.set("next", 0);
+      });
+    },
     // AllMaskapai({ commit }) {
     //   Umrah.allmaskapai().then((data) => {
     //     return commit("allmaskapai", data.data.data);

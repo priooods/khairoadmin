@@ -30,21 +30,21 @@ const actions = {
       return cookies.set("next", 0);
     });
   },
-  addoperator({ commit }, form) {
+  addoperator({ dispatch }, form) {
     Operator.AddOperator(form).then((data) => {
       if (data.data.error_code == 0) {
         cookies.set("next", 1);
-        return commit("newuser", data.data.data);
+        return dispatch("allOperator");
       }
       cookies.set("next", 0);
       return false;
     });
   },
-  updateOperator({ commit }, username) {
+  updateOperator({ dispatch }, username) {
     Operator.UpdateOperator(username).then((dt) => {
       if (dt.data.error_code == 0) {
         cookies.set("next", 1);
-        return commit("updateoperator", dt.data.data);
+        return dispatch("allOperator");
       }
       return cookies.set("next", 0);
     });
@@ -54,11 +54,11 @@ const actions = {
       return commit("userall", data.data.data);
     });
   },
-  deleteOperator({ commit }, username) {
+  deleteOperator({ dispatch }, username) {
     Operator.DeleteOperator(username).then((data) => {
       if (data.data.error_code == 0) {
         cookies.set("next", 1);
-        return commit("deleteoperator", username);
+        return dispatch("allOperator");
       }
       return cookies.set("next", 0);
     });
@@ -67,7 +67,7 @@ const actions = {
     Operator.LogoutOperator(username).then((data) => {
       if (data.data.error_code == 0) {
         cookies.keys().forEach((cookie) => cookies.remove(cookie));
-        router.push({ path: "/khairo" }, () => {});
+        router.push({ path: "/" }, () => {});
         return commit("logout");
       }
     });
@@ -80,35 +80,6 @@ const mutations = {
   },
   userall(state, payload) {
     state.userall = payload;
-    if (payload == null) return (state.userall = payload);
-    state.admin = payload.filter((e) => {
-      return e.type == "Admin";
-    });
-    state.operator = payload.filter((e) => {
-      return e.type == "Operator";
-    });
-  },
-  newuser(state, payload) {
-    state.userall.push(payload);
-    if (payload.type === "Admin") {
-      return state.admin.push(payload);
-    } else {
-      return state.operator.push(payload);
-    }
-  },
-  deleteoperator(state, payload) {
-    if (payload.type === "Admin") {
-      var adm = state.admin.findIndex((e) => e.id === payload.id);
-      return state.admin.splice(adm, 1);
-    } else {
-      var opt = state.operator.findIndex((e) => e.id === payload.id);
-      return state.operator.splice(opt, 1);
-    }
-  },
-  updateoperator(state, payload) {
-    var index = state.userall.findIndex((x) => x.id === payload.id);
-    state.userall.splice(index, 1, payload);
-    return this.commit("operat/userall", state.userall);
   },
   resetState(state) {
     Object.assign(state, defaultState());
