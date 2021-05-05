@@ -147,6 +147,40 @@ export default {
           minWidth: 120,
         },
       ],
+      Jamaah: [
+        {
+          title: "No",
+          key: "index",
+          width: 55,
+        },
+        {
+          title: "Code",
+          key: "code",
+          minWidth: 100,
+          ellipsis: true,
+        },
+        {
+          title: "NIK",
+          key: "no_ktp",
+          minWidth: 100,
+          ellipsis: true,
+        },
+        {
+          title: "Nama Jamaah",
+          key: "nama_lengkap",
+          minWidth: 130,
+        },
+        {
+          title: "Gender",
+          key: "gender",
+          minWidth: 90,
+        },
+        {
+          title: "Tempat Lahir",
+          key: "ttl",
+          minWidth: 100,
+        },
+      ],
     };
   },
   computed: {
@@ -182,6 +216,12 @@ export default {
     },
     umrahlist() {
       return store.state.umrah.umrahall.map((items, index) => ({
+        ...items,
+        index: index + 1,
+      }));
+    },
+    jamaahlist() {
+      return store.state.jamaah.jamaahall.map((items, index) => ({
         ...items,
         index: index + 1,
       }));

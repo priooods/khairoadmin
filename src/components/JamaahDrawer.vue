@@ -1,216 +1,127 @@
 <template>
-  <div class="jamaah-baru row px-3" v-show="show">
-        <div class="back d-flex justify-content-start col-1" @click="backpresed">
-            <i class='bx bx-left-arrow-alt ml-n3'></i>
-            <h2 class="ml-1">Kembali</h2>
+  <div class="jamaahnew" v-show="show">
+        <div class="cursor-pointer hover:text-yellow-500" @click="backpresed">
+            <i class='bx bx-left-arrow-alt inline'></i>
+            <h2 class="ml-1 inline">Kembali</h2>
         </div>
-        <div class="bg mt-3">
-            <p>Harap Lengkapi semua form yang tersedia untuk membuat data jamaah baru <br>Semua yang diberi tanda ( <span>*</span> ) wajib di isi, lainnya bersifat on</p>
-            <div class="row mt-3">
-                <b-form-group id="lay-nama-mitra" class="col-md-4 col-12 add-style">
-                    <label for="nama-mitra">Nama Mitra <span>*</span></label>
-                    <b-form-select class="search" v-model="form.mitra_id"
-                        size="sm" required id="nama-mitra" placeholder="Pilih Mitra Calon Jamaah">
-                            <b-form-select-option 
-                                v-for="(data,st) in $store.state.mitra.mitrall" v-bind:key="st" 
-                                :value="data.id">{{data.fullname}}
-                            </b-form-select-option>
-                    </b-form-select>
-                </b-form-group>
-                <b-form-group id="lay-paket" class="col-md-4 col-12 add-style">
-                    <label for="paket">Paket Umrah <span>*</span></label>
-                    <b-form-select class="search" v-model="form.umrah_id"
-                        size="sm" required id="paket" placeholder="Pilih Paket Umrah">
-                            <b-form-select-option
-                                v-for="(data,st) in $store.state.umrah.umrahall" v-bind:key="st" 
-                                :value="data.id">{{data.nama}}
-                            </b-form-select-option>
-                    </b-form-select>
-                </b-form-group>
-                <b-form-group id="lay-nama-lengkap" class="col-md-4 col-12 add-style">
-                    <label for="nama-lengkap">Nama Lengkap <span>*</span></label>
-                    <b-form-input class="search" size="sm" 
-                        v-model="form.nama_lengkap" id="nama-lengkap" type="text" 
-                        required placeholder="Masukan Nama lengkap">
-                    </b-form-input>
-                </b-form-group>
-                <b-form-group id="lay-no-KTP" class="col-md-4 col-12 add-style">
-                    <label for="no-KTP">No KTP <span>*</span></label>
-                    <b-form-input class="search" size="sm" :state="ktpState"
-                        v-model="form.no_ktp" id="no-KTP" type="number" 
-                        required placeholder="Masukan no KTP Jamaah">
-                    </b-form-input>
-                </b-form-group>
-                <b-form-group id="lay-pasport-nama" class="col-md-4 col-12 add-style">
-                    <label for="pasport-nama">Nama Passport</label>
-                    <b-form-input class="search" v-on:change="checkpasname" size="sm" 
-                        v-model="passport.nama" id="pasport-nama" type="text" 
-                        required placeholder="Masukan Nama Lengkap pada Passport">
-                    </b-form-input>
-                </b-form-group>
-                <b-form-group id="lay-passport-No" class="col-md-4 col-12 add-style" v-show="showpassport">
-                    <label for="passport-No">No Passport <span>*</span></label>
-                    <b-form-input class="search" size="sm" :state="passportState"
-                        v-model="passport.nomor" id="passport-No" type="text" 
-                        required placeholder="Masukan No pada Passport">
-                    </b-form-input>
-                </b-form-group>
-                <b-form-group id="lay-passport-kota" class="col-md-4 col-12 add-style" v-show="showpassport">
-                    <label for="passport-kota">Kota Passport <span>*</span></label>
-                    <b-form-input class="search" size="sm" 
-                        v-model="passport.kota" id="passport-kota" type="text" 
-                        required placeholder="Masukan Kota pada Passport">
-                    </b-form-input>
-                </b-form-group>
-                <b-form-group id="lay-passport-keluar" class="col-md-4 col-12 add-style" v-show="showpassport">
-                    <label for="passport-keluar">Passport Created<span>*</span></label>
-                    <b-form-datepicker class="search col my-auto" size="sm"
-                        v-model="passport.tgl_keluar" id="passport-keluar"
-                        required placeholder="Waktu Awal Berlaku Passport">
-                    </b-form-datepicker>
-                </b-form-group>
-                <b-form-group id="lay-passport-habis" class="col-md-4 col-12 add-style" v-show="showpassport">
-                    <label for="passport-habis">Passport Expired<span>*</span></label>
-                    <b-form-datepicker class="search col my-auto" size="sm"
-                        v-model="passport.tgl_habis" id="passport-habis"
-                        required placeholder="Waktu Habis Berlaku Passport">
-                    </b-form-datepicker>
-                </b-form-group>
-                <b-form-group id="lay-pasport-nama-ayah" class="col-md-4 col-12 add-style">
-                    <label for="pasport-nama-ayah">Nama Ayah</label>
-                    <b-form-input class="search" size="sm" 
-                        v-model="form.nama_ayah" id="nama-ayah" type="text" 
-                        required placeholder="Masukan Nama Ayah Jamaah">
-                    </b-form-input>
-                </b-form-group>
-                <b-form-group id="lay-tgl-lahir" class="col-md-4 col-12 add-style">
-                    <label for="tgl-lahir">Tempat, Tanggal Lahir<span>*</span></label>
-                    <div class="d-flex">
-                        <b-form-input class="search col" size="sm" 
-                            v-model="ttl.tempat" id="tempat-lahir" type="text" 
-                            required placeholder="Tempat Lahir">
-                        </b-form-input>
-                        <b-form-datepicker class="search col" size="sm"
-                            v-model="ttl.tanggal" id="tgl-lahir"
-                            required placeholder="Tanggal Lahir">
-                        </b-form-datepicker>
-                    </div>
-                </b-form-group>
-                <b-form-group id="lay-gender" class="col-md-4 col-12 add-style">
-                    <label for="gender">Gender Jamaah <span>*</span></label>
-                    <b-form-select class="search" v-model="form.gender"
-                        size="sm" required :options="genderoption" id="gender" placeholder="Pilih Gender Jamaah">
-                    </b-form-select>
-                </b-form-group>
-                <b-form-group id="lay-provinsi" class="col-md-4 col-12 add-style">
-                    <label for="provinsi">Provinsi <span>*</span></label>
-                    <b-form-input class="search" size="sm" 
-                        v-model="form.provinsi" id="provinsi" type="text" 
-                        required placeholder="Masukan Provinsi Jamaah">
-                    </b-form-input>
-                </b-form-group>
-                <b-form-group id="lay-kota" class="col-md-4 col-12 add-style">
-                    <label for="kota">Kota <span>*</span></label>
-                    <b-form-input class="search" size="sm" 
-                        v-model="form.kota" id="kota" type="text" 
-                        required placeholder="Masukan Kota Jamaah">
-                    </b-form-input>
-                </b-form-group>
-                <b-form-group id="lay-kecamatan" class="col-md-4 col-12 add-style">
-                    <label for="kecamatan">Kecamatan <span>*</span></label>
-                    <b-form-input class="search" size="sm" 
-                        v-model="form.kecamatan" id="kecamatan" type="text" 
-                        required placeholder="Masukan Kecamatan Jamaah">
-                    </b-form-input>
-                </b-form-group>
-                <b-form-group id="lay-desa" class="col-md-4 col-12 add-style">
-                    <label for="desa">Desa <span>*</span></label>
-                    <b-form-input class="search" size="sm" 
-                        v-model="form.desa" id="desa" type="text" 
-                        required placeholder="Masukan Desa Jamaah">
-                    </b-form-input>
-                </b-form-group>
-                <b-form-group id="lay-alamat" class="col-md-4 col-12 add-style">
-                    <label for="alamat">Alamat Jamaah <span>*</span></label>
-                    <b-form-textarea class="search" size="sm" 
-                    v-model="form.alamat" id="alamat" type="text" 
-                    required placeholder="Alamat Lengkap Jamaah">
-                    </b-form-textarea>
-                </b-form-group>
-                <b-form-group id="lay-kode-pos" class="col-md-4 col-12 add-style">
-                    <label for="kode-pos">Kode POS</label>
-                    <b-form-input class="search" size="sm" 
-                        v-model="form.kode_pos" id="kode-pos" type="number" 
-                        required placeholder="Masukan Kode Pos">
-                    </b-form-input>
-                </b-form-group>
-                <b-form-group id="lay-Negara" class="col-md-4 col-12 add-style">
-                    <label for="Negara">Negara Jamaah <span>*</span></label>
-                    <b-form-select class="search" v-model="form.negara"
-                        size="sm" required :options="negaraoption" id="Negara" placeholder="Pilih Negara Jamaah">
-                    </b-form-select>
-                </b-form-group>
-                <b-form-group id="lay-no-tlp" class="col-md-4 col-12 add-style">
-                    <label for="no-tlp">No tlp Jamaah<span>*</span></label>
-                    <b-form-input class="search" size="sm" 
-                        v-model="form.no_telp" id="no-tlp" type="number" 
-                        required placeholder="Masukan no tlp Jamaah">
-                    </b-form-input>
-                </b-form-group>
-                <b-form-group id="lay-email" class="col-md-4 col-12 add-style">
-                    <label for="email">Email Jamaah<span>*</span></label>
-                    <b-form-input class="search" size="sm" 
-                        v-model="form.email" id="email" type="text" 
-                        required placeholder="Masukan email Jamaah">
-                    </b-form-input>
-                </b-form-group>
-                <b-form-group id="lay-pendidikan" class="col-md-4 col-12 add-style">
-                    <label for="pendidikan">Pendidikan <span>*</span></label>
-                    <b-form-select class="search" v-model="form.pendidikan"
-                        size="sm" required :options="pendidikanoption" id="pendidikan" placeholder="Pilih Pendidikan Jamaah">
-                    </b-form-select>
-                </b-form-group>
-                <b-form-group id="lay-pekerjaan" class="col-md-4 col-12 add-style">
-                    <label for="pekerjaan">Pekerjaan <span>*</span></label>
-                    <b-form-select class="search" v-model="form.pekerjaan"
-                        size="sm" required :options="pekerjaanoption" id="pekerjaan" placeholder="Pilih Pekerjaan Jamaah">
-                    </b-form-select>
-                </b-form-group>
-                <b-form-group id="lay-status-haji" class="col-md-4 col-12 add-style">
-                    <label for="status-haji">Status Haji <span>*</span></label>
-                    <b-form-select class="search" v-model="form.status_haji"
-                        size="sm" required :options="statushajioption" id="status-haji" placeholder="Status Haji Jamaah">
-                    </b-form-select>
-                </b-form-group>
-                <b-form-group id="lay-darah" class="col-md-4 col-12 add-style">
-                    <label for="darah">Gol Darah  <span>*</span></label>
-                    <b-form-select class="search" v-model="form.darah"
-                        size="sm" required :options="darahoption" id="gol_darah" placeholder="Gol Darah Jamaah">
-                    </b-form-select>
-                </b-form-group>
-                <b-form-group id="lay-nama_mahram" class="col-md-4 col-12 add-style">
-                    <label for="nama_mahram">Nama Mahram</label>
-                    <b-form-input class="search" size="sm" 
-                        v-model="form.nama_mahram" id="nama_mahram" type="text" 
-                        required placeholder="Nama Mahram Jamaah">
-                    </b-form-input>
-                </b-form-group>
-                <b-form-group id="lay-hub_mahram" class="col-md-4 col-12 add-style">
-                    <label for="hub_mahram">Hubungan Mahram</label>
-                    <b-form-select class="search" v-model="form.hubungan_mahram"
-                        size="sm" required :options="huboption" id="hub_mahram" placeholder="Hubungan Mahram Jamaah">
-                    </b-form-select>
-                </b-form-group>
-                <b-form-group id="lay-no_mahram" class="col-md-4 col-12 add-style">
-                    <label for="no_mahram">No Telp Mahram</label>
-                    <b-form-input class="search" size="sm" id="no_mahram" type="number" 
-                        required placeholder="No tlp Mahram Jamaah">
-                    </b-form-input>
-                </b-form-group>
-            </div>
-            <div class="d-flex">
-                <vs-button @click="savejamaah" size="small">Simpan Jamaah</vs-button>
-                <vs-button @click="canceled" danger size="small">Cancel</vs-button>
+        <div class="w-full mt-3">
+            <p class="text-xs">Harap Lengkapi semua form yang tersedia untuk membuat data jamaah baru <br>Semua yang diberi tanda ( <span class="text-red-500">*</span> ) wajib di isi, lainnya bersifat on</p>
+            <Form class="grid md:grid-cols-4 md:gap-1 mt-3" :model="form">
+                <FormItem prop="mitra" label="Nama Perwakilan">
+                    <Select placeholder="Pilih Perwakilan" v-model="form.mitra_id" filterable :clearable="true">
+                        <Option v-for="(data,st) in $store.state.mitra.mitrall" v-bind:key="st" :value="data.id">{{ data.fullname }}</Option>
+                    </Select>
+                </FormItem>
+                <FormItem prop="paket" label="Paket Umrah">
+                    <Select placeholder="Pilih Paket Umrah" v-model="form.umrah_id" filterable :clearable="true">
+                        <Option v-for="(data,st) in $store.state.umrah.umrahall" v-bind:key="st" :value="data.id">{{ data.nama }}</Option>
+                    </Select>
+                </FormItem>
+                <FormItem prop="kaps_kamar" label="Pilihan Kamar" v-show="showkamar">
+                    <Input type="text" v-model="form.kapasitas_kamar" placeholder="Pilihan Kamar jamaah"></Input>
+                </FormItem>
+                <FormItem prop="harga_kamar" label="Harga Kamar" v-show="showkamar">
+                    <Input type="number" v-model="form.harga_kamar" placeholder="Harga Kamar jamaah"></Input>
+                </FormItem>
+                <FormItem prop="nama_lengkap" label="Nama Lengkap">
+                    <Input type="text" v-model="form.nama_lengkap" placeholder="Nama Lengkap jamaah"></Input>
+                </FormItem>
+                <FormItem prop="no_ktp" label="No KTP">
+                    <Input type="number" v-model="form.no_ktp" placeholder="No KTP jamaah"></Input>
+                </FormItem>
+                <FormItem prop="nama_passport" label="Nama Passport">
+                    <Input type="text" v-model="form.passport.nama" placeholder="Nama Passport jamaah"></Input>
+                </FormItem>
+                <FormItem prop="no_passport" label="No Passport" v-show="showpassport">
+                    <Input type="number" v-model="form.passport.nomor" placeholder="No Passport jamaah"></Input>
+                </FormItem>
+                <FormItem prop="kota_passport" label="Kota Passport" v-show="showpassport">
+                    <Input type="text" v-model="form.passport.kota" placeholder="Kota Passport jamaah"></Input>
+                </FormItem>
+                <FormItem prop="keluar_passport" label="Diterbitkan Passport" v-show="showpassport">
+                    <DatePicker type="date" v-model="form.passport.tgl_keluar" placeholder="Diterbitkan Passport jamaah" class="w-full"></DatePicker>
+                </FormItem>
+                <FormItem prop="habis_passport" label="Expired Passport" v-show="showpassport">
+                    <DatePicker type="date" v-model="form.passport.tgl_habis" placeholder="Expired Passport jamaah" class="w-full"></DatePicker>
+                </FormItem>
+                <FormItem prop="nama_ayah" label="Nama Ayah">
+                    <Input type="text" v-model="form.nama_ayah" placeholder="Nama Ayah jamaah"></Input>
+                </FormItem>
+                <FormItem prop="tempat_lahir" label="Tempat Lahir">
+                    <Input type="text" v-model="ttl.tempat" placeholder="Tempat Lahir jamaah"></Input>
+                </FormItem>
+                <FormItem prop="tgl_lahir" label="Tanggal Lahir">
+                    <DatePicker type="date" v-model="ttl.tanggal" placeholder="Tanggal Lahir jamaah" class="w-full"></DatePicker>
+                </FormItem>
+                <FormItem prop="gender" label="Gender Jamaah">
+                    <Select placeholder="Pilih Gender Jamaah" v-model="form.gender">
+                        <Option v-for="(data,st) in genderoption" v-bind:key="st" :value="data.value">{{ data.label }}</Option>
+                    </Select>
+                </FormItem>
+                <FormItem prop="provinsi" label="Provinsi">
+                    <Input type="text" v-model="form.provinsi" placeholder="Provinsi Jamaah"></Input>
+                </FormItem>
+                <FormItem prop="kota" label="Kota">
+                    <Input type="text" v-model="form.kota" placeholder="Kota Jamaah"></Input>
+                </FormItem>
+                <FormItem prop="kecamatan" label="Kecamatan">
+                    <Input type="text" v-model="form.kecamatan" placeholder="Kecamatan Jamaah"></Input>
+                </FormItem>
+                <FormItem prop="desa" label="Desa/Kelurahan">
+                    <Input type="text" v-model="form.desa" placeholder="Desa/Kelurahan Jamaah"></Input>
+                </FormItem>
+                <FormItem prop="alamat" label="Alamat">
+                    <Input type="textarea" :autosize="true" v-model="form.alamat" placeholder="Alamat Jamaah"></Input>
+                </FormItem>
+                <FormItem prop="kode_pos" label="Kode Pos">
+                    <Input type="number" v-model="form.kode_pos" placeholder="Kode Pos Jamaah"></Input>
+                </FormItem>
+                <FormItem prop="negara" label="Negara Jamaah">
+                    <Select placeholder="Pilih Negara Jamaah" v-model="form.negara">
+                        <Option v-for="(data,st) in negaraoption" v-bind:key="st" :value="data.value">{{ data.label }}</Option>
+                    </Select>
+                </FormItem>
+                <FormItem prop="no_tlp" label="No Telp">
+                    <Input type="number" v-model="form.no_telp" placeholder="No Telp Jamaah"></Input>
+                </FormItem>
+                <FormItem prop="email" label="E-mail">
+                    <Input type="text" v-model="form.email" placeholder="e-mail Jamaah"></Input>
+                </FormItem>
+                <FormItem prop="pendidikan" label="Pendidikan">
+                    <Select placeholder="Pilih Pendidikan Jamaah" v-model="form.pendidikan" filterable>
+                        <Option v-for="(data,st) in pendidikanoption" v-bind:key="st" :value="data.value">{{ data.label }}</Option>
+                    </Select>
+                </FormItem>
+                <FormItem prop="pekerjaan" label="Pekerjaan">
+                    <Select placeholder="Pilih pekerjaan Jamaah" v-model="form.pekerjaan" filterable>
+                        <Option v-for="(data,st) in pekerjaanoption" v-bind:key="st" :value="data.value">{{ data.label }}</Option>
+                    </Select>
+                </FormItem>
+                <FormItem prop="status_haji" label="Status Haji">
+                    <Select placeholder="Status Haji Jamaah" v-model="form.status_haji">
+                        <Option v-for="(data,st) in statushajioption" v-bind:key="st" :value="data.value">{{ data.label }}</Option>
+                    </Select>
+                </FormItem>
+                <FormItem prop="darah" label="Golongan Darah">
+                    <Select placeholder="Golongan Darah Jamaah" v-model="form.darah">
+                        <Option v-for="(data,st) in darahoption" v-bind:key="st" :value="data.value">{{ data.label }}</Option>
+                    </Select>
+                </FormItem>
+                <FormItem prop="nama_mahram" label="Nama Mahram">
+                    <Input type="text" v-model="form.nama_mahram" placeholder="Nama Mahram Jamaah"></Input>
+                </FormItem>
+                <FormItem prop="hubungan_mahram" label="Hubungan Mahram">
+                    <Select placeholder="Hubungan Mahram Jamaah" v-model="form.hubungan_mahram">
+                        <Option v-for="(data,st) in huboption" v-bind:key="st" :value="data.value">{{ data.label }}</Option>
+                    </Select>
+                </FormItem>
+                <FormItem prop="no_tlp" label="No Telp Mahram">
+                    <Input type="number" placeholder="No Telp Mahram Jamaah"></Input>
+                </FormItem>
+            </Form>
+            <div class="mt-3 flex">
+                <Button @click="savejamaah" type="primary">Simpan Jamaah</Button>
+                <Button @click="canceled" class="ml-2" type="error">Cancel</Button>
             </div>
         </div>
   </div>
@@ -227,49 +138,49 @@ export default {
     data() {
         return {
             huboption:[
-                {value: 'Suami', text: 'Suami'},
-                {value: 'Istri', text: 'Istri'},
-                {value: 'Anak', text: 'Anak'},
-                {value: 'Lain-lain', text: 'Lain-lain'},
+                {value: 'Suami', label: 'Suami'},
+                {value: 'Istri', label: 'Istri'},
+                {value: 'Anak', label: 'Anak'},
+                {value: 'Lain-lain', label: 'Lain-lain'},
             ],
             genderoption:[
-                {value: 'Pria', text: 'Pria'},
-                {value: 'Wanita', text: 'Wanita'},
+                {value: 'Pria', label: 'Pria'},
+                {value: 'Wanita', label: 'Wanita'},
             ],
             darahoption: [
-                {value: 'A', text: 'A'},
-                {value: 'B', text: 'B'},
-                {value: 'AB', text: 'AB'},
-                {value: 'O', text: 'O'},
+                {value: 'A', label: 'A'},
+                {value: 'B', label: 'B'},
+                {value: 'AB', label: 'AB'},
+                {value: 'O', label: 'O'},
             ],
             statushajioption:[
-                {value: 'Sudah', text: 'Sudah'},
-                {value: 'Belum', text: 'Belum'},
+                {value: 'Sudah', label: 'Sudah'},
+                {value: 'Belum', label: 'Belum'},
             ],
             pendidikanoption:[
-                {value: 'SD', text: 'SD'},
-                {value: 'SMP', text: 'SMP'},
-                {value: 'SMA/SLTA/MA', text: 'SMA/SLTA/MA'},
-                {value: 'D1/D2/D3/SM', text: 'D1/D2/D3/SM'},
-                {value: 'S1', text: 'S1'},
-                {value: 'S2', text: 'S2'},
-                {value: 'S3', text: 'S3'},
+                {value: 'SD', label: 'SD'},
+                {value: 'SMP', label: 'SMP'},
+                {value: 'SMA/SLTA/MA', label: 'SMA/SLTA/MA'},
+                {value: 'D1/D2/D3/SM', label: 'D1/D2/D3/SM'},
+                {value: 'S1', label: 'S1'},
+                {value: 'S2', label: 'S2'},
+                {value: 'S3', label: 'S3'},
             ],
             pekerjaanoption:[
-                {value: 'Pegawai Sipil', text: 'Pegawai Sipil'},
-                {value: 'TNI/Polri', text: 'TNI/Polri'},
-                {value: 'Wiraswasta', text: 'Wiraswasta'},
-                {value: 'Tani/Nelayan', text: 'Tani/Nelayan'},
-                {value: 'Swasta', text: 'Swasta'},
-                {value: 'Ibu Rumah Tangga', text: 'Ibu Rumah Tangga'},
-                {value: 'Pelajar/Mahasiswa', text: 'Pelajar/Mahasiswa'},
-                {value: 'BUMN/BUMD', text: 'BUMN/BUMD'},
-                {value: 'Pensiunan', text: 'Pensiunan'},
-                {value: 'Lainnya', text: 'Lainnya'},
+                {value: 'Pegawai Sipil', label: 'Pegawai Sipil'},
+                {value: 'TNI/Polri', label: 'TNI/Polri'},
+                {value: 'Wiraswasta', label: 'Wiraswasta'},
+                {value: 'Tani/Nelayan', label: 'Tani/Nelayan'},
+                {value: 'Swasta', label: 'Swasta'},
+                {value: 'Ibu Rumah Tangga', label: 'Ibu Rumah Tangga'},
+                {value: 'Pelajar/Mahasiswa', label: 'Pelajar/Mahasiswa'},
+                {value: 'BUMN/BUMD', label: 'BUMN/BUMD'},
+                {value: 'Pensiunan', label: 'Pensiunan'},
+                {value: 'Lainnya', label: 'Lainnya'},
             ],
             negaraoption:[
-                {value: 'Indonesia', text: 'Indonesia'},
-                {value: 'Asing', text: 'Asing'},
+                {value: 'Indonesia', label: 'Indonesia'},
+                {value: 'Asing', label: 'Asing'},
             ],
             form:{
                 mitra_id: '',
@@ -289,7 +200,13 @@ export default {
                 no_telp:'',
                 pendidikan:'',
                 pekerjaan:'',
-                passport: null,
+                passport: {
+                    nama: '',
+                    kota: '',
+                    tgl_habis: '',
+                    nomor: '',
+                    tgl_keluar: '',
+                },
                 status_haji:'',
                 nama_mahram:'',
                 hubungan_mahram: '',
@@ -300,17 +217,31 @@ export default {
                 tempat:'',
                 tanggal: ''
             },
-            passport:{
-                nama: '',
-                kota: '',
-                tgl_habis: '',
-                nomor: '',
-                tgl_keluar: '',
-            },
-            showpassport: false
+            showpassport: false,
+            showkamar:false
+        }
+    },
+    watch:{
+        namapass: function(value) {
+            if (value.length == 0) {
+                return this.showpassport = false
+            }
+            return this.showpassport = true 
+        },
+        umrah: function(value){
+            if (value == null) {
+                return this.showkamar = false
+            }
+            return this.showkamar = true 
         }
     },
     computed:{
+        namapass(){
+            return this.form.passport.nama;
+        },
+        umrah(){
+            return this.form.umrah_id;
+        },
         ktpState(){
             if(this.form.no_ktp.length < 16){
                 return false;
@@ -334,13 +265,6 @@ export default {
         },
         canceled(){
             return this.$emit('closeable', false);
-        },
-        checkpasname(value){
-            if(value.length > 0){
-                this.showpassport = true;
-            } else {
-                this.showpassport = false;
-            }
         },
         savejamaah(){
             this.helper_loading("Menyimpan Jamaah Baru...");
@@ -379,39 +303,3 @@ export default {
     }
 }
 </script>
-
-<style lang="scss">
-@import "@/assets/fonts/font.scss";
-.jamaah-baru{
-    min-height: 100vh !important;
-    height: auto;
-    // height: 100vh;
-    p, label{
-        span{
-            color: red;
-            font-weight: 800;
-        }
-    }
-    h1{
-        font-size: 16px;
-        font-family: $font-bold;
-    }
-    .back{
-        h2{
-            font-size: 14px;
-            font-family: $font-bold;
-        }
-    }
-    .back:hover{
-        color: $yellow;
-        cursor: pointer;
-        h2{
-            color: $yellow;
-        }
-    }
-    #lay-alamat{
-        min-height: 40px;
-    }
-    // ns1.rumahweb.com
-}
-</style>
