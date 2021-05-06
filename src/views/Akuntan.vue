@@ -1,10 +1,8 @@
 <template>
-  <div class="akuntan views">
-      <h1 class="ml-3">History Akuntan</h1>
-      <div class="bg mt-3 mx-2">
-            <div class="mt-2">
-                <p>Lihat semua History Pembayaran Jamaah</p>  
-            </div>
+  <div class="akuntan">
+      <h1 class="hidden md:block">History Akuntan</h1>
+      <div class="bg-gray-100 mt-5 md:mt-3 md:p-3 p-2">
+            <p class="md:mt-0 mt-5">Lihat semua History Pembayaran Jamaah</p> 
             <b-form-input class="search my-3 w-100" size="sm" v-model="searchtable" type="text" placeholder="Cari History"></b-form-input>
             <div class="tables mt-1">
                 <table>
@@ -76,7 +74,3 @@ export default {
     },
 }
 </script>
-
-<style>
-
-</style>

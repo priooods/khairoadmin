@@ -11,7 +11,7 @@
                     <p class="font-medium">Total Keseluruhan Jamaah Wanita</p>
                     <h5 class="flex mt-3 font-semibold">{{perempuan.length}}<p class="ml-2 my-auto"> / Orang</p></h5>
                 </div>
-                <div class="cursor-pointer rounded-md text-white p-3 bg-red-500" @click="showdetailss">
+                <div class="cursor-pointer rounded-md text-white p-3 bg-red-400" @click="showdetailss">
                     <p class="font-medium">Total Jamaah yang belum lunas</p>
                     <h5 class="flex mt-3 font-semibold">{{bayar.length}}<p class="ml-2 my-auto"> / Orang</p></h5>
                 </div>
@@ -22,10 +22,11 @@
             </div>
             <div class="bg-gray-100 p-2 mt-4">
                 <div>
-                    <div class="flex justify-end">
+                    <div class="md:flex justify-end">
+                        <p class="mr-auto text-xs md:my-auto md:mb-0 mb-4">Tap items pada table untuk melihat detail lengkapnya</p>
                         <download-excel
                             v-if="$cookies.get('type') == 1"
-                            class="btn btn-default md:mr-2 mr-1"
+                            class="btn btn-default md:mr-2 mr-1 md:block inline"
                             :data="json_data"
                             :fields="json_fields"
                             worksheet="My Worksheet"
@@ -33,7 +34,7 @@
                         >
                             <Button type="success">Download Excel</Button>
                         </download-excel>
-                        <Button type="primary" @click="showform = 2">Tambah Jamaah Baru</Button>
+                        <Button type="primary" class="md:block inline" @click="showform = 2">Tambah Jamaah Baru</Button>
                     </div>
                     <TableGlobal :column="Jamaah" :data="jamaahlist" :totalpage="$store.state.jamaah.jamaahall.length/5 * 10" :placeholder="'Cari Nama Jamaah...'" :key="'nama_lengkap'" class="mt-3"></TableGlobal>
                     <!-- <div class="tables">
@@ -127,11 +128,6 @@ export default {
         },
     },
     created(){
-        // if(this.$cookies.get('type') == 1){
-        //     this.$store.dispatch('jamaah/Alljamaah', {mitra: null});
-        // } else {
-        //     this.$store.dispatch('jamaah/Alljamaah', {mitra: this.$store.state.mitra.user.id});
-        // }
         this.$store.dispatch('jamaah/Alljamaah', {mitra: null});
         this.$store.dispatch('jamaah/JamaahBelumBayar');
     },
@@ -166,7 +162,6 @@ export default {
         showdetailss(){
             this.showform = 3;
             this.checkopen = 4;
-            console.log(this.$store.state.jamaah.jamaahbayar);
             return this.detailjamaah = this.$store.state.jamaah.jamaahbayar;
         }
     },
