@@ -1,101 +1,109 @@
 <template>
     <div class="block" v-show="show == 2">
-        <div class="cursor-pointer hover:text-red-500" @click="backpresed">
+        <div class="cursor-pointer md:w-1/6 mt-4 md:mt-0 hover:text-red-500" @click="backpresed">
             <i class='bx bx-left-arrow-alt inline'></i>
-            <h2 class="inline">Tutup</h2>
+            <h2 class="inline ml-2">Tutup</h2>
         </div>
         <p class="text-md mt-3 md:mt-5">Harap lengkapi semua form yang tersedia pada form dibawah</p>
         <div class="mt-4">
-            <p class="font-semibold text-sm">Informasi Umum</p>
-            <Form class="md:grid md:w-4/6 grid-cols-2 md:gap-2">
-                <FormItem label="Nama Paket" :model="form" :rules="formRules">
-                    <Input v-model="form.nama" type="text" placeholder="Masukan Nama Paket"></Input>
-                </FormItem>
-                <FormItem label="Durasi Paket">
-                    <Input v-model="form.durasi" type="number" placeholder="Masukan Durasi Paket"></Input>
-                </FormItem>
-                <FormItem label="Tahun Paket ( Hijriah )">
-                    <Input v-model="form.tahun" type="number" placeholder="contoh: 1976"></Input>
-                </FormItem>
-                <FormItem label="Kuota Paket">
-                    <Input v-model="form.kuota" type="number" placeholder="Masukan Kuota Paket"></Input>
-                </FormItem>
-                <FormItem label="Biaya Paket">
-                    <Input v-model="form.biaya" type="number" placeholder="Masukan biaya Paket"></Input>
-                </FormItem>
-                <FormItem label="Tanggal Berangkat">
-                    <DatePicker type="date" v-model="tanggal.berangkat" placeholder="Tanggal Berangkat Umrah" class="w-full"></DatePicker>
-                </FormItem>
-                <FormItem label="Tanggal Pulang">
-                    <DatePicker type="date" v-model="tanggal.pulang" placeholder="Tanggal Pulang Umrah" class="w-full"></DatePicker>
-                </FormItem>
-                <FormItem label="Maskapai">
-                    <Input v-model="form.maskapai" type="text" placeholder="Masukan Maskapai Umrah"></Input>
-                </FormItem>
+            <Form ref="form" class="md:grid w-full grid-cols-2 md:gap-2" :inline="false" :model="formsUmrah" :rules="formRules">
+                <div class="md:w-4/6">
+                    <p class="font-bold text-sm mb-3 md:mb-4">Informasi Umum</p>
+                    <FormItem label="Nama Paket" prop="nama">
+                        <Input v-model="formsUmrah.nama" type="text" placeholder="Masukan Nama Paket"></Input>
+                    </FormItem>
+                    <FormItem label="Durasi Paket" prop="durasi">
+                        <Input v-model="formsUmrah.durasi" type="number" placeholder="Masukan Durasi Paket"></Input>
+                    </FormItem>
+                    <FormItem label="Tahun Paket ( Hijriah )" prop="tahun">
+                        <Input v-model="formsUmrah.tahun" type="number" placeholder="contoh: 1976"></Input>
+                    </FormItem>
+                    <FormItem label="Kuota Paket" prop="kuota">
+                        <Input v-model="formsUmrah.kuota" type="number" placeholder="Masukan Kuota Paket"></Input>
+                    </FormItem>
+                    <FormItem label="Biaya Paket" prop="biaya">
+                        <Input v-model="formsUmrah.biaya" type="number" placeholder="Masukan biaya Paket"></Input>
+                    </FormItem>
+                    <FormItem label="Tanggal Berangkat" prop="tanggal.berangkat">
+                        <DatePicker format="yyyy-MM-dd" type="date" v-model="formsUmrah.tanggal.berangkat" placeholder="Tanggal Berangkat Umrah" class="w-full"></DatePicker>
+                    </FormItem>
+                    <FormItem label="Tanggal Pulang" prop="tanggal.pulang">
+                        <DatePicker format="yyyy-MM-dd" type="date" v-model="formsUmrah.tanggal.pulang" placeholder="Tanggal Pulang Umrah" class="w-full"></DatePicker>
+                    </FormItem>
+                </div>
+                <div class="md:w-4/6">
+                    <p class="font-bold text-sm mb-3 md:mb-4">Informasi Detail</p>
+                    <FormItem label="Maskapai" prop="maskapai[0].nama">
+                        <Input v-model="formsUmrah.maskapai[0].nama" type="text" placeholder="Masukan Maskapai Umrah"></Input>
+                    </FormItem>
+                    <div class="mt-3">
+                        <p class="font-semibold text-xs mb-3">Data Hotel Madinnah</p>
+                        <FormItem prop="hotel[0].nama" label="Nama Hotel Madinnah">
+                            <Input v-model="formsUmrah.hotel[0].nama" type="text" placeholder="Masukan Maskapai Umrah"></Input>
+                        </FormItem>
+                        <FormItem prop="hotel[0].kota" label="Kota Hotel Madinnah">
+                            <Input v-model="formsUmrah.hotel[0].kota" type="text" placeholder="Masukan Maskapai Umrah"></Input>
+                        </FormItem>
+                        <FormItem prop="hotel[0].alamat" label="Alamat Hotel Madinnah">
+                            <Input v-model="formsUmrah.hotel[0].alamat" type="text" placeholder="Masukan Maskapai Umrah"></Input>
+                        </FormItem>
+                    </div>
+                    <div class="mt-3">
+                        <p class="font-semibold text-xs mb-3">Data Hotel Mekkah</p>
+                        <FormItem prop="hotel[1].nama" label="Nama Hotel Mekkah">
+                            <Input v-model="formsUmrah.hotel[1].nama" type="text" placeholder="Masukan Maskapai Umrah"></Input>
+                        </FormItem>
+                        <FormItem prop="hotel[1].kota" label="Kota Hotel Mekkah">
+                            <Input v-model="formsUmrah.hotel[1].kota" type="text" placeholder="Masukan Maskapai Umrah"></Input>
+                        </FormItem>
+                        <FormItem prop="hotel[1].alamat" label="Alamat Hotel Mekkah">
+                            <Input v-model="formsUmrah.hotel[1].alamat" type="text" placeholder="Masukan Maskapai Umrah"></Input>
+                        </FormItem>
+                    </div>
+                </div>
             </Form>
         </div>
-        <!-- <div class="mt-3">
-            <p class="text-sm font-semibold">Informasi Hotel</p>
-            <Form :model="formhotel" class="md:grid grid-cols-1 md:gap-2">
-                Hotels Input
-                <FormItem label="Nama Hotel">
-                    <Input v-model="formhotel.nama" type="text" placeholder="Masukan Nama Hotel"></Input>
-                </FormItem>
-                <FormItem label="Kota Hotel">
-                    <Input v-model="formhotel.kota" type="text" placeholder="Masukan Kota Hotel"></Input>
-                </FormItem>
-                <FormItem label="Alamat Hotel">
-                    <Input v-model="formhotel.alamat" type="text" placeholder="Masukan Alamat Hotel"></Input>
-                </FormItem>
-            </Form>
-        </div> -->
-        <div class="mt-3">
-            <Button type="primary" @click="buatumrah">Simpan Paket</Button>
-        </div>
+        <Button class="mt-4" type="primary" @click="buatumrah">Simpan Paket</Button>
     </div>
 </template>
 
 <script>
 import Notifikasi from '../model/Notifikasi';
+import moment from 'moment-timezone';
 export default {
     name: "UmrahDrawer",
     mixins: [Notifikasi],
     props:{
         show: Number,
-        data: null
     },
     data() {
         return {
             formsUmrah: {
-                nama: null,
-                durasi: null,
-                tahun: null,
-                kuota: null,
-                biaya: null,
-                tanggal: null,
-                maskapai: null,
-            },
-            tanggal: {
-                berangkat: '',
-                pulang: ''
-            },
-            formhotel:{ 
-                nama: null,
-                kota: null,
-                alamat: null,
-                kamar: [
+                nama: '',
+                durasi: '',
+                tahun: '',
+                kuota: '',
+                biaya: '',
+                tanggal: {
+                    berangkat: '',
+                    pulang: ''
+                },
+                maskapai: [
                     {
-                        kapasitas: '2',
-                        harga: '',
-                    },
-                    {
-                        kapasitas: '3',
-                        harga: '',
-                    },
-                    {
-                        kapasitas: '4',
-                        harga: '',
+                        nama: ''
                     }
+                ],
+                hotel: [
+                    {
+                        kota: 'Madinnah',
+                        nama: '',
+                        alamat: ''
+                    },
+                    {
+                        kota: 'Mekkah',
+                        nama: '',
+                        alamat: ''
+                    },
                 ]
             },
             formRules:{
@@ -114,94 +122,54 @@ export default {
                 biaya:[
                     { required: true, message: 'Harap Masukan Biaya Paket', trigger: 'blur' }
                 ],
-                maskapai:[
-                    { required: true, message: 'Harap Lengkapi Maskapai', trigger: 'blur' }
-                ]
+                'tanggal.berangkat': [
+                    { required: true, type: 'date', message: 'Harap pilih tanggal berangkat', trigger: 'change' }
+                ],
+                'tanggal.pulang': [
+                    { required: true, type: 'date', message: 'Harap pilih tanggal pulang', trigger: 'change' }
+                ],
+                'maskapai[0].nama':[
+                    { required: true, message: 'Masukan Maskapai',trigger: 'blur' }
+                ],
+                'hotel[0].kota': [
+                    { required: true, message: 'Masukan kota hotel madinnah', trigger: 'blur' }
+                ],
+                'hotel[0].nama': [
+                    { required: true, message: 'Harap masukan nama hotel', trigger: 'blur' }
+                ],
+                'hotel[0].alamat':[
+                    { required: true, message: 'Masukan alamat lengkap hotel',trigger: 'blur' }
+                ],
+                'hotel[1].kota': [
+                    { required: true, message: 'Masukan kota hotel mekkah', trigger: 'blur' }
+                ],
+                'hotel[1].nama': [
+                    { required: true, message: 'Harap masukan nama hotel', trigger: 'blur' }
+                ],
+                'hotel[1].alamat':[
+                    { required: true, message: 'Masukan alamat lengkap hotel',trigger: 'blur' }
+                ],
             }
-        }
-    },
-    computed:{
-        form(){
-            return {...this.data};
-        },
-        datamaskapai(){
-            return this.$store.state.umrah.maskapaiall;
-        },
-        datahotel(){
-            return this.$store.state.umrah.hotelall;
         }
     },
     methods: {
-        addhotel(){
-            return this.hotel.hotel.push({hotel_id: ''})
-        },
-        removehotel(index){
-            return this.hotel.hotel.splice(index, 1);
-        },
-        addmaskapai(){
-            return this.maskapai.maskapai.push({maskapai_id: ''})
-        },
-        removemaskapai(index){
-            return this.maskapai.maskapai.splice(index, 1);
-        },
         buatumrah(){
             this.helper_loading("Membuat Paket...");
-            if(this.checknull()){
-                this.loading.close();
-               return this.helper_global_form_notif();
-            }
-            this.formsUmrah = this.form;
-            this.formsUmrah.maskapai = this.maskapai.maskapai;
-            this.formsUmrah.hotel = this.hotel.hotel;
-            this.formsUmrah.tanggal = this.tanggal.tanggal;
             console.log(this.formsUmrah);
-            this.$store.dispatch('umrah/AddUmrah', this.formsUmrah);
-            this.helper_check_request("Berhasil Menambah Paket", "Refresh halaman apabila data paket belum ditambahkan pada table");
-
+            this.$refs['form'].validate((valid) => {
+                if(valid){
+                    this.formsUmrah.tanggal.berangkat = new moment(this.formsUmrah.tanggal.berangkat).format('yyyy-MM-DD');
+                    this.formsUmrah.tanggal.pulang = new moment(this.formsUmrah.tanggal.pulang).format('yyyy-MM-DD');
+                    this.$store.dispatch('umrah/AddUmrah', this.formsUmrah);
+                    return this.helper_check_request("Berhasil Menambah Paket", "Refresh halaman apabila data paket belum ditambahkan pada table");
+                }
+                this.loading.close();
+                return false;
+            })
         },
         backpresed(){
             return this.$emit('tutupumrah', 1);
         },
-        checknull(){
-            return this.form.nama == null ||this.form.durasi == null ||this.form.jenis_paket == null ||this.form.tahun == null ||
-                this.form.kuota == null ||this.form.biaya == null;
-        }
     },
 }
 </script>
-
-<style lang="scss">
-@import "@/assets/fonts/font.scss";
-.umrahdrawer{
-  position: fixed;
-  right: 0;
-  top: 0;
-  width: 600px;
-  bottom: 0;
-  height: 100vh;
-  overflow-y: auto;
-  z-index: 2;
-  h1{
-    font-size: 16px;
-    font-family: $font-bold;
-  }
-  .back{
-    h2{
-      font-size: 14px;
-      font-family: $font-bold;
-    }
-  }
-  .back:hover{
-    color: $yellow;
-    cursor: pointer;
-    h2{
-      color: $yellow;
-    }
-  }
-}
-@media (max-width: 700px){
-  .umrahdrawer{
-    width: 100%;
-  }
-}
-</style>

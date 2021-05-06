@@ -32,25 +32,25 @@
                 <FormItem prop="nama_passport" label="Nama Passport">
                     <Input type="text" v-model="form.passport.nama" placeholder="Nama Passport jamaah"></Input>
                 </FormItem>
-                <FormItem prop="no_passport" label="No Passport" v-show="showpassport">
+                <FormItem prop="no_passport" label="No Passport" v-if="showpassport">
                     <Input type="number" v-model="form.passport.nomor" placeholder="No Passport jamaah"></Input>
                 </FormItem>
-                <FormItem prop="kota_passport" label="Kota Passport" v-show="showpassport">
+                <FormItem prop="kota_passport" label="Kota Passport" v-if="showpassport">
                     <Input type="text" v-model="form.passport.kota" placeholder="Kota Passport jamaah"></Input>
                 </FormItem>
-                <FormItem prop="keluar_passport" label="Diterbitkan Passport" v-show="showpassport">
+                <FormItem prop="keluar_passport" label="Diterbitkan Passport" v-if="showpassport">
                     <DatePicker type="date" v-model="form.passport.tgl_keluar" placeholder="Diterbitkan Passport jamaah" class="w-full"></DatePicker>
                 </FormItem>
-                <FormItem prop="habis_passport" label="Expired Passport" v-show="showpassport">
+                <FormItem prop="habis_passport" label="Expired Passport" v-if="showpassport">
                     <DatePicker type="date" v-model="form.passport.tgl_habis" placeholder="Expired Passport jamaah" class="w-full"></DatePicker>
                 </FormItem>
                 <FormItem prop="nama_ayah" label="Nama Ayah">
                     <Input type="text" v-model="form.nama_ayah" placeholder="Nama Ayah jamaah"></Input>
                 </FormItem>
-                <FormItem prop="tempat_lahir" label="Tempat Lahir">
+                <FormItem prop="ttl.tempat" label="Tempat Lahir">
                     <Input type="text" v-model="form.ttl.tempat" placeholder="Tempat Lahir jamaah"></Input>
                 </FormItem>
-                <FormItem prop="tgl_lahir" label="Tanggal Lahir">
+                <FormItem prop="ttl.tanggal" label="Tanggal Lahir">
                     <DatePicker type="date" v-model="form.ttl.tanggal" placeholder="Tanggal Lahir jamaah" class="w-full"></DatePicker>
                 </FormItem>
                 <FormItem prop="gender" label="Gender Jamaah">
@@ -287,6 +287,12 @@ export default {
                 ],
                 darah: [
                     { required: true, message: 'Golongan Darah is Required', trigger: 'change' }
+                ],
+                'ttl.tempat': [
+                    { required: true, message: 'Tempat Lahir Required', trigger: 'blur' }
+                ],
+                'ttl.tanggal': [
+                    { required: true, type:'date', message: 'Tempat Lahir Required', trigger: 'change' }
                 ],
             }
         }

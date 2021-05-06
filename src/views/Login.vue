@@ -13,7 +13,7 @@
                         <Input type="password" v-model="formInline.password" placeholder="Password"></Input>
                     </FormItem>
                 </Form>
-                <Checkbox v-model="checklog">Masuk sebagai mitra</Checkbox>
+                <Checkbox v-model="checklog">Masuk sebagai cabang</Checkbox>
                 <Button type="primary" @click="login" long class="mt-5">Login</Button>
             </div>
         </div>

@@ -1,4 +1,5 @@
 import store from "../store/index";
+// import Vue2Filters from "vue2-filters";
 export default {
   data() {
     return {
@@ -142,6 +143,16 @@ export default {
           minWidth: 100,
         },
         {
+          title: "Sisa Kuota",
+          key: "sisa",
+          minWidth: 100,
+        },
+        {
+          title: "Berangkat",
+          key: "berangkat",
+          minWidth: 100,
+        },
+        {
           title: "Harga",
           key: "biaya",
           minWidth: 120,
@@ -180,6 +191,11 @@ export default {
           key: "ttl",
           minWidth: 100,
         },
+        {
+          title: "Usia",
+          key: "umur",
+          minWidth: 90,
+        },
       ],
     };
   },
@@ -197,6 +213,7 @@ export default {
     gudanglist() {
       return store.state.gudang.gudang.map((items, index) => ({
         ...items,
+        harga: this.$options.filters.currency(items.harga, "Rp. "),
         index: index + 1,
       }));
     },
@@ -217,12 +234,15 @@ export default {
     umrahlist() {
       return store.state.umrah.umrahall.map((items, index) => ({
         ...items,
+        berangkat: items.jadwal ? items.jadwal.berangkat : "--",
+        sisa: items.sisa + " Orang",
         index: index + 1,
       }));
     },
     jamaahlist() {
       return store.state.jamaah.jamaahall.map((items, index) => ({
         ...items,
+        umur: items.umur + " Tahun",
         index: index + 1,
       }));
     },

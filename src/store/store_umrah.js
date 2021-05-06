@@ -5,16 +5,14 @@ export default {
   state: {
     hotelall: [],
     umrahall: [],
-    umrahdetail: [],
-    maskapaiall: [],
   },
   actions: {
     AddUmrah({ dispatch }, form) {
       Umrah.umrahadd(form).then((data) => {
-        console.log(data);
+        console.log(data.data);
         if (data.data.error_code == 0) {
-          cookies.set("next", 1);
-          return dispatch("AllUmrah");
+          dispatch("AllUmrah");
+          return cookies.set("next", 1);
         }
         return cookies.set("next", 0);
       });
@@ -40,7 +38,6 @@ export default {
     },
     AddHotel({ dispatch }, form) {
       Umrah.hoteladd(form).then((data) => {
-        console.log(data.data);
         if (data.data.error_code == 0) {
           cookies.set("next", 1);
           return dispatch("AllHotel");

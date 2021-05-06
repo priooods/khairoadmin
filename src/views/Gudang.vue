@@ -44,10 +44,10 @@
                         <p class="text-xs">{{ds.total}}</p>
                       </div>
                     </div>
-                    <div class="flex justify-end">
+                    <!-- <div class="flex justify-end">
                       <Button v-show="$store.state.operat.user.type === 'Operator' || $store.state.operat.user.type === 'SuperUser'
                       || $store.state.operat.user.type === 'SuperExtra'" type="error" @click="Canceled(data.id, i)">Hapus History</Button>
-                    </div>
+                    </div> -->
                   </div>
                 </li>
               </ul>

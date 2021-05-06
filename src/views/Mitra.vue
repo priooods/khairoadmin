@@ -1,7 +1,7 @@
 <template>
   <div class="mitra">
       <div v-show="!showdrawer">
-        <h1 class="hidden md:block">Mitra</h1>
+        <h1 class="hidden md:block">Perwakilan</h1>
         <div class="bg-gray-50 mt-3 p-3">
           <div class="md:flex">
             <p class="my-auto">Lihat semua data cabang yang telah didaftarkan. Tap pada item untuk melakukan aksi lainnya</p>
@@ -43,6 +43,7 @@ export default {
       return this.editor = val;
     },
     rowclick(value){
+      console.log(value);
       if (this.$store.state.operat.user.type == 'Admin' 
         ||this.$store.state.operat.user.type == 'SuperUser'){
           this.showdrawer = true;
