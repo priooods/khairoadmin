@@ -1,18 +1,18 @@
 <template>
-  <div class="jamaahnew" v-show="show">
+  <div class="jamaahnew md:mt-0 mt-3" v-show="show == 2">
         <div class="cursor-pointer hover:text-yellow-500" @click="backpresed">
             <i class='bx bx-left-arrow-alt inline'></i>
             <h2 class="ml-1 inline">Kembali</h2>
         </div>
-        <div class="w-full mt-3">
-            <p class="text-xs">Harap Lengkapi semua form yang tersedia untuk membuat data jamaah baru <br>Semua yang diberi tanda ( <span class="text-red-500">*</span> ) wajib di isi, lainnya bersifat on</p>
-            <Form class="grid md:grid-cols-4 md:gap-1 mt-3" :model="form">
-                <FormItem prop="mitra" label="Nama Perwakilan">
+        <div class="w-full mt-5 md:mt-3">
+            <p class="text-xs">Harap Lengkapi semua form yang tersedia untuk membuat data jamaah baru !</p>
+            <Form class="grid md:grid-cols-4 md:gap-1 mt-3" :model="form" ref="form" :rules="formrules">
+                <FormItem prop="mitra_id" label="Nama Perwakilan">
                     <Select placeholder="Pilih Perwakilan" v-model="form.mitra_id" filterable :clearable="true">
                         <Option v-for="(data,st) in $store.state.mitra.mitrall" v-bind:key="st" :value="data.id">{{ data.fullname }}</Option>
                     </Select>
                 </FormItem>
-                <FormItem prop="paket" label="Paket Umrah">
+                <FormItem prop="umrah_id" label="Paket Umrah">
                     <Select placeholder="Pilih Paket Umrah" v-model="form.umrah_id" filterable :clearable="true">
                         <Option v-for="(data,st) in $store.state.umrah.umrahall" v-bind:key="st" :value="data.id">{{ data.nama }}</Option>
                     </Select>
@@ -48,13 +48,13 @@
                     <Input type="text" v-model="form.nama_ayah" placeholder="Nama Ayah jamaah"></Input>
                 </FormItem>
                 <FormItem prop="tempat_lahir" label="Tempat Lahir">
-                    <Input type="text" v-model="ttl.tempat" placeholder="Tempat Lahir jamaah"></Input>
+                    <Input type="text" v-model="form.ttl.tempat" placeholder="Tempat Lahir jamaah"></Input>
                 </FormItem>
                 <FormItem prop="tgl_lahir" label="Tanggal Lahir">
-                    <DatePicker type="date" v-model="ttl.tanggal" placeholder="Tanggal Lahir jamaah" class="w-full"></DatePicker>
+                    <DatePicker type="date" v-model="form.ttl.tanggal" placeholder="Tanggal Lahir jamaah" class="w-full"></DatePicker>
                 </FormItem>
                 <FormItem prop="gender" label="Gender Jamaah">
-                    <Select placeholder="Pilih Gender Jamaah" v-model="form.gender">
+                    <Select placeholder="Pilih Gender Jamaah" :clearable="true" v-model="form.gender">
                         <Option v-for="(data,st) in genderoption" v-bind:key="st" :value="data.value">{{ data.label }}</Option>
                     </Select>
                 </FormItem>
@@ -77,33 +77,33 @@
                     <Input type="number" v-model="form.kode_pos" placeholder="Kode Pos Jamaah"></Input>
                 </FormItem>
                 <FormItem prop="negara" label="Negara Jamaah">
-                    <Select placeholder="Pilih Negara Jamaah" v-model="form.negara">
+                    <Select placeholder="Pilih Negara Jamaah"  :clearable="true" v-model="form.negara">
                         <Option v-for="(data,st) in negaraoption" v-bind:key="st" :value="data.value">{{ data.label }}</Option>
                     </Select>
                 </FormItem>
-                <FormItem prop="no_tlp" label="No Telp">
+                <FormItem prop="no_telp" label="No Telp">
                     <Input type="number" v-model="form.no_telp" placeholder="No Telp Jamaah"></Input>
                 </FormItem>
                 <FormItem prop="email" label="E-mail">
                     <Input type="text" v-model="form.email" placeholder="e-mail Jamaah"></Input>
                 </FormItem>
                 <FormItem prop="pendidikan" label="Pendidikan">
-                    <Select placeholder="Pilih Pendidikan Jamaah" v-model="form.pendidikan" filterable>
+                    <Select placeholder="Pilih Pendidikan Jamaah" v-model="form.pendidikan" filterable :clearable="true">
                         <Option v-for="(data,st) in pendidikanoption" v-bind:key="st" :value="data.value">{{ data.label }}</Option>
                     </Select>
                 </FormItem>
                 <FormItem prop="pekerjaan" label="Pekerjaan">
-                    <Select placeholder="Pilih pekerjaan Jamaah" v-model="form.pekerjaan" filterable>
+                    <Select placeholder="Pilih pekerjaan Jamaah" v-model="form.pekerjaan" filterable :clearable="true">
                         <Option v-for="(data,st) in pekerjaanoption" v-bind:key="st" :value="data.value">{{ data.label }}</Option>
                     </Select>
                 </FormItem>
                 <FormItem prop="status_haji" label="Status Haji">
-                    <Select placeholder="Status Haji Jamaah" v-model="form.status_haji">
+                    <Select placeholder="Status Haji Jamaah"  :clearable="true" v-model="form.status_haji">
                         <Option v-for="(data,st) in statushajioption" v-bind:key="st" :value="data.value">{{ data.label }}</Option>
                     </Select>
                 </FormItem>
                 <FormItem prop="darah" label="Golongan Darah">
-                    <Select placeholder="Golongan Darah Jamaah" v-model="form.darah">
+                    <Select placeholder="Golongan Darah Jamaah"  :clearable="true" v-model="form.darah">
                         <Option v-for="(data,st) in darahoption" v-bind:key="st" :value="data.value">{{ data.label }}</Option>
                     </Select>
                 </FormItem>
@@ -111,7 +111,7 @@
                     <Input type="text" v-model="form.nama_mahram" placeholder="Nama Mahram Jamaah"></Input>
                 </FormItem>
                 <FormItem prop="hubungan_mahram" label="Hubungan Mahram">
-                    <Select placeholder="Hubungan Mahram Jamaah" v-model="form.hubungan_mahram">
+                    <Select placeholder="Hubungan Mahram Jamaah"  :clearable="true" v-model="form.hubungan_mahram">
                         <Option v-for="(data,st) in huboption" v-bind:key="st" :value="data.value">{{ data.label }}</Option>
                     </Select>
                 </FormItem>
@@ -133,9 +133,21 @@ export default {
     mixins: [Notifikasi],
     name:"JamaahDrawer",
     props:{
-        show: Boolean,
+        show: Number,
     },
     data() {
+        const validateMitra = (rule, value, callback) => {
+            if(value == null || value == ''){
+                callback(new Error('Harap pilih Perwakilan'));
+            }
+            callback();
+        };
+        const validateUmrah = (rule, value, callback) => {
+            if(value == null || value == ''){
+                callback(new Error('Harap pilih Paket Umrah'));
+            }
+            callback();
+        };
         return {
             huboption:[
                 {value: 'Suami', label: 'Suami'},
@@ -188,7 +200,10 @@ export default {
                 nama_lengkap: '',
                 nama_ayah: '',
                 no_ktp: '',
-                ttl: '',
+                ttl: {
+                    tempat: '',
+                    tanggal: ''
+                },
                 gender: '',
                 negara: '',
                 alamat: '',
@@ -213,12 +228,67 @@ export default {
                 darah: '',
                 email: ''
             },
-            ttl:{
-                tempat:'',
-                tanggal: ''
-            },
             showpassport: false,
-            showkamar:false
+            showkamar:false,
+            formrules:{
+                nama_lengkap: [
+                    { required: true, message: 'Harap Lengkapi Nama Lengkap', trigger: 'blur' }
+                ],
+                desa: [
+                    { required: true, message: 'Harap Lengkapi Desa/Kelurahan', trigger: 'blur' }
+                ],
+                alamat: [
+                    { required: true, message: 'Harap Lengkapi Alamat', trigger: 'blur' }
+                ],
+                mitra_id: [
+                    { validator:validateMitra, required: true, trigger: 'change' }
+                ],
+                umrah_id: [
+                    { required: true, validator:validateUmrah, trigger: 'change' }
+                ],
+                gender: [
+                    { required: true, message: 'Harap Pilih Gender', trigger: 'change' }
+                ],
+                nama_ayah: [
+                    { required: true, message: 'Harap Masukan Nama Ayah', trigger: 'blur' }
+                ],
+                provinsi: [
+                    { required: true, message: 'Harap Masukan Provinsi', trigger: 'blur' }
+                ],
+                kota: [
+                    { required: true, message: 'Harap Masukan Kota', trigger: 'blur' }
+                ],
+                kecamatan: [
+                    { required: true, message: 'Harap Masukan Kecamatan', trigger: 'blur' }
+                ],
+                no_ktp: [
+                    { required: true, message: 'Harap Masukan No Ktp', trigger: 'blur' },
+                    { type: 'string', min: 16, message: 'No Ktp minimal 16 Char', trigger: 'blur' }
+                ],
+                email: [
+                    { required: true, message: 'Harap Masukan Email Jamaah', trigger: 'blur' },
+                    { type: 'email', message: 'Incorrect email format', trigger: 'blur' }
+                ],
+                negara: [
+                    { required: true, message: 'Harap Pilih Negara', trigger: 'change' }
+                ],
+                kode_pos: [
+                    { required: true, message: 'Harap Masukan Kode Pos', trigger: 'blur' }
+                ],
+                no_telp: [
+                    { required: true, message: 'Nomer Handphone is Required', trigger: 'blur' },
+                    { type: 'string', min: 9, message: 'No Handphone minimal 9 Char', trigger: 'blur' }
+                ],
+                pendidikan: [
+                    { required: true, message: 'Pendidikan is Required', trigger: 'change' }
+                ],
+                pekerjaan: [
+                    { required: true, message: 'Pekerjaan is Required', trigger: 'change' }
+                ],
+                darah: [
+                    { required: true, message: 'Golongan Darah is Required', trigger: 'change' }
+                ],
+            }
         }
     },
     watch:{
@@ -233,7 +303,7 @@ export default {
                 return this.showkamar = false
             }
             return this.showkamar = true 
-        }
+        },
     },
     computed:{
         namapass(){
@@ -242,64 +312,35 @@ export default {
         umrah(){
             return this.form.umrah_id;
         },
-        ktpState(){
-            if(this.form.no_ktp.length < 16){
-                return false;
-            } else if(this.form.no_ktp.length == 0){
-                return true;
-            }
-            return this.form.no_ktp.length > 16 ? false :  true
-        },
-        passportState(){
-            if(this.passport.nomor.length < 7){
-                return false;
-            } else if(this.passport.nomor.length == 0){
-                return true;
-            }
-            return this.passport.nomor.length > 7 ? false :  true
-        }
     },
     methods:{
         backpresed(){
             return this.canceled();
         },
         canceled(){
-            return this.$emit('closeable', false);
+            return this.$emit('closeable', 1);
         },
         savejamaah(){
-            this.helper_loading("Menyimpan Jamaah Baru...");
-            if(this.checkform()){
-                this.helper_global_form_notif();
-                console.log("disini berhenti 1");
-                return this.loading.close();
-            }
-            if(this.passport.nama != null ||this.passport.nama != ''){
-                this.form.passport = this.passport;
-            } else {
-                this.passport.nama = null;
-                this.passport.kota = null;
-                this.passport.tgl_habis = null;
-                this.passport.tgl_keluar = null;
-                this.form.passport = null;
-            }
-            this.form.ttl = this.ttl.tempat + ',' + this.ttl.tanggal;
-            this.form.no_telp = parseInt(this.form.no_telp);
-            this.$store.dispatch('jamaah/AddJamaah', this.form);
-            this.helper_check_request('Berhasil Menyimpan', 'Data Jamaah baru berhasil disimpan, refresh ulang halaman apabila jamaah baru tidak muncul di table');
+            // this.helper_loading("Menyimpan Jamaah Baru...");
+            this.$refs['form'].validate((valid) => {
+                if(valid){
+                    console.log("Berhasil");
+                    return true;
+                } else {
+                    return false
+                }
+            })
+            //     this.passport.nama = null;
+            //     this.passport.kota = null;
+            //     this.passport.tgl_habis = null;
+            //     this.passport.tgl_keluar = null;
+            //     this.form.passport = null;
+            // }
+            // this.form.ttl = this.ttl.tempat + ',' + this.ttl.tanggal;
+            // this.form.no_telp = parseInt(this.form.no_telp);
+            // this.$store.dispatch('jamaah/AddJamaah', this.form);
+            // this.helper_check_request('Berhasil Menyimpan', 'Data Jamaah baru berhasil disimpan, refresh ulang halaman apabila jamaah baru tidak muncul di table');
         },
-        checkpassport(){
-            return this.passport.kota.length == 0 || this.passport.tgl_habis.length == 0 || this.passport.tgl_keluar.length == 0
-        },
-        checkform(){
-            return this.form.mitra_id.length == 0 ||this.form.umrah_id.length == 0 ||this.form.nama_lengkap.length == 0 ||
-            this.form.alamat.length == 0 || this.form.no_ktp.length == 0 ||
-            this.form.gender.length == 0 ||this.form.negara.length == 0 || 
-            this.form.desa.length == 0 || this.form.kecamatan.length == 0 ||
-            this.form.kota.length == 0 ||this.form.provinsi.length == 0 ||
-            this.form.no_telp.length == 0 ||this.form.pendidikan.length == 0 || 
-            this.form.pekerjaan.length == 0 || this.form.darah.length == 0 ||
-            this.ttl.tempat.length == 0 ||this.ttl.tanggal.length == 0 || this.form.email.length == 0
-        }
     }
 }
 </script>

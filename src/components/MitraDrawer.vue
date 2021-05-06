@@ -60,8 +60,8 @@
             <h2 class="inline ml-2">Info Mitra</h2>
           </div>
           <Form ref="forms" class="grid grid-cols-3 gap-1" :model="forms" :rules="ruleform"> 
-              <FormItem prop="code_agent" label="Mitra">
-                  <Select v-model="forms.code_agent" placeholder="Pilih Agent Mitra">
+              <FormItem prop="code_agent" label="Perwakilan">
+                  <Select v-model="forms.code_agent" placeholder="Pilih Agent Mitra" filterable :clearable="true">
                     <Option v-for="(dt, i) in $store.state.mitra.mitrall" v-bind:key="i" :value="dt.id">{{dt.fullname}}</Option>
                   </Select>
               </FormItem>

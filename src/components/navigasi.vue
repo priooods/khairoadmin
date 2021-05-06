@@ -41,7 +41,7 @@
                 <li class="mt-3" v-if="$cookies.get('type') == 1">
                     <router-link v-on:click.native="closeable" to="/base/mitra">
                         <div class="flex">
-                            <i class='bx bx-group bx-sm' ></i><span class="my-auto ml-3 text-base">Mitra</span>
+                            <i class='bx bx-group bx-sm' ></i><span class="my-auto ml-3 text-base">Perwakilan</span>
                         </div>
                     </router-link>
                 </li>

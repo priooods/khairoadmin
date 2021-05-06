@@ -1,8 +1,8 @@
 <template>
   <div class="jamaah">
-        <div v-show="!showform">
-            <h1>Jamaah</h1>
-            <div class="grid md:grid-rows-1 md:grid-cols-4 grid-cols-1 gap-2 mt-3">
+        <div v-show="showform == 1">
+            <h1 class="hidden md:block">Jamaah</h1>
+            <div class="grid md:grid-rows-1 md:grid-cols-4 grid-cols-1 gap-2 mt-5 md:mt-3">
                 <div class="cursor-pointer rounded-md p-3 bg-gray-100" @click="showPria">
                     <p class="font-medium">Total Keseluruhan Jamaah Pria</p>
                     <h5 class="flex mt-3 font-semibold">{{pria.length}}<p class="ml-2 my-auto"> / Orang</p></h5>
@@ -33,7 +33,7 @@
                         >
                             <Button type="success">Download Excel</Button>
                         </download-excel>
-                        <Button type="primary" @click="showform =!showform">Tambah Jamaah Baru</Button>
+                        <Button type="primary" @click="showform = 2">Tambah Jamaah Baru</Button>
                     </div>
                     <TableGlobal :column="Jamaah" :data="jamaahlist" :totalpage="$store.state.jamaah.jamaahall.length/5 * 10" :placeholder="'Cari Nama Jamaah...'" :key="'nama_lengkap'" class="mt-3"></TableGlobal>
                     <!-- <div class="tables">
@@ -76,12 +76,12 @@
         @closeable="tutupform"
         :show.sync="showform">
     </JamaahDrawer>
-    <!-- <JamaahDetail
+    <JamaahAksi
         @closeable="tutupdetail"
         :checkval.sync="checkopen"
-        :show.sync="showdetail"
+        :show.sync="showform"
         :data.sync="detailjamaah">
-    </JamaahDetail> -->
+    </JamaahAksi>
   </div>
 </template>
 
@@ -90,21 +90,18 @@ import Vue2Filters from 'vue2-filters';
 import Excel from '../model/Excel';
 import TableData from '../plugins/TableData';
 import TableGlobal from '../components/TableGlobal';
-// import JamaahDetail from '../components/JamaahAksi';
+import JamaahAksi from '../components/JamaahAksi';
 import JamaahDrawer from '../components/JamaahDrawer';
 export default {
-    components:{JamaahDrawer, TableGlobal},
+    components:{JamaahDrawer,JamaahAksi, TableGlobal},
     mixins: [Vue2Filters.mixin, Excel,TableData],
     name: "Jamaah",
     data() {
         return {
-            showform: false,
-            showdetail: false,
+            showform: 1,
             databelumbayar: [],
             detailjamaah: [],
-            searching: '',
             checkopen: 1,
-            datatable: [],
         }
     },
     computed:{
@@ -139,36 +136,36 @@ export default {
         this.$store.dispatch('jamaah/JamaahBelumBayar');
     },
     methods: {
-        tutupform(){
-            return this.showform = false;
+        tutupform(value){
+            return this.showform = value;
         },
-        tutupdetail(){
-            return this.showdetail = false;
+        tutupdetail(value){
+            return this.showform = value;
         },
         showdetails(value){
-            this.checkopen = 1;
-            this.showdetail = true;
+            this.checkopen = 3;
+            this.showform = 3;
             return this.detailjamaah = value;
         },
         showPerempuan(){
-            this.showdetail = true;
-            this.checkopen = 3;
+            this.showform = 3;
+            this.checkopen = 5;
             return this.detailjamaah = this.perempuan;
         },
         showPria(){
-            this.showdetail = true;
-            this.checkopen = 4;
+            this.showform = 3;
+            this.checkopen = 6;
             return this.detailjamaah = this.pria;
         },
         berkasfail(){
-            this.showdetail = true;
-            this.checkopen = 5;
+            this.showform = 3;
+            this.checkopen = 7;
             console.log(this.berkas);
             return this.detailjamaah = this.berkas;
         },
         showdetailss(){
-            this.showdetail = true;
-            this.checkopen = 2;
+            this.showform = 3;
+            this.checkopen = 4;
             console.log(this.$store.state.jamaah.jamaahbayar);
             return this.detailjamaah = this.$store.state.jamaah.jamaahbayar;
         }
