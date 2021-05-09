@@ -41,6 +41,11 @@ export default {
             return this.opens = val;
         },
         rowclick(value){
+            const yr = new Date().getFullYear() == new Date(value.jadwal.pulang).getFullYear();
+            const month = new Date().getMonth() == new Date(value.jadwal.pulang).getMonth();
+            if(yr && month){
+                return this.$Message.error('Paket Umrah ini sudah selesai');
+            }
             console.log(value);
             this.opens = 3;
             return this.data = value;
@@ -74,5 +79,16 @@ export default {
   .active-btn{
       background: #195BFF;
   }
+}
+.ivu-table .sisa-style-danger {
+    background: #ff6600 !important;
+    color: #fff;
+}
+.ivu-table .sisa-style-warning {
+    background: #d0ff00 !important;
+}
+.ivu-table .berangkat-style-green {
+    background: #00ff7b !important;
+    color: #fff;
 }
 </style>

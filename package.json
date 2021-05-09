@@ -21,6 +21,7 @@
     "moment-timezone": "^0.5.33",
     "postcss": "^7",
     "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.0.2",
+    "view-design": "^4.5.0",
     "vue": "^2.6.12",
     "vue-apexcharts": "^1.6.0",
     "vue-axios": "^3.2.4",

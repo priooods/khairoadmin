@@ -4,6 +4,9 @@ export default {
   addjamaah(data) {
     return client.post("jamaah/add", data);
   },
+  pesananupdate(id, value) {
+    return client.post("pesanan/update", {  id: id, harga_kamar: value  });
+  },
   alljamaah(data) {
     return client.post("jamaah/show", data);
   },
@@ -13,7 +16,4 @@ export default {
   jamaahbayar(data) {
     return client.post("jamaah/bayar", data);
   },
-  jamaahPesanan(data) {
-    return client.post('pesanan/update', data);
-  }
 };

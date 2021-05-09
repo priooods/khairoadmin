@@ -24,6 +24,7 @@ export default {
     },
     AddMitra({ dispatch }, data) {
       Mitra.addmitra(data).then((res) => {
+        console.log(res.data);
         if (res.data.error_code == 0) {
           cookies.set("next", 1);
           return dispatch("AllMitra");

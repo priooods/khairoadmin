@@ -2,6 +2,9 @@
   <div class="mitra">
       <div v-show="!showdrawer">
         <h1 class="hidden md:block">Perwakilan</h1>
+        <div class="mt-3 md:flex justify-end">
+          <apexchart type="bar" class="w-full mr-auto" height="250" :options="optionsMitra" :series="seriesMitra"></apexchart>
+        </div>
         <div class="bg-gray-50 mt-3 p-3">
           <div class="md:flex">
             <p class="my-auto">Lihat semua data cabang yang telah didaftarkan. Tap pada item untuk melakukan aksi lainnya</p>
@@ -19,8 +22,9 @@ import Mitradrawer from '../components/MitraDrawer';
 import Notifikasi from '../model/Notifikasi';
 import TableGlobal from '../components/TableGlobal';
 import TableData from '../plugins/TableData';
+import Charts from '../model/Charts';
 export default {
-  mixins: [Notifikasi, TableData],
+  mixins: [Notifikasi, TableData, Charts],
   components: {Mitradrawer, TableGlobal},
   name: "Mitra",
   created() {
@@ -30,7 +34,7 @@ export default {
   data: ()=> {
     return{
       showdrawer: false,
-      detailmitra: [],
+      detailmitra: null,
       shownew: false,
       editor: 1
     }
@@ -39,8 +43,8 @@ export default {
     closedrawer(val){
       return this.showdrawer = val;
     },
-    editing(val){
-      return this.editor = val;
+    editing(value){
+      return this.editor = value;
     },
     rowclick(value){
       console.log(value);
@@ -55,7 +59,7 @@ export default {
     openNew(){
       this.showdrawer = true;
       this.editor = 1
-      return this.detailmitra = {};
+      return this.detailmitra = null;
     },
   }
 }

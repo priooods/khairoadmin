@@ -29,7 +29,7 @@
           <p class="font-semibold mb-3 text-xs text-red-500">Informasi Lainnya</p>
           <div class="grid grid-cols-2 mt-2 gap-2 w-full">
             <p class="text-md font-semibold">Sisa Kuota</p>
-            <p class="text-md">: {{detail.sisa}} Orang</p>
+            <p class="text-md">: {{detail.sisa}}</p>
           </div>
           <div class="grid grid-cols-2 mt-2 gap-2 w-full" v-for="(data,i) in detail.maskapai" :key="i">
             <p class="text-md font-semibold">Maskapai</p>

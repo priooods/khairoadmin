@@ -1,103 +1,122 @@
 <template>
   <div class="jamaah-aksi" v-show="show == 3">
-      <div class="cursor-pointer hover:text-yellow-500" @click="backpresed">
+      <div class="cursor-pointer md:mt-0 mt-5 hover:text-yellow-500" @click="backpresed">
           <i class='bx bx-left-arrow-alt inline'></i>
           <h2 class="ml-1 inline">Kembali</h2>
       </div>
-      <div v-if="checkval == 3">
-        <h1 class="mt-2">Detail Jamaah</h1>
-          <div class="mt-3" v-if="detail.bayar !== 'LUNAS'">
-            <Button type="primary" block v-show="closeshow == 0" @click="closeshow = 1">Bayar Tagihan</Button>
-            <div class="mt-3" v-show="closeshow == 1">
-              <Form ref="formInline" :model="formInline" :rules="ruleInline">
-                  <FormItem prop="bayar" label="Nominal Bayar">
-                      <Input type="number" v-model="formInline.bayar" placeholder="Masukan Nominal Bayar"></Input>
-                  </FormItem>
-              </Form>
-              <div class="row mt-3">
-                <Button type="primary" class="col" block @click="bayarr" success>Bayar</Button>
-                <Button type="primary" class="col" block @click="closeshow = 0" danger>Tutup</Button>
+      <div v-if="checkval == 3" class="mb-7">
+        <h1 class="mt-2 hidden md:block">Detail Jamaah</h1>
+        <div class="grid md:grid-cols-2 gap-2">
+          <div>
+            <!-- <div class="mt-3" v-if="detail.bayar !== 'LUNAS'">
+              <Button type="primary" block v-show="closeshow == 0" @click="closeshow = 1">Bayar Tagihan</Button>
+              <div class="mt-3" v-show="closeshow == 1">
+                <Form ref="formInline" :model="formInline" :rules="ruleInline">
+                    <FormItem prop="bayar" label="Nominal Bayar">
+                        <Input type="number" v-model="formInline.bayar" placeholder="Masukan Nominal Bayar"></Input>
+                    </FormItem>
+                </Form>
+                <div class="row mt-3">
+                  <Button type="primary" class="col" block @click="bayarr" success>Bayar</Button>
+                  <Button type="primary" class="col" block @click="closeshow = 0" danger>Tutup</Button>
+                </div>
               </div>
+            </div> -->
+            <!-- <div class="mt-3" v-if="detail.hotel_id == null">
+              <Button type="primary" block v-show="closeshow == 0" @click="callUmrahdetail">Tambah Detail</Button>
+              <div class="row" v-show="closeshow == 3">
+                <b-form-group id="lay-maskapai" class="col-12 add-style">
+                  <label for="maskapai">Pilih Maskapai <span>*</span></label>
+                    <b-form-select class="search" v-model="form.maskapai_id"
+                        size="sm" required id="maskapai" placeholder="Pilih maskapai Umrah">
+                            <b-form-select-option
+                                v-for="(data,st) in $store.state.umrah.umrahdetail.maskapai" v-bind:key="st" 
+                                :value="data.id">{{data.nama}}
+                            </b-form-select-option>
+                    </b-form-select>
+                </b-form-group>
+                <b-form-group id="lay-hotel" class="col-12 add-style">
+                  <label for="hotel">Pilih Hotel <span>*</span></label>
+                    <b-form-select class="search" v-model="form.hotel_id"
+                        size="sm" required id="hotel" placeholder="Pilih hotel Umrah">
+                            <b-form-select-option
+                                v-for="(data,st) in $store.state.umrah.umrahdetail.hotel" v-bind:key="st" 
+                                :value="data.id">{{data.nama}}
+                            </b-form-select-option>
+                    </b-form-select>
+                </b-form-group>
+                <div class="col-12 row mt-3">
+                  <Button type="primary" class="col" block @click="updatedetails" success>Update</Button>
+                  <Button type="primary" class="col" block @click="closeshow = 0" danger>Tutup</Button>
+                </div>
+              </div>
+            </div> -->
+            <p class="text-xs font-bold uppercase my-4">Informasi Umum</p>
+            <div class="grid grid-cols-2 w-full gap-2">
+              <p class="md:text-md text-xs font-semibold">Status Bayar</p>
+              <p class="md:text-md text-xs">{{detail.bayar ? detail.bayar : '--'}}</p>
+              <p class="md:text-md text-xs font-semibold">Tagihan</p>
+              <p class="md:text-md text-xs">{{detail.tagihan ? detail.tagihan : 0 | currency('Rp. ')}}</p>
+              <p class="md:text-md text-xs font-semibold">Code</p>
+              <p class="md:text-md text-xs">{{detail.code ? detail.code : '--'}}</p>
+              <p class="md:text-md text-xs font-semibold">Nama Jamaah</p>
+              <p class="md:text-md text-xs">{{detail.nama_lengkap ? detail.nama_lengkap : '---'}}</p>
+              <p class="md:text-md text-xs font-semibold">Nama Ayah</p>
+              <p class="md:text-md text-xs">{{detail.nama_ayah}}</p>
+              <p class="md:text-md text-xs font-semibold">Tempat/Tanggal Lahir</p>
+              <p class="md:text-md text-xs">{{detail.ttl}}</p>
+              <p class="md:text-md text-xs font-semibold">No KTP</p>
+              <p class="md:text-md text-xs">{{detail.no_ktp}}</p>
+              <p class="md:text-md text-xs font-semibold">Usia</p>
+              <p class="md:text-md text-xs">{{detail.umur ? detail.umur : 0}}</p>
+              <p class="md:text-md text-xs font-semibold">No Telepon</p>
+              <p class="md:text-md text-xs">{{detail.no_telp}}</p>
+              <p class="md:text-md text-xs font-semibold">Gender</p>
+              <p class="md:text-md text-xs">{{detail.gender}}</p>
+              <p class="md:text-md text-xs font-semibold">Gol Darah</p>
+              <p class="md:text-md text-xs">{{detail.darah ? detail.darah : '--'}}</p>
+              <p class="md:text-md text-xs font-semibold">Alamat</p>
+              <p class="md:text-md text-xs">{{detail.alamat}}</p>
+              <p class="md:text-md text-xs font-semibold">Nama Mahram</p>
+              <p class="md:text-md text-xs">{{detail.nama_mahram ? detail.nama_mahram : '--'}}</p>
+            </div>
+            <div class="grid grid-cols-2 w-full gap-2 mt-2" v-show="detail.passport">
+                <p class="md:text-md text-xs font-semibold">Nama Passport</p>
+                <p class="md:text-md text-xs">{{detail.passport ? detail.passport.nama : '--'}}</p>
+                <p class="md:text-md text-xs font-semibold">No Passport</p>
+                <p class="md:text-md text-xs">{{detail.passport ? detail.passport.nomor : '--' }}</p>
+                <p class="md:text-md text-xs font-semibold">Kota Passport</p>
+                <p class="md:text-md text-xs">{{detail.passport ? detail.passport.kota : '--'}}</p>
+                <p class="md:text-md text-xs font-semibold">Keluar Passport</p>
+                <p class="md:text-md text-xs">{{detail.passport ? detail.passport.tgl_keluar : '--' | moment("DD MMMM YYYY")}}</p>
+                <p class="md:text-md text-xs font-semibold">Expired Passport</p>
+                <p class="md:text-md text-xs">{{detail.passport ? detail.passport.tgl_keluar : '--' | moment("DD MMMM YYYY")}}</p>
             </div>
           </div>
-          <div class="mt-3" v-if="detail.hotel_id == null">
-            <Button type="primary" block v-show="closeshow == 0" @click="callUmrahdetail">Tambah Detail</Button>
-            <div class="row" v-show="closeshow == 3">
-              <!-- <b-form-group id="lay-maskapai" class="col-12 add-style">
-                <label for="maskapai">Pilih Maskapai <span>*</span></label>
-                  <b-form-select class="search" v-model="form.maskapai_id"
-                      size="sm" required id="maskapai" placeholder="Pilih maskapai Umrah">
-                          <b-form-select-option
-                              v-for="(data,st) in $store.state.umrah.umrahdetail.maskapai" v-bind:key="st" 
-                              :value="data.id">{{data.nama}}
-                          </b-form-select-option>
-                  </b-form-select>
-              </b-form-group>
-              <b-form-group id="lay-hotel" class="col-12 add-style">
-                <label for="hotel">Pilih Hotel <span>*</span></label>
-                  <b-form-select class="search" v-model="form.hotel_id"
-                      size="sm" required id="hotel" placeholder="Pilih hotel Umrah">
-                          <b-form-select-option
-                              v-for="(data,st) in $store.state.umrah.umrahdetail.hotel" v-bind:key="st" 
-                              :value="data.id">{{data.nama}}
-                          </b-form-select-option>
-                  </b-form-select>
-              </b-form-group> -->
-              <div class="col-12 row mt-3">
-                <Button type="primary" class="col" block @click="updatedetails" success>Update</Button>
-                <Button type="primary" class="col" block @click="closeshow = 0" danger>Tutup</Button>
-              </div>
+          <div>
+            <p class="text-xs font-bold uppercase my-4">Informasi Pesanan</p>
+            <div class="grid grid-cols-2 w-full gap-2" v-show="detail.pesanan">
+              <p class="md:text-md text-xs font-semibold">Nama Paket</p>
+              <p class="md:text-md text-xs">{{detail.pesanan ? detail.pesanan.umrah.nama : '--'}}</p>
+              <p class="md:text-md text-xs font-semibold">Biaya Umrah</p>
+              <p class="md:text-md text-xs">{{detail.pesanan ? detail.pesanan.umrah.biaya : '--' | currency('Rp. ')}}</p>
+              <p class="md:text-md text-xs font-semibold">Jadwal Berangkat</p>
+              <p class="md:text-md text-xs">{{detail.pesanan ? detail.pesanan.jadwal.berangkat : '--' | moment("DD MMMM YYYY")}}</p>
+              <p class="md:text-md text-xs font-semibold">Jadwal Pulang</p>
+              <p class="md:text-md text-xs">{{detail.pesanan ? detail.pesanan.jadwal.pulang : '--' | moment("DD MMMM YYYY")}}</p>
+            </div>
+            <p class="text-xs font-bold uppercase my-4">Informasi Berkas</p>
+            <div class="grid grid-cols-2 w-full gap-2">
+              <p class="md:text-md text-xs font-semibold">Pass Foto</p>
+              <p class="md:text-md text-xs font-bold" :class="{'text-red-500' : detail.pasfoto == null, 'text-green-500' : detail.pasfoto != null}">{{detail.pasfoto ? 'Sudah Di Setorkan' : 'Belum Di Setorkan'}}</p>
+              <p class="md:text-md text-xs font-semibold">KTP</p>
+              <p class="md:text-md text-xs font-bold" :class="{'text-red-500' : detail.ktp == null, 'text-green-500' : detail.ktp != null}">{{detail.ktp ? 'Sudah Di Setorkan' : 'Belum Di Setorkan' }}</p>
+              <p class="md:text-md text-xs font-semibold">Kartu Keluarga</p>
+              <p class="md:text-md text-xs font-bold" :class="{'text-red-500' : detail.kk == null, 'text-green-500' : detail.kk != null}">{{detail.kk ? 'Sudah Di Setorkan' : 'Belum Di Setorkan'}}</p>
+              <p class="md:text-md text-xs font-semibold">Akte Lahir</p>
+              <p class="md:text-md text-xs font-bold" :class="{'text-red-500' : detail.akte_lahir == null, 'text-green-500' : detail.akte_lahir != null}">{{detail.akte_lahir ? 'Sudah Di Setorkan' : 'Belum Di Setorkan'}}</p>
             </div>
           </div>
-          <div class="row mt-3" v-show="closeshow == 0">
-            <p class="col-md-6 mt-2 col-4">Status Bayar</p>
-            <p class="col-md-6 mt-2 col-8 text-bold">{{detail.bayar ? detail.bayar : '--'}}</p>
-            <p class="col-md-6 mt-2 col-4">Tagihan</p>
-            <p class="col-md-6 mt-2 col-8 text-bold">{{detail.tagihan ? detail.tagihan : 0 | currency('Rp. ')}}</p>
-            <p class="col-md-6 mt-2 col-4">Code</p>
-            <p class="col-md-6 mt-2 col-8">{{detail.code ? detail.code : '--'}}</p>
-            <p class="col-md-6 mt-2 col-4">Nama Jamaah</p>
-            <p class="col-md-6 mt-2 col-8">{{detail.nama_lengkap ? detail.nama_lengkap : '---' | uppercase}}</p>
-            <p class="col-md-6 mt-2 col-4">Nama Ayah</p>
-            <p class="col-md-6 mt-2 col-8">{{detail.nama_ayah | uppercase}}</p>
-            <p class="col-md-6 mt-2 col-4">Tempat/Tanggal Lahir</p>
-            <p class="col-md-6 mt-2 col-8">{{detail.ttl | uppercase}}</p>
-            <p class="col-md-6 mt-2 col-4">No KTP</p>
-            <p class="col-md-6 mt-2 col-8">{{detail.no_ktp}}</p>
-            <p class="col-md-6 mt-2 col-4">Usia</p>
-            <p class="col-md-6 mt-2 col-8">{{detail.umur ? detail.umur : 0 | uppercase}} Tahun</p>
-            <p class="col-md-6 mt-2 col-4">No Telepon</p>
-            <p class="col-md-6 mt-2 col-8">{{detail.no_telp}}</p>
-            <p class="col-md-6 mt-2 col-4">Gender</p>
-            <p class="col-md-6 mt-2 col-8">{{detail.gender | uppercase}}</p>
-            <p class="col-md-6 mt-2 col-4">Gol Darah</p>
-            <p class="col-md-6 mt-2 col-8">{{detail.darah ? detail.darah : '--'}}</p>
-            <p class="col-md-6 mt-2 col-4">Alamat</p>
-            <p class="col-md-6 mt-2 col-8">{{detail.alamat | uppercase}}</p>
-            <p class="col-md-6 mt-2 col-4">Nama Mahram</p>
-            <p class="col-md-6 mt-2 col-8">{{detail.nama_mahram ? detail.nama_mahram : '--' | uppercase}}</p>
-            <div class="col mt-2 row" v-show="detail.passport">
-                <p class="col-md-6 mt-2 col-4">Nama Passport</p>
-                <p class="col-md-6 mt-2 col-8">{{detail.passport ? detail.passport.nama : '--' | uppercase}}</p>
-                <p class="col-md-6 mt-2 col-4">No Passport</p>
-                <p class="col-md-6 mt-2 col-8">{{detail.passport ? detail.passport.nomor : '--' }}</p>
-                <p class="col-md-6 mt-2 col-4">Kota Passport</p>
-                <p class="col-md-6 mt-2 col-8">{{detail.passport ? detail.passport.kota : '--' | uppercase}}</p>
-                <p class="col-md-6 mt-2 col-4">Keluar Passport</p>
-                <p class="col-md-6 mt-2 col-8">{{detail.passport ? detail.passport.tgl_keluar : '--'}}</p>
-                <p class="col-md-6 mt-2 col-4">Tanggal Kadaluarsa Passport</p>
-                <p class="col-md-6 mt-2 col-8">{{detail.passport ? detail.passport.tgl_keluar : '--'}}</p>
-            </div>
-            <div class="col-12 mt-2 row" v-show="detail.pesanan">
-                <p class="col-md-6 mt-2 col-4">Nama Paket</p>
-                <p class="col-md-6 mt-2 col-8">{{detail.pesanan ? detail.pesanan.umrah.nama : '--'}}</p>
-                <p class="col-md-6 mt-2 col-4">Biaya Umrah</p>
-                <p class="col-md-6 mt-2 col-8">{{detail.pesanan ? detail.pesanan.umrah.biaya : '--' | currency('Rp. ')}}</p>
-                <p class="col-md-6 mt-2 col-4">Jadwal Berangkat</p>
-                <p class="col-md-6 mt-2 col-8">{{detail.pesanan ? detail.pesanan.jadwal.berangkat : '--'}}</p>
-                <p class="col-md-6 mt-2 col-4">Jadwal Pulang</p>
-                <p class="col-md-6 mt-2 col-8">{{detail.pesanan ? detail.pesanan.jadwal.pulang : '--'}}</p>
-            </div>
         </div>
       </div>
       <div v-if="checkval == 4">

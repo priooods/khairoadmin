@@ -24,6 +24,9 @@
               <h6 class="mt-4 font-bold text-lg">{{$store.state.mitra.cabangall.length}} Cabang</h6>
             </div>
           </div>
+          <div class="mt-5 md:mt-4">
+            <apexchart type="radialBar" height="200" :options="options" :series="series"></apexchart>
+          </div>
         </div>
       </div>
     </div>
@@ -40,9 +43,10 @@
 import CabangDrawer from '../components/CabangDrawer';
 import TableGlobal from '../components/TableGlobal';
 import TableData from '../plugins/TableData';
+import ChartCabang from '../model/ChartCabang';
 export default {
     name: "Cabang",
-    mixins: [TableData],
+    mixins: [TableData,ChartCabang],
     components: {CabangDrawer,TableGlobal},
     data() {
       return {
@@ -59,6 +63,7 @@ export default {
         return this.opened = val
       },
       showdetail(val){
+        console.log(this.getMitras);
         if (this.$cookies.get('type') == 1) {
           if (this.$store.state.operat.user.type == 'SuperExtra' 
               || this.$store.state.operat.user.type == 'SuperUser' 

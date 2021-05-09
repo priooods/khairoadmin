@@ -1,5 +1,5 @@
 import store from "../store/index";
-// import Vue2Filters from "vue2-filters";
+import moment from "moment-timezone";
 export default {
   data() {
     return {
@@ -153,6 +153,11 @@ export default {
           minWidth: 100,
         },
         {
+          title: "Pulang",
+          key: "pulang",
+          minWidth: 100,
+        },
+        {
           title: "Harga",
           key: "biaya",
           minWidth: 120,
@@ -196,6 +201,11 @@ export default {
           key: "umur",
           minWidth: 90,
         },
+        {
+          title: "Status",
+          key: "status",
+          minWidth: 90,
+        },
       ],
     };
   },
@@ -235,15 +245,51 @@ export default {
       return store.state.umrah.umrahall.map((items, index) => ({
         ...items,
         berangkat: items.jadwal ? items.jadwal.berangkat : "--",
+        pulang: items.jadwal ? items.jadwal.pulang : "--",
         sisa: items.sisa + " Orang",
         index: index + 1,
+        cellClassName: {
+          sisa:
+            items.sisa == 0
+              ? "sisa-style-danger"
+              : items.sisa <= 5 && items.sisa > 0
+              ? "sisa-style-warning"
+              : "",
+          berangkat:
+            items.jadwal.berangkat == moment().format("yyyy-MM-DD")
+              ? "berangkat-style-green"
+              : "",
+          pulang:
+            items.jadwal.pulang == moment().format("yyyy-MM-DD") ||
+            moment(items.jadwal.pulang).isBefore(moment().format("yyyy-MM-DD"))
+              ? "sisa-style-danger"
+              : "",
+        },
       }));
     },
     jamaahlist() {
       return store.state.jamaah.jamaahall.map((items, index) => ({
         ...items,
         umur: items.umur + " Tahun",
+        status: items.bayar,
         index: index + 1,
+        cellClassName: {
+          code:
+            items.ktp == null &&
+            items.kk == null &&
+            items.pasfoto == null &&
+            items.akte_lahir == null
+              ? "biaya-danger"
+              : "biaya-success",
+          umur:
+            items.gender === "Wanita" && items.umur < 45 ? "usia-column" : "",
+          status:
+            items.bayar === "BELUM LUNAS" ? "biaya-danger" : "biaya-success",
+          index:
+            items.pesanan.harga_kamar == null
+              ? "biaya-danger"
+              : "biaya-success",
+        },
       }));
     },
   },

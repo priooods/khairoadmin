@@ -1,7 +1,7 @@
 <template>
     <div class="tabled">
         <Input type="text" v-model="searchtable" class="my-2" :placeholder="placeholder"></Input>
-        <Table size="small" @on-row-click="rowclick" class="w-full" stripe border :columns="column" :data="datas"></Table>
+        <Table size="small" :row-class-name="rows" @on-row-click="rowclick" class="w-full" stripe border :columns="column" :data="datas"></Table>
         <div style="margin: 10px;overflow: hidden">
             <div style="float: right;">
                 <Page :total="totalpage" :current="1" size="small"  @on-change="setPage"></Page>
@@ -17,7 +17,8 @@ export default {
         data: null,
         keys: null,
         totalpage: Number,
-        placeholder: null
+        placeholder: null,
+        rows: null
     },
     name: "TableGlobal",
     data(){

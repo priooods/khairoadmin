@@ -50,6 +50,34 @@ export default {
             trigger: "blur",
           },
         ],
+        no_tlp: [
+          {
+            required: true,
+            message: "Harap Masukan No Hanphone",
+            trigger: "blur",
+          },
+          {
+            type: "string",
+            min: 9,
+            max: 12,
+            message: "No Handphone Max 12 & Min 9 Char",
+            trigger: "blur",
+          },
+        ],
+        cabang_id: [
+          {
+            required: true,
+            message: "Cabang is Required",
+            trigger: "change",
+          },
+        ],
+        code_agent: [
+          {
+            required: true,
+            message: "Perwakilan is Required",
+            trigger: "change",
+          },
+        ],
       },
     };
   },
