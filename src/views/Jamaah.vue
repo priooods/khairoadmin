@@ -28,12 +28,10 @@
                     <div class="grid grid-cols-2 gap-1 mt-3">
                         <p class="text-xs font-semibold">Total Jamaah</p>
                         <p class="text-xs text-bold">: {{Totaljamaah.length}} Jamaah</p>
-                        <p class="text-xs font-semibold">Jamaah Pria</p>
-                        <p class="text-xs text-bold">: {{TotaljamaahPria.length}} Jamaah</p>
-                        <p class="text-xs font-semibold">Jamaah Wanita</p>
-                        <p class="text-xs text-bold">: {{TotaljamaahWanita.length}} Jamaah</p>
                         <p class="text-xs font-semibold">Jamaah sudah berangkat</p>
                         <p class="text-xs text-bold">: {{udahberangkat.length}} Jamaah</p>
+                        <p class="text-xs font-semibold">Jamaah sudah pulang</p>
+                        <p class="text-xs text-bold">: {{udahpulang.length}} Jamaah</p>
                     </div>
                 </div>
             </div>
@@ -59,9 +57,41 @@
             </div>
       </div>
     <Modal v-model="showpanduan" title="Panduan Table Jamaah" ok-text="OK" cancel-text="Cancel">
-        <div class="flex w-full">
+        <h2 class="font-bold">Column</h2>
+        <div class="flex w-full mt-2">
             <p>1</p>
-            <p class="ml-2">Warna Merah pada Column No Warna Merah pada Column No</p>
+            <div class="ml-2">
+                <p class="text-xs font-semibold">Nomor</p>
+                <p class="text-xs mt-1">Warna <span class="text-bold text-red-600">Merah</span> Pada Column Nomor menunjukan bahwa jamaah belum menambahkan biaya kamar. Harap click pada baris table tersebut lalu click tombol <span class="text-bold text-red-600">Atur Harga Kamar</span></p>
+            </div>
+        </div>
+        <div class="flex w-full mt-2">
+            <p>2</p>
+            <div class="ml-2">
+                <p class="text-xs font-semibold">Nama Jamaah</p>
+                <p class="text-xs mt-1">Warna <span class="text-bold text-green-600">Hijau</span> Pada Column Nama Jamaah menunjukan bahwa jamaah sudah berangkat umrah</p>
+            </div>
+        </div>
+        <div class="flex w-full mt-2">
+            <p>2</p>
+            <div class="ml-2">
+                <p class="text-xs font-semibold">Code</p>
+                <p class="text-xs mt-1">Warna <span class="text-bold text-red-600">Merah</span> Pada Column Code menunjukan bahwa jamaah belum melengkapi semua berkas yang diminta. Harap click pada baris table tersebut lalu click tombol <span class="text-bold text-red-600">Simpan Berkas</span></p>
+            </div>
+        </div>
+        <div class="flex w-full mt-2">
+            <p>3</p>
+            <div class="ml-2">
+                <p class="text-xs font-semibold">Usia</p>
+                <p class="text-xs mt-1">Warna <span class="text-bold text-yellow-600">Kuning</span> Pada Column Usia menunjukan bahwa jamaah berjenis kelamin Wanita dan usianya kurang dari 45 Tahun</p>
+            </div>
+        </div>
+        <div class="flex w-full mt-2">
+            <p>2</p>
+            <div class="ml-2">
+                <p class="text-xs font-semibold">Status</p>
+                <p class="text-xs mt-1">Warna <span class="text-bold text-red-600">Merah</span> Pada Column Status menunjukan bahwa jamaah belum melunasi semua biaya umrah. Harap click pada baris table tersebut lalu click tombol <span class="text-bold text-red-600">Bayar Umrah</span></p>
+            </div>
         </div>
     </Modal>
     <JamaahDrawer 
@@ -85,7 +115,6 @@ import TableData from '../plugins/TableData';
 import TableGlobal from '../components/TableGlobal';
 import JamaahAksi from '../components/JamaahAksi';
 import JamaahDrawer from '../components/JamaahDrawer';
-import moment from 'moment-timezone';
 export default {
     components:{JamaahDrawer,JamaahAksi, TableGlobal},
     mixins: [Vue2Filters.mixin, Excel,TableData,Charts],
@@ -119,13 +148,6 @@ export default {
             return this.$store.state.jamaah.jamaahall.filter((as) => {
                 return as.bayar === "BELUM LUNAS"
             })
-        },
-        udahberangkat() {
-            return this.$store.state.jamaah.jamaahall.filter((as) => {
-                return moment(as.created_at).format("yyyy") == new Date().getFullYear() && moment(as.pesanan.jadwal.pulang).isBefore(
-                    moment().format("yyyy-MM-DD")
-                    );
-            });
         },
     },
     created(){

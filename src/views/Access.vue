@@ -14,8 +14,9 @@
                     <p class="font-semibold text-red-500">{{$store.state.operat.user.type}} </p>
                   </div>
                 </div>
-                <div class="flex justify-end mt-5">
-                  <Button class="mr-2" type="success" @click="opened = true; typedetail = 3; datas = $store.state.operat.user">Update Profile</Button>
+                <div class="md:flex justify-end grid grid-cols-3 gap-2 mt-5">
+                  <Button type="info" @click="panduan =!panduan">Panduan</Button>
+                  <Button class="md:mx-1" type="success" @click="opened = true; typedetail = 3; datas = $store.state.operat.user">Update Profile</Button>
                   <Button @click="createnew" v-if="$store.state.operat.user.type == 'SuperUser' || $store.state.operat.user.type == 'Admin'" type="primary">Tambah Baru</Button>
                 </div>
                 <p class="mt-3">Lihat semua data access pengguna, tap item untuk melihat detail</p>  
@@ -38,6 +39,17 @@
         @deleteuser="deleteuser"
         :datauser="datas">
       </UsersDetail>
+      <Modal v-model="panduan" @on-ok="panduan = false" title="Panduan Access" ok-text="OK" cancel-text="Cancel">
+        <h2 class="text-xs font-bold">Access Website</h2>
+        <div class="flex w-full mt-2">
+            <p>1</p>
+            <p class="text-xs ml-2">Untuk dapat mengakses data akuntan pengguna harus memiliki akses sebagai SuperUser dan Admin.</p>
+        </div>
+        <div class="flex w-full mt-2">
+            <p>2</p>
+            <p class="text-xs ml-2">Untuk membuat account kepada setiap cabang, pastikan anda memberikan akses account sebagai Operator</p>
+        </div>
+      </Modal>
   </div>
 </template>
 
@@ -53,6 +65,7 @@ export default {
     data(){
       return {
         opened: false,
+        panduan:false,
         typedetail: 1,
         datas: [],
         formNew: {
@@ -76,9 +89,9 @@ export default {
         ||this.$store.state.operat.user.type == 'SuperUser') {
           this.datas = value; 
           this.opened = true; 
-          this.typedetail = 2;
-          return;
+          return this.typedetail = 2;
         }
+        this.$Message.error('Anda Tidak Memiliki Akses');
         return this.opened = false; 
       },
       deleteuser(val){

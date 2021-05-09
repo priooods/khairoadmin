@@ -26,12 +26,12 @@
               </Select>
           </FormItem>
       </Form>
-      <div v-if="type == 2">
-        <Button danger v-if="$store.state.operat.user.type == 'SuperUser' || $store.state.operat.user.type == 'Admin'" 
+      <div v-if="type == 2" class="md:flex grid grid-cols-2 gap-2">
+        <Button v-if="$store.state.operat.user.type == 'SuperUser' || $store.state.operat.user.type == 'Admin'" 
             type="error"
             @click="deleted">Hapus Pengguna</Button>
-        <Button warn v-if="$store.state.operat.user.type == 'SuperUser' || $store.state.operat.user.type == 'Admin'" 
-            type="primary ml-2"
+        <Button v-if="$store.state.operat.user.type == 'SuperUser' || $store.state.operat.user.type == 'Admin'" 
+            type="primary" class="md:ml-2"
             @click="updated">Update Pengguna</Button>
       </div>
       <div v-if="type == 3">

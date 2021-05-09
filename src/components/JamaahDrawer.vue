@@ -354,7 +354,7 @@ export default {
         },
         umrahlisting(){
             return this.$store.state.umrah.umrahall.filter((e => {
-                return e.sisa != 0 && moment(e.jadwal.pulang).isAfter(moment().format("yyyy-MM-DD"));
+                return e.sisa != 0 && moment(e.jadwal.berangkat).isAfter(moment().format("yyyy-MM-DD")) && moment(e.jadwal.pulang).isAfter(moment().format("yyyy-MM-DD")) ;
             }));
         }
     },

@@ -8,49 +8,6 @@
         <h1 class="mt-2 hidden md:block">Detail Jamaah</h1>
         <div class="grid md:grid-cols-2 gap-2">
           <div>
-            <!-- <div class="mt-3" v-if="detail.bayar !== 'LUNAS'">
-              <Button type="primary" block v-show="closeshow == 0" @click="closeshow = 1">Bayar Tagihan</Button>
-              <div class="mt-3" v-show="closeshow == 1">
-                <Form ref="formInline" :model="formInline" :rules="ruleInline">
-                    <FormItem prop="bayar" label="Nominal Bayar">
-                        <Input type="number" v-model="formInline.bayar" placeholder="Masukan Nominal Bayar"></Input>
-                    </FormItem>
-                </Form>
-                <div class="row mt-3">
-                  <Button type="primary" class="col" block @click="bayarr" success>Bayar</Button>
-                  <Button type="primary" class="col" block @click="closeshow = 0" danger>Tutup</Button>
-                </div>
-              </div>
-            </div> -->
-            <!-- <div class="mt-3" v-if="detail.hotel_id == null">
-              <Button type="primary" block v-show="closeshow == 0" @click="callUmrahdetail">Tambah Detail</Button>
-              <div class="row" v-show="closeshow == 3">
-                <b-form-group id="lay-maskapai" class="col-12 add-style">
-                  <label for="maskapai">Pilih Maskapai <span>*</span></label>
-                    <b-form-select class="search" v-model="form.maskapai_id"
-                        size="sm" required id="maskapai" placeholder="Pilih maskapai Umrah">
-                            <b-form-select-option
-                                v-for="(data,st) in $store.state.umrah.umrahdetail.maskapai" v-bind:key="st" 
-                                :value="data.id">{{data.nama}}
-                            </b-form-select-option>
-                    </b-form-select>
-                </b-form-group>
-                <b-form-group id="lay-hotel" class="col-12 add-style">
-                  <label for="hotel">Pilih Hotel <span>*</span></label>
-                    <b-form-select class="search" v-model="form.hotel_id"
-                        size="sm" required id="hotel" placeholder="Pilih hotel Umrah">
-                            <b-form-select-option
-                                v-for="(data,st) in $store.state.umrah.umrahdetail.hotel" v-bind:key="st" 
-                                :value="data.id">{{data.nama}}
-                            </b-form-select-option>
-                    </b-form-select>
-                </b-form-group>
-                <div class="col-12 row mt-3">
-                  <Button type="primary" class="col" block @click="updatedetails" success>Update</Button>
-                  <Button type="primary" class="col" block @click="closeshow = 0" danger>Tutup</Button>
-                </div>
-              </div>
-            </div> -->
             <p class="text-xs font-bold uppercase my-4">Informasi Umum</p>
             <div class="grid grid-cols-2 w-full gap-2">
               <p class="md:text-md text-xs font-semibold">Status Bayar</p>
@@ -100,6 +57,12 @@
               <p class="md:text-md text-xs">{{detail.pesanan ? detail.pesanan.umrah.nama : '--'}}</p>
               <p class="md:text-md text-xs font-semibold">Biaya Umrah</p>
               <p class="md:text-md text-xs">{{detail.pesanan ? detail.pesanan.umrah.biaya : '--' | currency('Rp. ')}}</p>
+              <p class="md:text-md text-xs font-semibold">Biaya Kamar</p>
+              <p class="md:text-md text-xs">{{detail.pesanan.harga_kamar ? detail.pesanan.harga_kamar : 'Belum Ditambahkan' | currency('Rp. ')}}</p>
+              <p class="md:text-md text-xs font-semibold text-red-500">Total Tagihan</p>
+              <p class="md:text-md text-xs text-red-500">{{detail.tagihan ? detail.tagihan : '0' | currency('Rp. ')}}</p>
+              <p class="md:text-md text-xs font-semibold text-green-500">Pembayaran Masuk</p>
+              <p class="md:text-md text-xs text-green-500">{{detail.pesanan.bayar ? detail.pesanan.bayar : '0' | currency('Rp. ')}}</p>
               <p class="md:text-md text-xs font-semibold">Jadwal Berangkat</p>
               <p class="md:text-md text-xs">{{detail.pesanan ? detail.pesanan.jadwal.berangkat : '--' | moment("DD MMMM YYYY")}}</p>
               <p class="md:text-md text-xs font-semibold">Jadwal Pulang</p>
@@ -113,13 +76,47 @@
               <p class="md:text-md text-xs font-bold" :class="{'text-red-500' : detail.ktp == null, 'text-green-500' : detail.ktp != null}">{{detail.ktp ? 'Sudah Di Setorkan' : 'Belum Di Setorkan' }}</p>
               <p class="md:text-md text-xs font-semibold">Kartu Keluarga</p>
               <p class="md:text-md text-xs font-bold" :class="{'text-red-500' : detail.kk == null, 'text-green-500' : detail.kk != null}">{{detail.kk ? 'Sudah Di Setorkan' : 'Belum Di Setorkan'}}</p>
+              <p class="md:text-md text-xs font-semibold">Buku Nikah</p>
+              <p class="md:text-md text-xs font-bold" :class="{'text-red-500' : detail.buku_nikah == null, 'text-green-500' : detail.buku_nikah != null}">{{detail.buku_nikah ? 'Sudah Di Setorkan' : 'Belum Di Setorkan'}}</p>
               <p class="md:text-md text-xs font-semibold">Akte Lahir</p>
               <p class="md:text-md text-xs font-bold" :class="{'text-red-500' : detail.akte_lahir == null, 'text-green-500' : detail.akte_lahir != null}">{{detail.akte_lahir ? 'Sudah Di Setorkan' : 'Belum Di Setorkan'}}</p>
+              <p class="md:text-md text-xs font-semibold">Bukti Vaksin</p>
+              <p class="md:text-md text-xs font-bold" :class="{'text-red-500' : detail.vaksin == null, 'text-green-500' : detail.vaksin != null}">{{detail.vaksin ? 'Sudah Di Setorkan' : 'Belum Di Setorkan'}}</p>
+            </div>
+            <div class="mt-5">
+              <div v-show="showing.kamar">
+                <Form class="md:w-3/6" ref="formkamar" :model="formkamar" :rules="ruleskamar">
+                  <FormItem prop="harga_kamar" label="Harga Kamar">
+                    <Input v-model="formkamar.harga_kamar" type="number" placeholder="tambahkan harga kamar"/>
+                  </FormItem>
+                </Form>
+                <div class="flex mt-2">
+                  <Button type="primary" class="mr-1" @click="bayarkamar">Simpan</Button>
+                  <Button type="error" class="ml-1" @click="showing.kamar = false">Batal</Button>
+                </div>
+              </div>
+              <div v-show="showing.bayar">
+                <Form class="md:w-3/6" ref="formbayar" :model="formbayar" :rules="rulesbayar">
+                  <FormItem prop="bayar" label="Bayar Tagihan">
+                    <Input v-model="formbayar.bayar" type="number" placeholder="tambahkan biaya pembayaran umrah"/>
+                  </FormItem>
+                </Form>
+                <div class="flex mt-2">
+                  <Button type="primary" class="mr-1" @click="bayartagihan">Simpan</Button>
+                  <Button type="error" class="ml-1" @click="showing.bayar = false">Batal</Button>
+                </div>
+              </div>
+              <div class="grid md:grid-cols-3 grid-cols-1 md:w-5/6 gap-2 mt-3">
+                <Button type="error" @click="deleteshow = !deleteshow" >Hapus Data</Button>
+                <Button type="info" @click="showing.berkas = !showing.berkas" >Simpan Berkas</Button>
+                <Button type="success" @click="showing.bayar = true" v-if="detail.bayar === 'BELUM LUNAS' && showing.bayar == false && showing.kamar == false">Bayar Umrah</Button>
+                <Button type="primary" @click="showing.kamar = true" v-if="detail.pesanan.harga_kamar == null && showing.bayar == false && showing.kamar == false">Atur Harga Kamar</Button>
+              </div>
             </div>
           </div>
         </div>
       </div>
-      <div v-if="checkval == 4">
+      <!-- <div v-if="checkval == 4">
         <h1 class="mt-2">Jamaah Belum Lunas</h1>
         <div class="row mt-3" v-for="(data,i) in detail" v-bind:key="i">
             <p class="col-md-6 col-4">Nama Jamaah</p>
@@ -154,7 +151,31 @@
             <p class="col-md-6 col-4">No Jamaah</p>
             <p class="col-md-6 col-8 text-bold">{{data.code}}</p>
           </div>
-      </div>
+      </div> -->
+      <Modal
+          v-model="showing.berkas"
+          title="Update Berkas"
+          @on-ok="updatejamaah"
+          okText="SImpan">
+          <p class="text-xs font-semibold">Check apabila berkas jamaah sudah disetorkan dan sudah anda terima</p>
+          <div class="mt-4 grid grid-cols-1 gap-2">
+            <Checkbox v-model="berkas.kk">Berkas Kartu Keluarga</Checkbox>
+            <Checkbox v-model="berkas.ktp">Berkas Kartu Tanda Penduduk</Checkbox>
+            <Checkbox v-model="berkas.pasfoto">Berkas Pass Foto 4x6 5 lembar</Checkbox>
+            <Checkbox v-model="berkas.akte_lahir">Berkas Akte Lahir</Checkbox>
+            <Checkbox v-model="berkas.vaksin">Berkas Bukti Vaksin</Checkbox>
+            <Checkbox v-model="berkas.buku_nikah">Berkas Buku Nikah</Checkbox>
+          </div>
+      </Modal>
+      <Modal
+          v-model="deleteshow"
+          title="Hapus Jamaah"
+          okText="Hapus"
+          @on-ok="hapusjamaah"
+          width="300">
+          <p class="text-xs font-semibold">Apakah anda yakin ingin menghapus data jamaah ?</p>
+          <p class="text-xs mt-2">Semua data jamaah yang dihapus akan mengubah semua data yang terhubung dengan data jamaah</p>
+      </Modal>
     <!-- <vs-button type="primary" danger>Hapus Paket</vs-button> -->
   </div>
 </template>
@@ -172,22 +193,41 @@ export default {
     },
     data() {
       return {
-        closeshow: 0,
-        closekamar: 0,
-        formInline: {
-            bayar: '',
-        },
-        checklog: false,
-        ruleInline: {
-            bayar: [
-                { required: true, message: 'Harap Masukan Nominal Pembayaran', trigger: 'blur' }
-            ],
-        },
-        form:{
-          hotel_id: '',
-          maskapai_id: '',
+        deleteshow: false,
+        berkas: {
+          kk: false,
+          ktp: false,
+          akte_lahir: false,
+          pasfoto: false,
+          vaksin: false,
+          buku_nikah: false,
           id: ''
-        }
+        },
+        showing: {
+          kamar: false,
+          bayar: false,
+          berkas: false
+        },
+        formkamar: {
+          id: '',
+          harga_kamar: '',
+        },
+        formbayar: {
+          id: '',
+          bayar: '',
+        },
+        ruleskamar:{
+          harga_kamar: [
+            { required: true, message: 'Harap Masukan Harga Kamar', trigger: 'blur' },
+            { type: 'string', min: 5, message: 'Min 5 Char', trigger: 'blur' }
+          ]
+        },
+        rulesbayar:{
+          bayar: [
+            { required: true, message: 'Harap Masukan Nominal Pembayaran', trigger: 'blur' },
+            { type: 'string', min: 5, message: 'Min 5 Char', trigger: 'blur' }
+          ]
+        },
       }
     },
     computed:{
@@ -204,31 +244,44 @@ export default {
         this.closeshow = 0;
         return this.$emit('closeable', 1);
       },
-      bayarr(){
+      bayartagihan(){
         this.helper_loading("Mengirim Pembayaran ..");
-        this.$refs['formInline'].validate((valid) => {
+        this.$refs['formbayar'].validate((valid) => {
             if (valid) {
-              this.$store.dispatch('jamaah/BayarJamaah', {id: this.detail.pesanan.id, bayar: this.formInline.bayar})
-              this.helper_check_request('Success Pembayaran', 'Pembayaran jamaah telah berhasil dilakukan !');
-              this.closeshow = 0;
-              return this.backpresed();
+              this.formbayar.id = this.detail.pesanan.id;
+              this.$store.dispatch('jamaah/BayarJamaah', this.formbayar)
+              return this.helper_check_request('Success Pembayaran', 'Pembayaran jamaah telah berhasil dilakukan !');
+              
             } else {
               this.loading.close();
               return false;
             }
         });
       },
-      updatedetails(){
-        this.helper_loading("Mengirim Pembayaran ..");
-        if(this.form.maskapai_id.length == 0 || this.form.hotel_id == 0){
-          this.loading.close();
-          return this.helper_global_form_notif();
-        } 
-        this.form.id = this.detail.pesanan.id;
-        this.$store.dispatch('jamaah/PesananUpdate', this.form);
-        this.helper_check_request('Success Menambah Detail', 'Pesanan Jamaah berhasil ditambahkan !');
-        this.closeshow = 0;
-        return this.backpresed();
+      bayarkamar(){
+        this.helper_loading("Mengirim Harga Kamar ..");
+        this.$refs['formkamar'].validate((valid) => {
+          if(valid){
+            this.formkamar.id = this.detail.pesanan.id;
+            this.$store.dispatch('jamaah/PesananUpdate', this.formkamar);
+            return this.helper_check_request('Berhasil Menambah Harga', 'Harga kamar berhasil ditambahkan, Refresh ulang halaman untuk melihat data terbaru!');
+          } else {
+            this.loading.close();
+            return false;
+          }
+        })
+      },
+      hapusjamaah(){
+        this.helper_loading("Menghapus Jamaah ..");
+        this.$store.dispatch('jamaah/HapusJamaah', this.detail.id);
+        return this.helper_check_request('Berhasil Menghapus Jamaah', 'Refresh ulang halaman untuk mendapatkan data terbaru');
+          
+      },
+      updatejamaah(){
+        this.helper_loading("Menyimpan Berkas ..");
+        this.berkas.id = this.detail.id;
+        this.$store.dispatch('jamaah/UpdateJamaah', this.berkas);
+        return this.helper_check_request('Success Menyimpan Berkan', 'Informasi Berkas sudah berhasil disimpan !');
       }
     },
 }

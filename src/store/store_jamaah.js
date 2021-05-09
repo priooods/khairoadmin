@@ -26,14 +26,37 @@ export default {
         return commit("jamaahbayar", data.data.data);
       });
     },
-    PesananUpdate({ dispatch },  form) {
+    PesananUpdate({ dispatch }, form) {
       Jamaah.pesananupdate(form).then((data) => {
-        console.log(data.data.data);
-        return dispatch("Alljamaah");
+        if (data.data.error_code == 0) {
+          cookies.set("next", 1);
+          return dispatch("Alljamaah");
+        }
+        return cookies.set("next", 0);
       });
     },
     BayarJamaah({ dispatch }, form) {
       Jamaah.jamaahbayar(form).then((data) => {
+        if (data.data.error_code == 0) {
+          cookies.set("next", 1);
+          return dispatch("Alljamaah");
+        }
+        return cookies.set("next", 0);
+      });
+    },
+    HapusJamaah({ dispatch }, form) {
+      Jamaah.jamaahhapus(form).then((data) => {
+        console.log(data.data);
+        if (data.data.error_code == 0) {
+          cookies.set("next", 1);
+          return dispatch("Alljamaah");
+        }
+        return cookies.set("next", 0);
+      });
+    },
+    UpdateJamaah({ dispatch }, form) {
+      Jamaah.jamaahupdate(form).then((data) => {
+        console.log(data.data);
         if (data.data.error_code == 0) {
           cookies.set("next", 1);
           return dispatch("Alljamaah");

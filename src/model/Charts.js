@@ -183,29 +183,35 @@ export default {
         return moment(e.created_at).format("yyyy") == new Date().getFullYear();
       });
     },
-    TotaljamaahWanita() {
-      return store.state.jamaah.jamaahall.filter((e) => {
-        return (
-          moment(e.created_at).format("yyyy") == new Date().getFullYear() &&
-          e.gender === "Wanita"
-        );
-      });
+    udahpulang() {
+      return this.$store.state.jamaah.jamaahall
+        .filter((a) => {
+          return (
+            moment(a.created_at).format("yyyy") == new moment().format("yyyy")
+          );
+        })
+        .map((as) => {
+          return as.pesanan.jadwal;
+        })
+        .filter((dd) => {
+          return (
+            moment(dd.pulang).isBefore(moment().format("yyyy-MM-DD"))
+          );
+        });
     },
-    TotaljamaahPria() {
-      return store.state.jamaah.jamaahall.filter((e) => {
-        return (
-          moment(e.created_at).format("yyyy") == new Date().getFullYear() &&
-          e.gender === "Pria"
-        );
-      });
-    },
-    JamaahYangPulang() {
-      return store.state.jamaah.jamaahall.filter((e) => {
-        return (
-          moment(e.created_at).format("yyyy") == new Date().getFullYear() &&
-          e.gender === "Pria"
-        );
-      });
+    udahberangkat() {
+      return this.$store.state.jamaah.jamaahall
+        .filter((a) => {
+          return (
+            moment(a.created_at).format("yyyy") == new moment().format("yyyy")
+          );
+        })
+        .map((as) => {
+          return as.pesanan.jadwal;
+        })
+        .filter((dd) => {
+          return moment(dd.berangkat).isBefore(moment().format("yyyy-MM-DD"));
+        });
     },
     optionsMitra() {
       return {

@@ -1,76 +1,62 @@
 <template>
   <div class="akuntan">
-      <h1 class="hidden md:block">History Akuntan</h1>
-      <div class="bg-gray-100 mt-5 md:mt-3 md:p-3 p-2">
-            <p class="md:mt-0 mt-5">Lihat semua History Pembayaran Jamaah</p> 
-            <b-form-input class="search my-3 w-100" size="sm" v-model="searchtable" type="text" placeholder="Cari History"></b-form-input>
-            <div class="tables mt-1">
-                <table>
-                    <thead>
-                    <tr>
-                        <th>No</th>
-                        <th class="th-sm">Keterangan</th>
-                        <th class="th-sm">Masuk</th>
-                        <th class="th-sm">Saldo</th>
-                        <th class="th-sm">Tanggal</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr v-for="(data, i) in datatable" v-bind:key="i">
-                        <td data-label="No">{{i + 1}}</td>
-                        <td data-label="Keterangan">{{data.keterangan}}</td>
-                        <td data-label="Masuk">{{data.masuk | currency('Rp. ')}}</td>
-                        <td data-label="Saldo">{{data.saldo | currency('Rp. ')}}</td>
-                        <td data-label="Tanggal">{{data.date | moment("DD MMMM YYYY") }}</td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-            <div style="margin: 10px;overflow: hidden">
-                <div style="float: right;">
-                    <Page :total="totalpage" :current="1" @on-change="setPage"></Page>
-                </div>
-            </div>
+      <div v-show="!drawer">
+        <h1 class="hidden md:block">History Akuntan</h1>
+        <div class="flex justify-end mt-5">
+          <Button type="primary" @click="drawer = !drawer">Buat Laporan</Button>
+        </div>
+        <div class="bg-gray-100 mt-5 md:mt-3 md:p-3 p-2">
+          <div class="flex justify-end">
+            <p class="md:mr-auto hidden md:block">Lihat semua History Pembayaran Jamaah</p>
+            <Button type="info" @click="panduan = true">Panduan</Button>
+          </div>
+          <TableGlobal :data="akuntanlist" :placeholder="'Cari Keterangan'" :key="'keterangan'" :totalpage="$store.state.gudang.akuntan.length/5 * 10" :column="Akuntan"></TableGlobal>
+        </div>
       </div>
+      <AkuntanDrawer :show="drawer" @closeable="closedrawer"></AkuntanDrawer>
+      <Modal v-model="panduan" @on-ok="panduan = false" title="Panduan Akuntan" ok-text="OK" cancel-text="Cancel">
+        <h2 class="text-xs font-bold">Column</h2>
+        <div class="flex w-full mt-2">
+            <p>1</p>
+            <p class="text-xs ml-2">Pada Column Saldo Akhir, yang diberikan tanda berwarna <span class="text-green-500">Hijau</span> merupakan saldo akhir anda saat ini</p>
+        </div>
+        <div class="flex w-full mt-2">
+            <p>2</p>
+            <p class="text-xs ml-2">Pada Column Saldo Masuk, yang diberikan tanda berwarna <span class="text-green-500">Hijau</span> merupakan saldo yang masuk terakhir kali</p>
+        </div>
+      </Modal>
   </div>
 </template>
 
 <script>
+import TableGlobal from '../components/TableGlobal';
+import TableData from '../plugins/TableData';
 import Vue2Filters from 'vue2-filters';
+import AkuntanDrawer from '../components/AkuntanDrawer';
 export default {
-    mixins: [Vue2Filters.mixin],
+    mixins: [Vue2Filters.mixin,TableData],
+    components: {TableGlobal, AkuntanDrawer},
     name: 'Akuntan',
     data() {
         return {
-            searchtable: '',
-            datatable: [],
+            panduan: false,
+            drawer: false
         }
     },
     created(){
       this.$store.dispatch("gudang/AllAkuntan");
     },
-    computed:{
-      listaccess(){
-        return this.$store.state.gudang.akuntan;
-      },
-      totalpage(){
-        return this.listaccess.length/5 * 10
-      },
-    },
-    mounted(){
-      this.setPage(1);
-    },
-    watch:{
-      searchtable: function (value){
-        const search = value.toLowerCase().trim();
-        if (!search) return this.setPage(1);
-        return this.datatable = this.listaccess.filter(c => c.keterangan.toLowerCase().indexOf(search) > -1); 
-      }
-    },
     methods: {
-        setPage(val){
-        return this.datatable = this.listaccess.slice((val - 1) * 5, val * 5);
-      },
+      closedrawer(value){
+        return this.drawer = value
+      }
     },
 }
 </script>
+
+<style>
+.ivu-table .akuntan-style-green {
+    background: #05ac56 !important;
+    color: #fff;
+}
+</style>

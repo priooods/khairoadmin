@@ -45,7 +45,7 @@
                         </div>
                     </router-link>
                 </li>
-                <li class="mt-3" v-if="$cookies.get('type') == 1 && $store.state.operat.user.type === 'SuperUser' ">
+                <li class="mt-3" v-if="$cookies.get('type') == 1 && $store.state.operat.user.type === 'SuperUser' || $store.state.operat.user.type === 'Admin' ">
                     <router-link v-on:click.native="closeable" to="/base/akuntan">
                         <div class="flex">
                             <i class='bx bxs-coin-stack  bx-sm'></i><span class="my-auto ml-3 text-base">Akuntan</span>

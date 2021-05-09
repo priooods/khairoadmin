@@ -141,6 +141,9 @@ export default {
           title: "Durasi",
           key: "durasi",
           minWidth: 100,
+          render: (h, params) => {
+            return h("div", [h("span", params.row.durasi + " Hari")]);
+          },
         },
         {
           title: "Sisa Kuota",
@@ -161,6 +164,14 @@ export default {
           title: "Harga",
           key: "biaya",
           minWidth: 120,
+          render: (h, params) => {
+            return h("div", [
+              h(
+                "span",
+                this.$options.filters.currency(params.row.biaya, "Rp. ")
+              ),
+            ]);
+          },
         },
       ],
       Jamaah: [
@@ -207,6 +218,30 @@ export default {
           minWidth: 90,
         },
       ],
+      Akuntan: [
+        {
+          title: "No",
+          key: "index",
+          width: 55,
+        },
+        {
+          title: "Keterangan",
+          key: "keterangan",
+        },
+        {
+          title: "Saldo Masuk",
+          key: "masuk",
+        },
+        {
+          title: "Saldo Akhir",
+          key: "saldo",
+        },
+        {
+          title: "Tanggal",
+          key: "date",
+          width: 140,
+        },
+      ],
     };
   },
   computed: {
@@ -225,6 +260,19 @@ export default {
         ...items,
         harga: this.$options.filters.currency(items.harga, "Rp. "),
         index: index + 1,
+      }));
+    },
+    akuntanlist() {
+      return store.state.gudang.akuntan.map((items, index) => ({
+        ...items,
+        masuk: this.$options.filters.currency(items.masuk, "Rp. "),
+        saldo: this.$options.filters.currency(items.saldo, "Rp. "),
+        date: moment(items.date).format("DD MMMM YYYY"),
+        index: index + 1,
+        cellClassName: {
+          saldo: index == 0 ? "akuntan-style-green" : "",
+          masuk: index == 0 ? "akuntan-style-green" : "",
+        },
       }));
     },
     mitralist() {
@@ -255,10 +303,11 @@ export default {
               : items.sisa <= 5 && items.sisa > 0
               ? "sisa-style-warning"
               : "",
-          berangkat:
-            items.jadwal.berangkat == moment().format("yyyy-MM-DD")
-              ? "berangkat-style-green"
-              : "",
+          berangkat: moment(items.jadwal.berangkat).isBefore(
+            moment().format("yyyy-MM-DD")
+          )
+            ? "berangkat-style-green"
+            : "",
           pulang:
             items.jadwal.pulang == moment().format("yyyy-MM-DD") ||
             moment(items.jadwal.pulang).isBefore(moment().format("yyyy-MM-DD"))
@@ -275,20 +324,25 @@ export default {
         index: index + 1,
         cellClassName: {
           code:
-            items.ktp == null &&
-            items.kk == null &&
-            items.pasfoto == null &&
-            items.akte_lahir == null
+            items.ktp == null ||
+            (items.ktp == false && items.kk == false) ||
+            (items.kk == null && items.pasfoto == null) ||
+            (items.pasfoto == false && items.akte_lahir == null) ||
+            items.akte_lahir == false
               ? "biaya-danger"
-              : "biaya-success",
+              : "",
           umur:
             items.gender === "Wanita" && items.umur < 45 ? "usia-column" : "",
-          status:
-            items.bayar === "BELUM LUNAS" ? "biaya-danger" : "biaya-success",
-          index:
-            items.pesanan.harga_kamar == null
-              ? "biaya-danger"
-              : "biaya-success",
+          status: items.bayar === "BELUM LUNAS" ? "biaya-danger" : "",
+          index: items.pesanan.harga_kamar == null ? "biaya-danger" : "",
+          nama_lengkap:
+            moment(items.created_at).format("yyyy") ==
+              new moment().format("yyyy") &&
+            moment(items.pesanan.jadwal.berangkat).isBefore(
+              moment().format("yyyy-MM-DD")
+            )
+              ? "biaya-success"
+              : "",
         },
       }));
     },

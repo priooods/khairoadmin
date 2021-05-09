@@ -40,6 +40,7 @@ export default {
     },
     AllAkuntan({ commit }) {
       Gudang.akuntan().then((data) => {
+        console.log(data.data);
         return commit("AllAkuntan", data.data.data);
       });
     },
