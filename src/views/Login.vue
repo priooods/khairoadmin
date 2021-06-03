@@ -38,7 +38,7 @@ export default {
                 ],
                 password: [
                     { required: true, message: 'Harap Lengkapi Password Anda', trigger: 'blur' },
-                    { type: 'string', min: 6, message: 'The password length cannot be less than 6 char', trigger: 'blur' }
+                    { type: 'string', min: 5, message: 'The password length cannot be less than 6 char', trigger: 'blur' }
                 ]
             }
         }
@@ -48,12 +48,14 @@ export default {
             this.helper_loading("Mencari Akun ..");
             this.$refs['formInline'].validate((valid) => {
                 if (valid) {
-                    if(!this.checklog){
-                        this.$store.dispatch("operat/loginoperator", this.formInline);
-                        return this.helper_login_request('Selamat Datang', 'Selamat Datang Kembali, Bagaimana kabar kamu hari ini');
-                    }
-                    this.$store.dispatch("mitra/LoginMitra", this.formInline);
+                    this.$store.dispatch("operat/loginoperator", this.formInline);
                     return this.helper_login_request('Selamat Datang', 'Selamat Datang Kembali, Bagaimana kabar kamu hari ini');
+                    // if(!this.checklog){
+                    //     this.$store.dispatch("operat/loginoperator", this.formInline);
+                    //     return this.helper_login_request('Selamat Datang', 'Selamat Datang Kembali, Bagaimana kabar kamu hari ini');
+                    // }
+                    // this.$store.dispatch("mitra/LoginMitra", this.formInline);
+                    // return this.helper_login_request('Selamat Datang', 'Selamat Datang Kembali, Bagaimana kabar kamu hari ini');
                 } else {
                     this.loading.close();
                     return false;
