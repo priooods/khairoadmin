@@ -21,7 +21,7 @@
                 </div>
             </div>
             <div class="my-5 bg-gray-100 p-2 md:flex justify-start">
-                <apexchart type="area" class="w-full" height="200" :options="chartJamaah" :series="seriesJamaah"></apexchart>
+                <apexchart type="bar" class="w-full" height="200" :options="chartJamaah2" :series="seriesJamaahBar"></apexchart>
                 <div class="bg-blue-400 md:ml-2 rounded text-white px-2 py-2 md:w-2/6 w-full ml-auto h-full">
                     <p class="font-semibold">Data Jamaah Tahun Ini</p>
                     <p class="text-xs">Semua jamaah yang didaftarkan</p>

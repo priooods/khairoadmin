@@ -77,11 +77,14 @@ export default {
             const yr = new Date().getFullYear() == new Date(value.jadwal.pulang).getFullYear();
             const month = new Date().getMonth() == new Date(value.jadwal.pulang).getMonth();
             if(yr && month){
-                return this.$Message.error('Paket Umrah ini sudah selesai');
+                console.log("INi masih terbuka");
+                this.opens = 3;
+                return this.data = value;
             }
-            console.log(value);
-            this.opens = 3;
-            return this.data = value;
+            console.log("ini udah selesai guys");
+            return this.$Message.error('Paket Umrah ini sudah selesai');
+            // this.opens = 3;
+            // return this.data = value;
         },
         bukaformumrah(){
             this.opens = 2;

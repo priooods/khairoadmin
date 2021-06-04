@@ -9,45 +9,28 @@ export default {
         },
         labels: ["Admin", "Operator"],
       },
-      chartJamaah: {
-        dataLabels: {
-          enabled: false,
-        },
-        stroke: {
-          curve: "smooth",
-        },
-        title: {
-          text: "Jamaah Yang Didaftarkan Tahun Ini",
-          align: "left",
-        },
-        chart: {
-          type: "area",
-        },
-        xaxis: {
-          categories: [
-            "Jan",
-            "Feb",
-            "Mar",
-            "Apr",
-            "Mei",
-            "Jun",
-            "Jul",
-            "Aug",
-            "Sep",
-            "Oct",
-            "Nov",
-            "Des",
-          ],
-        },
-        tooltip: {
-          x: {
-            format: "MMM",
-          },
-        },
-      },
     };
   },
+  methods: {
+    generateX(ss) {
+      return store.state.jamaah.jamaahall.filter((e) => {
+        return (
+          moment(e.created_at).format("YYYY") == new moment(ss).format("YYYY")
+        );
+      });
+    },
+  },
   computed: {
+    generateYears() {
+      const max = new Date().getFullYear();
+      const min = max - 4;
+      const years = [];
+
+      for (let i = min; i <= max; i++) {
+        years.push(i);
+      }
+      return years;
+    },
     admin() {
       return store.state.operat.userall.filter((e) => {
         return e.type == "Admin";
@@ -61,122 +44,27 @@ export default {
     series() {
       return [this.admin.length, this.operator.length];
     },
-    Jan() {
-      return store.state.jamaah.jamaahall.filter((e) => {
-        return (
-          moment(e.created_at).format("MMM") == "Jan" &&
-          moment(e.created_at).format("yyyy") == new Date().getFullYear()
-        );
-      });
+    chartJamaah2() {
+      return {
+        chart: {
+          type: "bar",
+        },
+        labels: this.generateYears,
+      };
     },
-    Feb() {
-      return store.state.jamaah.jamaahall.filter((e) => {
-        return (
-          moment(e.created_at).format("MMM") == "Feb" &&
-          moment(e.created_at).format("yyyy") == new Date().getFullYear()
-        );
-      });
-    },
-    Mar() {
-      return store.state.jamaah.jamaahall.filter((e) => {
-        return (
-          moment(e.created_at).format("MMM") == "Jan" &&
-          moment(e.created_at).format("yyyy") == new Date().getFullYear()
-        );
-      });
-    },
-    Apr() {
-      return store.state.jamaah.jamaahall.filter((e) => {
-        return (
-          moment(e.created_at).format("MMM") == "Apr" &&
-          moment(e.created_at).format("yyyy") == new Date().getFullYear()
-        );
-      });
-    },
-    May() {
-      return store.state.jamaah.jamaahall.filter((e) => {
-        return (
-          moment(e.created_at).format("MMM") == "May" &&
-          moment(e.created_at).format("yyyy") == new Date().getFullYear()
-        );
-      });
-    },
-    Jun() {
-      return store.state.jamaah.jamaahall.filter((e) => {
-        return (
-          moment(e.created_at).format("MMM") == "Jun" &&
-          moment(e.created_at).format("yyyy") == new Date().getFullYear()
-        );
-      });
-    },
-    Jul() {
-      return store.state.jamaah.jamaahall.filter((e) => {
-        return (
-          moment(e.created_at).format("MMM") == "Jul" &&
-          moment(e.created_at).format("yyyy") == new Date().getFullYear()
-        );
-      });
-    },
-    Aug() {
-      return store.state.jamaah.jamaahall.filter((e) => {
-        return (
-          moment(e.created_at).format("MMM") == "Aug" &&
-          moment(e.created_at).format("yyyy") == new Date().getFullYear()
-        );
-      });
-    },
-    Sep() {
-      return store.state.jamaah.jamaahall.filter((e) => {
-        return (
-          moment(e.created_at).format("MMM") == "Sep" &&
-          moment(e.created_at).format("yyyy") == new Date().getFullYear()
-        );
-      });
-    },
-    Oct() {
-      return store.state.jamaah.jamaahall.filter((e) => {
-        return (
-          moment(e.created_at).format("MMM") == "Oct" &&
-          moment(e.created_at).format("yyyy") == new Date().getFullYear()
-        );
-      });
-    },
-    Nov() {
-      return store.state.jamaah.jamaahall.filter((e) => {
-        return (
-          moment(e.created_at).format("MMM") == "Nov" &&
-          moment(e.created_at).format("yyyy") == new Date().getFullYear()
-        );
-      });
-    },
-    Dec() {
-      return store.state.jamaah.jamaahall.filter((e) => {
-        return (
-          moment(e.created_at).format("MMM") == "Dec" &&
-          moment(e.created_at).format("yyyy") == new Date().getFullYear()
-        );
-      });
-    },
-    seriesJamaah() {
+    seriesJamaahBar() {
       return [
         {
-          name: "Total Jamaah",
-          data: [
-            this.Jan.length,
-            this.Feb.length,
-            this.Mar.length,
-            this.Apr.length,
-            this.May.length,
-            this.Jun.length,
-            this.Jul.length,
-            this.Aug.length,
-            this.Sep.length,
-            this.Oct.length,
-            this.Nov.length,
-            this.Dec.length,
-          ],
+          data: this.generateMoments,
         },
       ];
+    },
+    generateMoments() {
+      const moments = [];
+      this.generateYears.forEach((e) => {
+        moments.push(this.generateX(e.toString()).length);
+      });
+      return moments;
     },
     Totaljamaah() {
       return store.state.jamaah.jamaahall.filter((e) => {
@@ -194,9 +82,7 @@ export default {
           return as.pesanan.jadwal;
         })
         .filter((dd) => {
-          return (
-            moment(dd.pulang).isBefore(moment().format("yyyy-MM-DD"))
-          );
+          return moment(dd.pulang).isBefore(moment().format("yyyy-MM-DD"));
         });
     },
     udahberangkat() {

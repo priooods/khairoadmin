@@ -116,42 +116,6 @@
           </div>
         </div>
       </div>
-      <!-- <div v-if="checkval == 4">
-        <h1 class="mt-2">Jamaah Belum Lunas</h1>
-        <div class="row mt-3" v-for="(data,i) in detail" v-bind:key="i">
-            <p class="col-md-6 col-4">Nama Jamaah</p>
-            <p class="col-md-6 col-8 text-bold">{{ data.jamaah.nama_lengkap}}</p>
-            <p class="col-md-6 col-4">No Jamaah</p>
-            <p class="col-md-6 col-8 text-bold">{{data.jamaah.code}}</p>
-          </div>
-      </div>
-      <div v-if="checkval == 5">
-        <h1 class="mt-2">Jamaah Wanita</h1>
-        <div class="row mt-3" v-for="(data,i) in detail" v-bind:key="i">
-            <p class="col-md-6 col-4">Nama Jamaah</p>
-            <p class="col-md-6 col-8 text-bold">{{ data.nama_lengkap}}</p>
-            <p class="col-md-6 col-4">No Jamaah</p>
-            <p class="col-md-6 col-8 text-bold">{{data.code}}</p>
-          </div>
-      </div>
-      <div v-if="checkval == 6">
-        <h1 class="mt-2">Jamaah Pria</h1>
-        <div class="row mt-3" v-for="(data,i) in detail" v-bind:key="i">
-            <p class="col-md-6 col-4">Nama Jamaah</p>
-            <p class="col-md-6 col-8 text-bold">{{ data.nama_lengkap}}</p>
-            <p class="col-md-6 col-4">No Jamaah</p>
-            <p class="col-md-6 col-8 text-bold">{{data.code}}</p>
-          </div>
-      </div>
-      <div v-if="checkval == 7">
-        <h1 class="mt-2">Berkas Passport Belum Lengkap</h1>
-        <div class="row mt-3" v-for="(data,i) in detail" v-bind:key="i">
-            <p class="col-md-6 col-4">Nama Jamaah</p>
-            <p class="col-md-6 col-8 text-bold">{{ data.nama_lengkap}}</p>
-            <p class="col-md-6 col-4">No Jamaah</p>
-            <p class="col-md-6 col-8 text-bold">{{data.code}}</p>
-          </div>
-      </div> -->
       <Modal
           v-model="showing.berkas"
           title="Update Berkas"
