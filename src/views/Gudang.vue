@@ -10,7 +10,7 @@
               <p class="my-auto mr-auto">Lihat semua data gudang</p>
               <Button type="primary" @click="Opendrawer = true; Typedrawer = 1">Tambah Persediaan</Button>
             </div>
-            <TableDefault :keys="'nama'" :placeholder="'Cari Barang...'" 
+            <TableDefault :keys="'nama'" @clickrow="rowclick" :placeholder="'Cari Barang...'" 
               :totalpage="$store.state.gudang.gudang.pages ? $store.state.gudang.gudang.pages.total_pages * 10 : 0" 
               :data="gudanglist" :column="Gudang">
             </TableDefault>
@@ -61,6 +61,28 @@
           </div>
         </div>
       </div>
+      <div v-if="popGudang">
+        <Modal v-model="popGudang" :footer-hide="true"  title="Ubah data gudang">
+          <div class="block">
+            <Form ref="form" class="grid grid-cols-2 gap-2" :inline="false" :model="detailgudang">
+              <FormItem label="Nama item" prop="nama">
+                  <Input v-model="detailgudang.nama" type="text" placeholder="Masukan Nama"></Input>
+              </FormItem>
+              <FormItem label="Stok item" prop="stok">
+                  <Input v-model="detailgudang.stok" type="number" placeholder="Masukan Stok"></Input>
+              </FormItem>
+              <FormItem label="Harga Satuan" prop="harga">
+                  <Input v-model="detailgudang.harga" type="number" placeholder="Masukan Harga"></Input>
+              </FormItem>
+            </Form>
+            <div class="grid grid-cols-2 gap-3">
+              <Button type="error" @click="hapusGudang">Hapus Item</Button>
+              <Button type="primary" @click="updateGudang">Update Item</Button>
+            </div>
+            <Button class="w-full mt-4" type="warning" @click="popGudang = !popGudang; detailgudang = null">Kembali</Button>
+          </div>
+        </Modal>
+      </div>
       <GudangDrawer :show.sync="Opendrawer" :type="Typedrawer" @closedrawer="closedrawer"></GudangDrawer>
     </div>
   </div>
@@ -80,9 +102,14 @@ export default {
       return{
         Opendrawer: false,
         Typedrawer: 2,
+        popGudang: false,
+        detailgudang: null,
         muncul: [],
         searchtable: '',
         datatable: [],
+        updatesgudang: {
+          nama: '',
+        }
       }
     },
     created(){
@@ -91,6 +118,11 @@ export default {
       })
     },
     methods:{
+      rowclick(v){
+        console.log(v,'gudang');
+        this.detailgudang = v;
+        this.popGudang = !this.popGudang;
+      },
       closedrawer(){
         return this.Opendrawer = false;
       },
@@ -109,6 +141,18 @@ export default {
         this.$store.dispatch('gudang/CancelBelanja', val).finally(() => {
           this.loading.close();
           return this.helper_global_success_notif("Berhasil Menghapus Data", 'Permintaan belanja anda berhasil di cancel');
+        });
+      },
+      hapusGudang(){
+        this.$store.dispatch('gudang/Delete', {id: this.detailgudang.id}).finally(() => {
+          this.popGudang = !this.popGudang;
+          return this.helper_global_success_notif("Berhasil Menghapus Data", 'item gudang berhasil di hapus !');
+        });
+      },
+      updateGudang(){
+        this.$store.dispatch('gudang/Updated', this.detailgudang).finally(() => {
+          this.popGudang = !this.popGudang;
+          return this.helper_global_success_notif("Berhasil mengubah Data", 'item gudang berhasil di ubah !');
         });
       }
     }

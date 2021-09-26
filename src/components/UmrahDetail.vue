@@ -79,6 +79,21 @@
         <FormItem label="Biaya Paket" prop="biaya">
             <Input v-model="detail.biaya" type="number" placeholder="Masukan biaya Paket"></Input>
         </FormItem>
+        <div v-if="detail.maskapai">
+          <FormItem label="Maskapai" prop="maskapai">
+              <Input v-model="detail.maskapai[0].nama" type="text" placeholder="nama maskapai"></Input>
+          </FormItem>
+        </div>
+        <div v-if="detail.hotel">
+          <FormItem label="Hotel Madinah" prop="hotel[0].nama">
+              <Input v-model="detail.hotel[0].nama" type="text" placeholder="Hotel Madinah"></Input>
+          </FormItem>
+        </div>
+        <div v-if="detail.hotel">
+          <FormItem label="Hotel Mekkah" prop="hotel[1].nama">
+              <Input v-model="detail.hotel[1].nama" type="text" placeholder="Hotel Mekkah"></Input>
+          </FormItem>
+        </div>
       </Form>
       <div class="flex mt-3">
         <Button type="primary" class="mr-1" @click="updated">Simpan</Button>
@@ -123,15 +138,28 @@ export default {
           return this.$emit('closeable', 1);
         },
         updated(){
-          this.helper_loading("Mengupdate Data Paket..")
+          let loading = this.$vs.loading({
+                text: "Mengupdate Data Paket...",
+            });
           this.forms.nama = this.detail.nama;
           this.forms.durasi = this.detail.durasi;
           this.forms.tahun = this.detail.tahun;
           this.forms.kuota = this.detail.kuota;
           this.forms.biaya = this.detail.biaya;
           this.forms.id = this.detail.id;
-          this.$store.dispatch('umrah/UpdateUmrah', this.forms);
-          this.helper_check_request("Update Berhasil", "Refresh ulang halaman untuk melihat data terbaru !");
+          this.forms.maskapai = [{nama: this.detail.maskapai[0].nama}];
+          this.forms.hotel = [{nama: this.detail.hotel[0].nama},{nama: this.detail.hotel[1].nama}]
+          this.$store.dispatch('umrah/UpdateUmrah', this.forms).finally(() => {
+            loading.close();
+            this.$vs.notification({
+                color: "success",
+                duration: 3000,
+                position: "top-right",
+                title: "Update Berhasil",
+                text: "Refresh ulang halaman apabila data tidak berubah, untuk melihat data terbaru !",
+            });
+            return this.backpresed();
+          });
         }
     },
 }

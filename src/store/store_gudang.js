@@ -61,6 +61,32 @@ export default {
           });
       });
     },
+    Delete({ dispatch }, data) {
+      return new Promise((resolve, reject) => {
+        Gudang.deleteGudang(data)
+          .then((data) => {
+            return dispatch("AllGudang").finally(() => {
+              return resolve(data.data);
+            });
+          })
+          .catch((er) => {
+            reject(er);
+          });
+      });
+    },
+    Updated({ dispatch }, data) {
+      return new Promise((resolve, reject) => {
+        Gudang.updateGudang(data)
+          .then((data) => {
+            return dispatch("AllGudang").finally(() => {
+              return resolve(data.data);
+            });
+          })
+          .catch((er) => {
+            reject(er);
+          });
+      });
+    },
     AllAkuntan({ commit }) {
       Gudang.akuntan().then((data) => {
         console.log(data.data);

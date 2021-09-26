@@ -79,7 +79,7 @@ export default {
         },
         rowclick(value){
             if(moment().isBefore(value.jadwal.pulang)){
-                console.log(value);
+                console.log(value,'awal');
                 this.opens = 3;
                 return this.data = value;
             }

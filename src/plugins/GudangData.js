@@ -15,7 +15,7 @@ export default {
         },
         {
           title: "Harga",
-          key: "harga",
+          key: "hargaprev",
           minWidth: 100,
         },
         {
@@ -31,7 +31,7 @@ export default {
       return this.$store.state.gudang.gudang.data
         ? this.$store.state.gudang.gudang.data.map((items, index) => ({
             ...items,
-            harga: this.$options.filters.currency(items.harga, "Rp. "),
+            hargaprev: this.$options.filters.currency(items.harga, "Rp. "),
             index: index + 1,
           }))
         : [];

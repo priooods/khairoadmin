@@ -1,5 +1,4 @@
 import Umrah from "../api/Umrah";
-import cookies from "vue-cookies";
 export default {
   namespaced: true,
   state: {
@@ -12,7 +11,7 @@ export default {
           .then((data) => {
             resolve(data);
             if (data.data.error_code == 0) {
-              return dispatch("AllUmrah",{page: 1});
+              return dispatch("AllUmrah", { page: 1 });
             }
           })
           .catch((er) => {
@@ -20,7 +19,7 @@ export default {
           });
       });
     },
-    AllUmrah({ commit },params) {
+    AllUmrah({ commit }, params) {
       return new Promise((resolve, reject) => {
         Umrah.allpaket(params)
           .then((data) => {
@@ -45,13 +44,17 @@ export default {
       });
     },
     UpdateUmrah({ dispatch }, form) {
-      Umrah.umrahupdate(form).then((data) => {
-        console.log(data.data);
-        if (data.data.error_code == 0) {
-          cookies.set("next", 1);
-          return dispatch("AllUmrah");
-        }
-        return cookies.set("next", 0);
+      return new Promise((resolve, reject) => {
+        Umrah.umrahupdate(form)
+          .then((data) => {
+            resolve(data);
+            if (data.data.error_code == 0) {
+              return dispatch("AllUmrah", { page: 1 });
+            }
+          })
+          .catch((er) => {
+            reject(er);
+          });
       });
     },
   },
