@@ -234,7 +234,7 @@ export default {
             },
             ttl: {
                 tanggal: '',
-                tempat: ''
+                tempat: '',
             },
             disabled: true,
             showkamar:false,
@@ -387,20 +387,25 @@ export default {
         },
         savejamaah(){
             this.helper_loading("Menyimpan Jamaah Baru...");
-            this.$refs['form'].validate((valid) => {
-                if(valid){
-                    const tgl = new moment(this.ttl.tanggal).format("yyyy/MM/DD");
-                    this.form.ttl = this.ttl.tempat + ',' + tgl;
-                    console.log(this.form.ttl);
-                    this.form.passport.tgl_habis =  new moment(this.form.passport.tgl_habis).format("yyyy/MM/DD");
-                    this.form.passport.tgl_keluar =  new moment(this.form.passport.tgl_keluar).format("yyyy/MM/DD");
-                    this.$store.dispatch('jamaah/AddJamaah', this.form);
-                    return this.helper_check_request('Berhasil Menyimpan', 'Data Jamaah baru berhasil disimpan, refresh ulang halaman apabila jamaah baru tidak muncul di table');
-                } else {
-                    this.loading.close();
-                    return false
-                }
-            })
+            console.log('save jamaah running!');
+            console.log('form jamaah!', this.form);
+            const tgl = new moment(this.ttl.tanggal).format("yyyy/MM/DD");
+            this.form.ttl = this.ttl.tempat + ',' + tgl;
+            console.log(this.form.ttl);
+            this.form.passport.tgl_habis =  new moment(this.form.passport.tgl_habis).format("yyyy/MM/DD");
+            this.form.passport.tgl_keluar =  new moment(this.form.passport.tgl_keluar).format("yyyy/MM/DD");
+            this.$store.dispatch('jamaah/AddJamaah', this.form);
+                this.loading.close();
+            return this.backpresed();
+            // this.$refs['form'].validate((valid) => {
+            //     console.log('return valid!');
+            //     if(valid){
+            //         return this.helper_check_request('Berhasil Menyimpan', 'Data Jamaah baru berhasil disimpan, refresh ulang halaman apabila jamaah baru tidak muncul di table');
+            //     } else {
+            //         this.loading.close();
+            //         return false
+            //     }
+            // })
         },
     }
 }

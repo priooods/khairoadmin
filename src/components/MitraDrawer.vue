@@ -75,7 +75,7 @@
             <h2 class="inline ml-2">Kembali</h2>
           </div>
           <h1 class="my-4 hidden md:block">Buat Perwakilan</h1>
-          <Form ref="forms" class="grid grid-cols-3 gap-1" :model="formnew" :rules="ruleform"> 
+          <Form ref="forms" class="grid grid-cols-3 gap-1" :model="formnew" :rules="dataUpdate"> 
               <FormItem prop="code_agent" label="Perwakilan">
                   <Select v-model="formnew.code_agent" placeholder="Pilih Agent Mitra" filterable :clearable="true">
                     <Option v-for="(dt, i) in $store.state.mitra.mitrall" v-bind:key="i" :value="dt.id">{{dt.fullname}}</Option>
@@ -97,8 +97,7 @@
                   <Input v-model="formnew.alamat" id="alamat" type="text" placeholder="Masukan Alamat Mitra"></Input>
               </FormItem>
               <FormItem label="Lokasi Cabang" prop="cabang_id">
-                  <Select v-model="formnew.cabang_id" 
-                    required id="cabang" placeholder="Masukan Lokasi Cabang">
+                  <Select v-model="formnew.cabang_id" id="cabang_id" placeholder="Masukan Lokasi Cabang" name="cabang_id">
                       <Option v-for="(dt, i) in $store.state.mitra.cabangall" v-bind:key="i" :value="dt.id">{{dt.name}}</Option>
                     </Select>
               </FormItem>
@@ -174,6 +173,13 @@ export default {
           code_agent: ''
         },
         dataUpdate: {
+          // cabang_id: [
+          //   {
+          //     required: true,
+          //     message: "Harap pilih Cabang Terdaftar",
+          //     trigger: "change",
+          //   },
+          // ],
           alamat: [
             {
               required: true,

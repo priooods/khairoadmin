@@ -4,6 +4,9 @@ export default {
   allpaket(data) {
     return client.post("umrah/show", data);
   },
+  umrahall(data) {
+    return client.post("umrah/show", data);
+  },
   umrahadd(data) {
     return client.post("umrah/add", data);
   },

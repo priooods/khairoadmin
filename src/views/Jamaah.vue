@@ -150,7 +150,7 @@ export default {
             })
         },
     },
-    created(){
+    mounted(){
         this.$store.dispatch('jamaah/Alljamaah', {mitra: null});
         this.$store.dispatch('jamaah/JamaahBelumBayar');
     },

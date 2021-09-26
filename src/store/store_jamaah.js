@@ -1,5 +1,6 @@
 import Jamaah from "../api/Jamaah";
 import cookies from "vue-cookies";
+import iView from "iview";
 export default {
   namespaced: true,
   state: {
@@ -9,9 +10,11 @@ export default {
   actions: {
     AddJamaah({ dispatch }, form) {
       Jamaah.addjamaah(form).then((data) => {
+        console.log(data);
         if (data.data.error_code == 0) {
           cookies.set("next", 1);
-          return dispatch("Alljamaah");
+          iView.Message.success("Jamaah baru berhasil ditambahkan");
+          return dispatch("Alljamaah", {mitra: null});
         }
         return cookies.set("next", 0);
       });
