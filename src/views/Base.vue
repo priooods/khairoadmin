@@ -9,7 +9,7 @@
         </div>
         <navigasi class="md:block" :class="{'hidden': opened == false}" @backpres="backpres"/>
       </div>
-      <div class="relative md:min-h-screen ml-auto md:w-5/6 w-screen md:px-4 md:px-3 px-2">
+      <div class="relative md:min-h-screen ml-auto md:w-5/6 w-screen md:px-3 px-2">
         <router-view class="md:py-4"></router-view>
       </div>
     </div>

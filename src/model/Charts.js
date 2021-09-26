@@ -1,4 +1,3 @@
-import store from "../store/index";
 import moment from "moment-timezone";
 export default {
   data: function() {
@@ -13,11 +12,14 @@ export default {
   },
   methods: {
     generateX(ss) {
-      return store.state.jamaah.jamaahall.filter((e) => {
-        return (
-          moment(e.created_at).format("YYYY") == new moment(ss).format("YYYY")
-        );
-      });
+      return this.$store.state.jamaah.jamaahall.data
+        ? this.$store.state.jamaah.jamaahall.data.filter((e) => {
+            return (
+              moment(e.created_at).format("YYYY") ==
+              new moment(ss).format("YYYY")
+            );
+          })
+        : [];
     },
   },
   computed: {
@@ -32,14 +34,18 @@ export default {
       return years;
     },
     admin() {
-      return store.state.operat.userall.filter((e) => {
-        return e.type == "Admin";
-      });
+      return this.$store.state.operat.userall.data
+        ? this.$store.state.operat.userall.data.filter((e) => {
+            return e.type == "Admin";
+          })
+        : [];
     },
     operator() {
-      return store.state.operat.userall.filter((e) => {
-        return e.type == "Operator";
-      });
+      return this.$store.state.operat.userall.data
+        ? this.$store.state.operat.userall.data.filter((e) => {
+            return e.type == "Operator";
+          })
+        : [];
     },
     series() {
       return [this.admin.length, this.operator.length];
@@ -67,37 +73,49 @@ export default {
       return moments;
     },
     Totaljamaah() {
-      return store.state.jamaah.jamaahall.filter((e) => {
-        return moment(e.created_at).format("yyyy") == new Date().getFullYear();
-      });
+      return this.$store.state.jamaah.jamaahall.data
+        ? this.$store.state.jamaah.jamaahall.data.filter((e) => {
+            return (
+              moment(e.created_at).format("yyyy") == new Date().getFullYear()
+            );
+          })
+        : [];
     },
     udahpulang() {
-      return this.$store.state.jamaah.jamaahall
-        .filter((a) => {
-          return (
-            moment(a.created_at).format("yyyy") == new moment().format("yyyy")
-          );
-        })
-        .map((as) => {
-          return as.pesanan.jadwal;
-        })
-        .filter((dd) => {
-          return moment(dd.pulang).isBefore(moment().format("yyyy-MM-DD"));
-        });
+      return this.$store.state.jamaah.jamaahall.data
+        ? this.$store.state.jamaah.jamaahall.data
+            .filter((a) => {
+              return (
+                moment(a.created_at).format("yyyy") ==
+                new moment().format("yyyy")
+              );
+            })
+            .map((as) => {
+              return as.pesanan.jadwal;
+            })
+            .filter((dd) => {
+              return moment(dd.pulang).isBefore(moment().format("yyyy-MM-DD"));
+            })
+        : [];
     },
     udahberangkat() {
-      return this.$store.state.jamaah.jamaahall
-        .filter((a) => {
-          return (
-            moment(a.created_at).format("yyyy") == new moment().format("yyyy")
-          );
-        })
-        .map((as) => {
-          return as.pesanan.jadwal;
-        })
-        .filter((dd) => {
-          return moment(dd.berangkat).isBefore(moment().format("yyyy-MM-DD"));
-        });
+      return this.$store.state.jamaah.jamaahall.data
+        ? this.$store.state.jamaah.jamaahall.data
+            .filter((a) => {
+              return (
+                moment(a.created_at).format("yyyy") ==
+                new moment().format("yyyy")
+              );
+            })
+            .map((as) => {
+              return as.pesanan.jadwal;
+            })
+            .filter((dd) => {
+              return moment(dd.berangkat).isBefore(
+                moment().format("yyyy-MM-DD")
+              );
+            })
+        : [];
     },
     optionsMitra() {
       return {
@@ -119,9 +137,11 @@ export default {
           enabled: false,
         },
         xaxis: {
-          categories: store.state.mitra.mitrall.map((e) => {
-            return e.fullname;
-          }),
+          categories: this.$store.state.mitra.mitrall.data
+            ? this.$store.state.mitra.mitrall.data.map((e) => {
+                return e.fullname;
+              })
+            : "",
         },
       };
     },
@@ -129,16 +149,21 @@ export default {
       return [
         {
           name: "Total Jamaah",
-          data: store.state.mitra.mitrall
-            .filter((e) => {
-              return e.jamaah
-                ? moment(e.jamaah.created_at).format("yyyy") ==
-                    new Date().getFullYear()
-                : null;
-            })
-            .map((e) => {
-              return parseInt(e.jamaah.length);
-            }),
+          data: this.$store.state.mitra.mitrall.data
+            ? this.$store.state.mitra.mitrall.data
+                .map((s) => {
+                  return s.pesanan;
+                })
+                .filter((e) => {
+                  return e
+                    ? moment(e.created_at).format("yyyy") ==
+                        new Date().getFullYear()
+                    : null;
+                })
+                .map((e) => {
+                  return parseInt(e.length);
+                })
+            : [],
         },
       ];
     },

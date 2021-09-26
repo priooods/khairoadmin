@@ -6,10 +6,10 @@
         </div>
         <div class="w-full mt-5 md:mt-3">
             <p class="text-xs">Harap Lengkapi semua form yang tersedia untuk membuat data jamaah baru !</p>
-            <Form class="grid md:grid-cols-4 md:gap-1 mt-3" :model="form" ref="form" :rules="formrules">
+            <Form ref="formsnewJamaah" class="grid md:grid-cols-4 md:gap-1 mt-3" :model="form" :rules="formrules">
                 <FormItem prop="mitra_id" label="Nama Perwakilan">
                     <Select placeholder="Pilih Perwakilan" v-model="form.mitra_id" filterable :clearable="true">
-                        <Option v-for="(data,st) in $store.state.mitra.mitrall" v-bind:key="st" :value="data.id">{{ data.fullname }}</Option>
+                        <Option v-for="(data,st) in $store.state.mitra.mitrall.data" v-bind:key="st" :value="data.id">{{ data.fullname }}</Option>
                     </Select>
                 </FormItem>
                 <FormItem prop="umrah_id" label="Paket Umrah">
@@ -29,7 +29,7 @@
                     <Input type="number" :maxlength="16" v-model="form.no_ktp" placeholder="No KTP jamaah"></Input>
                 </FormItem>
                 <FormItem prop="passport.nomor" label="No Passport">
-                    <Input type="text" :maxlength="8" v-model="form.passport.nomor" placeholder="No Passport jamaah"></Input>
+                    <Input type="text" :maxlength="20" v-model="form.passport.nomor" placeholder="No Passport jamaah"></Input>
                 </FormItem>
                 <FormItem prop="passport.nama" label="Nama Passport">
                     <Input type="text" v-model="form.passport.nama" placeholder="Nama Passport jamaah"></Input>
@@ -46,11 +46,11 @@
                 <FormItem prop="nama_ayah" label="Nama Ayah" >
                     <Input type="text" v-model="form.nama_ayah" :disabled="disabled" placeholder="Nama Ayah jamaah"></Input>
                 </FormItem>
-                <FormItem prop="tempat" label="Tempat Lahir">
-                    <Input type="text" v-model="ttl.tempat" :disabled="disabled" placeholder="Tempat Lahir jamaah"></Input>
+                <FormItem prop="ttl.tempat" label="Tempat Lahir">
+                    <Input type="text" v-model="form.ttl.tempat" :disabled="disabled" placeholder="Tempat Lahir jamaah"></Input>
                 </FormItem>
-                <FormItem prop="tanggal" label="Tanggal Lahir">
-                    <DatePicker type="date" v-model="ttl.tanggal" :disabled="disabled" format="DD/MM/yyyy" placeholder="Tanggal Lahir jamaah" class="w-full"></DatePicker>
+                <FormItem prop="ttl.tanggal" label="Tanggal Lahir">
+                    <DatePicker type="date" v-model="form.ttl.tanggal" :disabled="disabled" placeholder="Tanggal Lahir jamaah" class="w-full"></DatePicker>
                 </FormItem>
                 <FormItem prop="gender" label="Gender Jamaah">
                     <Select placeholder="Pilih Gender Jamaah" :disabled="disabled" :clearable="true" v-model="form.gender">
@@ -60,7 +60,7 @@
                 <FormItem prop="provinsi" label="Provinsi">
                     <Input type="text" :disabled="disabled" v-model="form.provinsi" placeholder="Provinsi Jamaah"></Input>
                 </FormItem>
-                <FormItem prop="kota" label="Kota">
+                <FormItem prop="kota" label="Kota/Kab">
                     <Input type="text" :disabled="disabled" v-model="form.kota" placeholder="Kota Jamaah"></Input>
                 </FormItem>
                 <FormItem prop="kecamatan" label="Kecamatan">
@@ -72,7 +72,7 @@
                 <FormItem prop="alamat" label="Alamat">
                     <Input type="textarea" :disabled="disabled" :autosize="true" v-model="form.alamat" placeholder="Alamat Jamaah"></Input>
                 </FormItem>
-                <FormItem prop="kode_pos" label="Kode Pos">
+                <FormItem label="Kode Pos">
                     <Input type="number" :disabled="disabled" v-model="form.kode_pos" placeholder="Kode Pos Jamaah"></Input>
                 </FormItem>
                 <FormItem prop="negara" label="Negara Jamaah">
@@ -83,7 +83,7 @@
                 <FormItem prop="no_telp" label="No Telp">
                     <Input type="number" :disabled="disabled" :maxlength="13" v-model="form.no_telp" placeholder="No Telp Jamaah"></Input>
                 </FormItem>
-                <FormItem prop="email" label="E-mail">
+                <FormItem label="E-mail">
                     <Input type="text" :disabled="disabled" v-model="form.email" placeholder="e-mail Jamaah"></Input>
                 </FormItem>
                 <FormItem prop="pendidikan" label="Pendidikan">
@@ -206,7 +206,10 @@ export default {
                 nama_lengkap: '',
                 nama_ayah: '',
                 no_ktp: '',
-                ttl: null,
+                ttl: {
+                    tanggal: '',
+                    tempat: ''
+                },
                 gender: '',
                 negara: '',
                 alamat: '',
@@ -249,10 +252,10 @@ export default {
                     { required: true, message: 'Harap Lengkapi Alamat', trigger: 'blur' }
                 ],
                 mitra_id: [
-                    { validator:validateMitra, required: true, trigger: 'change' }
+                    { validator: validateMitra, required: true, trigger: 'change' }
                 ],
                 umrah_id: [
-                    { required: true, validator:validateUmrah, trigger: 'change' }
+                    { required: true, validator: validateUmrah, trigger: 'change' }
                 ],
                 gender: [
                     { required: true, message: 'Harap Pilih Gender', trigger: 'change' }
@@ -273,15 +276,8 @@ export default {
                     { required: true, message: 'Harap Masukan No Ktp', trigger: 'blur' },
                     { type: 'string', min: 16, max:16, message: 'No Ktp Harus 16 Char', trigger: 'blur' }
                 ],
-                email: [
-                    { required: true, message: 'Harap Masukan Email Jamaah', trigger: 'blur' },
-                    { type: 'email', message: 'Incorrect email format', trigger: 'blur' }
-                ],
                 negara: [
                     { required: true, message: 'Harap Pilih Negara', trigger: 'change' }
-                ],
-                kode_pos: [
-                    { required: true, message: 'Harap Masukan Kode Pos', trigger: 'blur' }
                 ],
                 no_telp: [
                     { required: true, message: 'Nomer Handphone is Required', trigger: 'blur' },
@@ -310,7 +306,6 @@ export default {
                 ],
                 'passport.nomor': [
                     { required: true, message: 'Nomor Passport Required', trigger: 'blur' },
-                    { type: 'string', min: 7, max:7, message: 'No Passport Min & Max 7 Char', trigger: 'blur' }
                 ],
                 'passport.nama': [
                     { required: true, message: 'Nama Passport Required', trigger: 'blur' }
@@ -353,9 +348,10 @@ export default {
             return this.form.umrah_id;
         },
         umrahlisting(){
-            return this.$store.state.umrah.umrahall.filter((e => {
-                return e.sisa != 0 && moment(e.jadwal.berangkat).isAfter(moment().format("yyyy-MM-DD")) && moment(e.jadwal.pulang).isAfter(moment().format("yyyy-MM-DD")) ;
-            }));
+            return this.$store.state.umrah.umrahall.data ? this.$store.state.umrah.umrahall.data.filter((e => {
+                return e.sisa != 0 
+                && moment(e.jadwal.berangkat).isBefore(moment().format("yyyy-MM-DD")) 
+            })) : [];
         }
     },
     methods:{
@@ -386,26 +382,36 @@ export default {
             return this.$emit('closeable', 1);
         },
         savejamaah(){
-            this.helper_loading("Menyimpan Jamaah Baru...");
-            console.log('save jamaah running!');
-            console.log('form jamaah!', this.form);
-            const tgl = new moment(this.ttl.tanggal).format("yyyy/MM/DD");
-            this.form.ttl = this.ttl.tempat + ',' + tgl;
-            console.log(this.form.ttl);
+            let loading = this.$vs.loading({
+                text: "Menyimpan Jamaah Baru...",
+            });
+            this.form.ttl.tanggal = new moment(this.form.ttl.tanggal).format("yyyy/MM/DD");
             this.form.passport.tgl_habis =  new moment(this.form.passport.tgl_habis).format("yyyy/MM/DD");
             this.form.passport.tgl_keluar =  new moment(this.form.passport.tgl_keluar).format("yyyy/MM/DD");
-            this.$store.dispatch('jamaah/AddJamaah', this.form);
-                this.loading.close();
-            return this.backpresed();
-            // this.$refs['form'].validate((valid) => {
-            //     console.log('return valid!');
-            //     if(valid){
-            //         return this.helper_check_request('Berhasil Menyimpan', 'Data Jamaah baru berhasil disimpan, refresh ulang halaman apabila jamaah baru tidak muncul di table');
-            //     } else {
-            //         this.loading.close();
-            //         return false
-            //     }
-            // })
+            this.$store.dispatch('jamaah/AddJamaah', this.form)
+            .then(result => {
+                console.log(result.data, result.data.error_code);
+                if(result.data.error_code){
+                    loading.close();
+                    return this.$vs.notification({
+                        color: "danger",
+                        duration: 3000,
+                        position: "top-right",
+                        title: "Gagal Menyimpan !",
+                        text: result.data.error_message,
+                    });
+                } else {
+                    loading.close();
+                    this.$vs.notification({
+                        color: "success",
+                        duration: 3000,
+                        position: "top-right",
+                        title: "Berhasil Menyimpan",
+                        text: "Data Jamaah baru berhasil disimpan, refresh ulang halaman apabila jamaah baru tidak muncul di table",
+                    });
+                    return this.backpresed();
+                }
+            });
         },
     }
 }

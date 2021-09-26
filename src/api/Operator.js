@@ -6,6 +6,9 @@ export default {
   AllOperator(data) {
     return client.post("operator/show", data);
   },
+  SearchOperator(data) {
+    return client.post("operator/search", data);
+  },
   LogoutOperator(username) {
     return client.post("operator/logout", { username: username });
   },

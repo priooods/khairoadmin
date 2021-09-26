@@ -23,14 +23,22 @@ export default {
       });
     },
     AddMitra({ dispatch }, data) {
-      Mitra.addmitra(data).then((res) => {
-        console.log(res.data);
-        if (res.data.error_code == 0) {
-          cookies.set("next", 1);
-          return dispatch("AllMitra");
-        }
-        cookies.set("next", 0);
-        return false;
+      return new Promise((resolve, reject) => {
+        Mitra.addmitra(data)
+          .then((res) => {
+            resolve(data);
+            console.log(res.data);
+            if (res.data.error_code == 0) {
+              return dispatch("AllMitra").finally(() => {
+                return cookies.set("next", 1);
+              })
+            }
+            cookies.set("next", 0);
+            return false;
+          })
+          .catch((er) => {
+            reject(er);
+          });
       });
     },
     DeleteMitra({ dispatch }, data) {
@@ -42,9 +50,29 @@ export default {
         return cookies.set("next", 0);
       });
     },
-    AllMitra({ commit }) {
-      Mitra.allmitra().then((data) => {
-        return commit("mitrall", data.data.data);
+    AllMitra({ commit }, params) {
+      return new Promise((resolve, reject) => {
+        Mitra.allmitra(params)
+          .then((data) => {
+            console.log(data.data);
+            resolve(data);
+            return commit("mitrall", data.data);
+          })
+          .catch((er) => {
+            reject(er);
+          });
+      });
+    },
+    Searching({ commit }, params) {
+      return new Promise((resolve, reject) => {
+        Mitra.search(params)
+          .then((data) => {
+            resolve(data);
+            return commit("mitrall", data.data);
+          })
+          .catch((er) => {
+            reject(er);
+          });
       });
     },
     AllCabang({ commit }) {

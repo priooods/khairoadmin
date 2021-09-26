@@ -1,8 +1,16 @@
 import client from "./index";
 
 export default {
-  allmitra() {
+  showmitra() {
     return client.post("mitra/show", { fee: 2000000, mitra_fee: 200000 });
+  },
+  allmitra(params) {
+    return client.get("mitra/all", {
+      params: params,
+    });
+  },
+  search(data) {
+    return client.post("mitra/search", data);
   },
   loginmitra(data) {
     return client.post("mitra/login", data);
@@ -29,6 +37,6 @@ export default {
     return client.post("cabang/delete", data);
   },
   logoutMitra(data) {
-    return client.post("mitra/logout", {  username: data  });
+    return client.post("mitra/logout", { username: data });
   },
 };

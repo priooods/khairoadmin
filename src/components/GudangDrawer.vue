@@ -67,9 +67,11 @@ export default {
                 this.loading.close();
                 return this.helper_global_form_notif();
             }
-            this.$store.dispatch('gudang/AddBelanja', this.inputs);
-            this.helper_check_request("Berhasil Menambah Barang", 'Data belanja anda telah disimpan. Refresh halaman apabila data belum dapat dilihat');
-            return this.backpresed();
+            this.$store.dispatch('gudang/AddBelanja', this.inputs).finally(() => {
+                this.loading.close();
+                this.helper_global_success_notif("Berhasil Menambah Barang", 'Data belanja anda telah disimpan. Refresh halaman apabila data belum dapat dilihat');
+                return this.backpresed();
+            });
         },
         backpresed(){
             return this.$emit('closedrawer', false);

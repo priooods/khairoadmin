@@ -51,6 +51,13 @@
             </div>
           </div>
           <div>
+            <p class="text-xs font-bold uppercase my-4">Informasi Mitra</p>
+            <div class="grid grid-cols-2 w-full gap-2" v-show="detail.pesanan">
+              <p class="md:text-md text-xs font-semibold">Nama Mitra</p>
+              <p class="md:text-md text-xs">{{detail.pesanan.mitra ? detail.pesanan.mitra.fullname : '--'}}</p>
+              <p class="md:text-md text-xs font-semibold">No Mitra</p>
+              <p class="md:text-md text-xs">{{detail.pesanan.mitra ? detail.pesanan.mitra.no_tlp : '--'}}</p>
+            </div>
             <p class="text-xs font-bold uppercase my-4">Informasi Pesanan</p>
             <div class="grid grid-cols-2 w-full gap-2" v-show="detail.pesanan">
               <p class="md:text-md text-xs font-semibold">Nama Paket</p>
@@ -71,17 +78,17 @@
             <p class="text-xs font-bold uppercase my-4">Informasi Berkas</p>
             <div class="grid grid-cols-2 w-full gap-2">
               <p class="md:text-md text-xs font-semibold">Pass Foto</p>
-              <p class="md:text-md text-xs font-bold" :class="{'text-red-500' : detail.pasfoto == null, 'text-green-500' : detail.pasfoto != null}">{{detail.pasfoto ? 'Sudah Di Setorkan' : 'Belum Di Setorkan'}}</p>
+              <p class="md:text-md text-xs font-bold" :class="detail.pasfoto ? 'text-green-500' : 'text-red-500'">{{detail.pasfoto ? 'Sudah Di Setorkan' : 'Belum Di Setorkan'}}</p>
               <p class="md:text-md text-xs font-semibold">KTP</p>
-              <p class="md:text-md text-xs font-bold" :class="{'text-red-500' : detail.ktp == null, 'text-green-500' : detail.ktp != null}">{{detail.ktp ? 'Sudah Di Setorkan' : 'Belum Di Setorkan' }}</p>
+              <p class="md:text-md text-xs font-bold" :class="detail.ktp ? 'text-green-500' : 'text-red-500'">{{detail.ktp ? 'Sudah Di Setorkan' : 'Belum Di Setorkan' }}</p>
               <p class="md:text-md text-xs font-semibold">Kartu Keluarga</p>
-              <p class="md:text-md text-xs font-bold" :class="{'text-red-500' : detail.kk == null, 'text-green-500' : detail.kk != null}">{{detail.kk ? 'Sudah Di Setorkan' : 'Belum Di Setorkan'}}</p>
+              <p class="md:text-md text-xs font-bold" :class="detail.kk ? 'text-green-500' : 'text-red-500'">{{detail.kk ? 'Sudah Di Setorkan' : 'Belum Di Setorkan'}}</p>
               <p class="md:text-md text-xs font-semibold">Buku Nikah</p>
-              <p class="md:text-md text-xs font-bold" :class="{'text-red-500' : detail.buku_nikah == null, 'text-green-500' : detail.buku_nikah != null}">{{detail.buku_nikah ? 'Sudah Di Setorkan' : 'Belum Di Setorkan'}}</p>
+              <p class="md:text-md text-xs font-bold" :class="detail.buku_nikah ? 'text-green-500' : 'text-red-500'">{{detail.buku_nikah ? 'Sudah Di Setorkan' : 'Belum Di Setorkan'}}</p>
               <p class="md:text-md text-xs font-semibold">Akte Lahir</p>
-              <p class="md:text-md text-xs font-bold" :class="{'text-red-500' : detail.akte_lahir == null, 'text-green-500' : detail.akte_lahir != null}">{{detail.akte_lahir ? 'Sudah Di Setorkan' : 'Belum Di Setorkan'}}</p>
+              <p class="md:text-md text-xs font-bold" :class="detail.akte_lahir ? 'text-green-500' : 'text-red-500'">{{detail.akte_lahir ? 'Sudah Di Setorkan' : 'Belum Di Setorkan'}}</p>
               <p class="md:text-md text-xs font-semibold">Bukti Vaksin</p>
-              <p class="md:text-md text-xs font-bold" :class="{'text-red-500' : detail.vaksin == null, 'text-green-500' : detail.vaksin != null}">{{detail.vaksin ? 'Sudah Di Setorkan' : 'Belum Di Setorkan'}}</p>
+              <p class="md:text-md text-xs font-bold" :class="detail.vaksin ? 'text-green-500' : 'text-red-500'">{{detail.vaksin ? 'Sudah Di Setorkan' : 'Belum Di Setorkan'}}</p>
             </div>
             <div class="mt-5">
               <div v-show="showing.kamar">
@@ -108,7 +115,7 @@
               </div>
               <div class="grid md:grid-cols-3 grid-cols-1 md:w-5/6 gap-2 mt-3">
                 <Button type="error" @click="deleteshow = !deleteshow" >Hapus Data</Button>
-                <Button type="info" @click="showing.berkas = !showing.berkas" >Simpan Berkas</Button>
+                <Button type="info" v-if="!detail.pasfoto && !detail.ktp && !detail.kk && !detail.buku_nikah && !detail.akte_lahir && !detail.vaksin" @click="showing.berkas = !showing.berkas" >Simpan Berkas</Button>
                 <Button type="success" @click="showing.bayar = true" v-if="detail.bayar === 'BELUM LUNAS' && showing.bayar == false && showing.kamar == false">Bayar Umrah</Button>
                 <Button type="primary" @click="showing.kamar = true" v-if="detail.pesanan.harga_kamar == null && showing.bayar == false && showing.kamar == false">Atur Harga Kamar</Button>
               </div>
@@ -209,43 +216,85 @@ export default {
         return this.$emit('closeable', 1);
       },
       bayartagihan(){
-        this.helper_loading("Mengirim Pembayaran ..");
+        let loading = this.$vs.loading({
+            text: "Menyimpan Harga Kamar...",
+        });
         this.$refs['formbayar'].validate((valid) => {
             if (valid) {
               this.formbayar.id = this.detail.pesanan.id;
-              this.$store.dispatch('jamaah/BayarJamaah', this.formbayar)
-              return this.helper_check_request('Success Pembayaran', 'Pembayaran jamaah telah berhasil dilakukan !');
-              
+              this.$store.dispatch('jamaah/BayarJamaah', this.formbayar).finally(() => {
+                loading.close();
+                this.backpresed();
+                return this.$vs.notification({
+                    color: "success",
+                    duration: 3000,
+                    position: "top-right",
+                    title: "Berhasil Menyimpan",
+                    text: "Pembayaran jamaah telah berhasil dilakukan !",
+                });
+              })
             } else {
-              this.loading.close();
+              loading.close();
               return false;
             }
         });
       },
       bayarkamar(){
-        this.helper_loading("Mengirim Harga Kamar ..");
+        let loading = this.$vs.loading({
+            text: "Menyimpan Harga Kamar...",
+        });
         this.$refs['formkamar'].validate((valid) => {
           if(valid){
             this.formkamar.id = this.detail.pesanan.id;
-            this.$store.dispatch('jamaah/PesananUpdate', this.formkamar);
-            return this.helper_check_request('Berhasil Menambah Harga', 'Harga kamar berhasil ditambahkan, Refresh ulang halaman untuk melihat data terbaru!');
+            this.$store.dispatch('jamaah/PesananUpdate', this.formkamar).finally(() => {
+              loading.close();
+              this.backpresed();
+              return this.$vs.notification({
+                  color: "success",
+                  duration: 3000,
+                  position: "top-right",
+                  title: "Berhasil Menyimpan",
+                  text: "Harga kamar berhasil ditambahkan, Refresh ulang halaman untuk melihat data terbaru!",
+              });
+            })
           } else {
-            this.loading.close();
+            loading.close();
             return false;
           }
         })
       },
       hapusjamaah(){
-        this.helper_loading("Menghapus Jamaah ..");
-        this.$store.dispatch('jamaah/HapusJamaah', this.detail.id);
-        return this.helper_check_request('Berhasil Menghapus Jamaah', 'Refresh ulang halaman untuk mendapatkan data terbaru');
-          
+        let loading = this.$vs.loading({
+            text: "Menghapus Jamaah...",
+        });
+        this.$store.dispatch('jamaah/HapusJamaah', this.detail.id).finally(() => {
+          loading.close();
+          this.backpresed();
+          return this.$vs.notification({
+            color: "success",
+            duration: 3000,
+            position: "top-right",
+            title: "Berhasil Menghapus Jamaah",
+            text: "Refresh ulang halaman untuk mendapatkan data terbaru",
+          });
+        });
       },
       updatejamaah(){
-        this.helper_loading("Menyimpan Berkas ..");
+        let loading = this.$vs.loading({
+            text: "Menyimpan Berkas...",
+        });
         this.berkas.id = this.detail.id;
-        this.$store.dispatch('jamaah/UpdateJamaah', this.berkas);
-        return this.helper_check_request('Success Menyimpan Berkan', 'Informasi Berkas sudah berhasil disimpan !');
+        this.$store.dispatch('jamaah/UpdateJamaah', this.berkas).finally(() => {
+          loading.close();
+          this.backpresed();
+          return this.$vs.notification({
+            color: "success",
+            duration: 3000,
+            position: "top-right",
+            title: "Berhasil Menyimpan",
+            text: "Informasi Berkas sudah berhasil disimpan !",
+          });
+        });
       }
     },
 }

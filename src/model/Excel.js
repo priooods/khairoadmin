@@ -34,7 +34,7 @@ export default {
   },
   computed: {
     json_data() {
-      return this.$store.state.jamaah.jamaahall;
+      return this.$store.state.jamaah.jamaahall.data;
     },
   },
 };

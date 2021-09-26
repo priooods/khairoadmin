@@ -8,13 +8,12 @@
                     <Button type="info" @click="showpanduan = !showpanduan">Panduan</Button>
                     <Button type="primary" @click="opens = 2">Tambah Paket</Button>
                 </div>
-                <TableGlobal 
-                    class="w-full"
-                    @clickrow="rowclick"
-                    :column="Umrah" :keys="'nama'" 
-                    :pagination="$store.state.umrah.umrahall/5*10" 
-                    :placeholder="'Cari Nama Umrah...'" :data="umrahlist">
-                </TableGlobal>
+                <TableDefault 
+                    class="w-full" @clickrow="rowclick" :column="Umrah" :keys="'code'" 
+                    @changepage="changepage" @searching="searchUmrah" @clearsearch="cs_Umrah"
+                    :totalpage="$store.state.umrah.umrahall.pages ? $store.state.umrah.umrahall.pages.total_pages * 10 : 0"
+                    :placeholder="'Cari Code Umrah...'" :data="umrahlist">
+                </TableDefault>
             </div>
         </div>
         <Modal v-model="showpanduan" title="Panduan Table Umrah" ok-text="OK" cancel-text="Cancel">
@@ -56,8 +55,9 @@
 <script>
 import UmrahDetail from '../components/UmrahDetail';
 import UmrahDrawer from '../components/UmrahDrawer';
-import TableGlobal from '../components/TableGlobal';
-import TableData from '../plugins/TableData';
+import TableDefault from '../components/TableDefault';
+import moment from 'moment-timezone';
+import UmrahData from '../plugins/UmrahData';
 export default {
     name: "Umrah",
     data(){
@@ -67,34 +67,44 @@ export default {
             showpanduan: false
         }
     },
-    mixins:[TableData],
-    components: {TableGlobal, UmrahDrawer, UmrahDetail},
+    mixins:[UmrahData],
+    components: {
+        TableDefault, 
+        UmrahDrawer, 
+        UmrahDetail
+    },
     methods:{
         closeumrah(val){
             return this.opens = val;
         },
         rowclick(value){
-            const yr = new Date().getFullYear() == new Date(value.jadwal.pulang).getFullYear();
-            const month = new Date().getMonth() == new Date(value.jadwal.pulang).getMonth();
-            if(yr && month){
-                console.log("INi masih terbuka");
+            if(moment().isBefore(value.jadwal.pulang)){
+                console.log(value);
                 this.opens = 3;
                 return this.data = value;
             }
-            console.log("ini udah selesai guys");
             return this.$Message.error('Paket Umrah ini sudah selesai');
-            // this.opens = 3;
-            // return this.data = value;
         },
         bukaformumrah(){
             this.opens = 2;
         },
         tutupumrahaksi(val){
             this.opens = val;
+        },
+        searchUmrah(v){
+            this.$store.dispatch('umrah/Searching',{code: v});
+        },
+        changepage(v){
+            this.$store.dispatch("umrah/AllUmrah",{ page: v })
+        },
+        cs_Umrah(){
+            this.$store.dispatch('umrah/AllUmrah',{page: 1})
         }
     },
     created(){
-      this.$store.dispatch('umrah/AllUmrah');
+      this.$store.dispatch('umrah/AllUmrah',{page: 1}).then(() => {}).finally(() => {
+          this.$store.dispatch('gudang/AllGudang').then(() => {}).finally(() => {});
+      });
     },
 }
 </script>

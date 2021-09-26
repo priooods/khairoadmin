@@ -75,7 +75,6 @@ export default {
     methods: {
         logout(){
             if (this.$cookies.get("type") == 1) {
-                this.$store.dispatch('operat/resetState');
                 return this.$store.dispatch('operat/logoutOperator', this.$cookies.get("username"))
             } else {
                 return this.$store.dispatch('mitra/LogoutMitra', this.$cookies.get("username"))

@@ -52,7 +52,10 @@
                         </download-excel>
                         <Button type="primary" class="md:block inline" @click="showform = 2">Tambah Jamaah</Button>
                     </div>
-                    <TableGlobal @clickrow="rowclick"  :column="Jamaah" :data="jamaahlist" :totalpage="$store.state.jamaah.jamaahall.length/5 * 10" :placeholder="'Cari Nama Jamaah...'" :key="'nama_lengkap'" class="mt-3"></TableGlobal>
+                    <TableDefault @clickrow="rowclick" @changepage="changepage" @searching="searchJamaah" @clearsearch="cs_Jamaah" :column="Jamaah" :data="jamaahlist" 
+                        :totalpage="$store.state.jamaah.jamaahall.pages ? $store.state.jamaah.jamaahall.pages.total_pages * 10 : 0" 
+                        :placeholder="'Cari Nama Jamaah...'" :key="'nama_lengkap'" class="mt-3">
+                    </TableDefault>
                 </div>
             </div>
       </div>
@@ -94,16 +97,8 @@
             </div>
         </div>
     </Modal>
-    <JamaahDrawer 
-        @closeable="tutupform"
-        :show.sync="showform">
-    </JamaahDrawer>
-    <JamaahAksi
-        @closeable="tutupdetail"
-        :checkval.sync="checkopen"
-        :show.sync="showform"
-        :data.sync="detailjamaah">
-    </JamaahAksi>
+    <JamaahDrawer @closeable="tutupform" :show="showform"></JamaahDrawer>
+    <JamaahAksi @closeable="tutupdetail" :checkval.sync="checkopen" :show.sync="showform" :data.sync="detailjamaah"></JamaahAksi>
   </div>
 </template>
 
@@ -111,13 +106,13 @@
 import Vue2Filters from 'vue2-filters';
 import Excel from '../model/Excel';
 import Charts from '../model/Charts';
-import TableData from '../plugins/TableData';
-import TableGlobal from '../components/TableGlobal';
+import JamaahData from '../plugins/JamaahData';
+import TableDefault from '../components/TableDefault';
 import JamaahAksi from '../components/JamaahAksi';
 import JamaahDrawer from '../components/JamaahDrawer';
 export default {
-    components:{JamaahDrawer,JamaahAksi, TableGlobal},
-    mixins: [Vue2Filters.mixin, Excel,TableData,Charts],
+    components:{JamaahDrawer,JamaahAksi, TableDefault},
+    mixins: [Vue2Filters.mixin, Excel,JamaahData,Charts],
     name: "Jamaah",
     data() {
         return {
@@ -130,29 +125,35 @@ export default {
     },
     computed:{
         perempuan(){
-            return this.$store.state.jamaah.jamaahall.filter((as) => {
+            return this.$store.state.jamaah.jamaahall.data ? this.$store.state.jamaah.jamaahall.data.filter((as) => {
                 return as.gender === "Wanita"
-            })
+            }) : []
         },
         pria(){
-            return this.$store.state.jamaah.jamaahall.filter((as) => {
+            return this.$store.state.jamaah.jamaahall.data ? this.$store.state.jamaah.jamaahall.data.filter((as) => {
                 return as.gender === "Pria"
-            })
+            }) : []
         },
         berkas(){
-            return this.$store.state.jamaah.jamaahall.filter((as) => {
+            return this.$store.state.jamaah.jamaahall.data ? this.$store.state.jamaah.jamaahall.data.filter((as) => {
                 return as.pasfoto == null && as.ktp == null && as.kk == null && as.vaksin == null;
-            })
+            }) : []
         },
         bayar(){
-            return this.$store.state.jamaah.jamaahall.filter((as) => {
+            return this.$store.state.jamaah.jamaahall.data ? this.$store.state.jamaah.jamaahall.data.filter((as) => {
                 return as.bayar === "BELUM LUNAS"
-            })
+            }) : []
         },
     },
-    mounted(){
-        this.$store.dispatch('jamaah/Alljamaah', {mitra: null});
-        this.$store.dispatch('jamaah/JamaahBelumBayar');
+    created(){
+        this.$store.dispatch('jamaah/Alljamaah').then(()=>{}).finally(() => {
+            this.$store.dispatch('mitra/AllMitra').then(()=>{}).finally(() => {});
+            this.$store.dispatch('jamaah/JamaahBelumBayar').then(()=>{}).finally(() => {
+                this.$store.dispatch('umrah/AllUmrah').then(() => {}).finally(() => {
+                    console.log(this.$store.state.umrah.umrahall.data,'umrah array');
+                });
+            });
+        });
     },
     methods: {
         tutupform(value){
@@ -167,27 +168,15 @@ export default {
             this.showform = 3;
             return this.detailjamaah = value;
         },
-        showPerempuan(){
-            this.showform = 3;
-            this.checkopen = 5;
-            return this.detailjamaah = this.perempuan;
+        changepage(v){
+            this.$store.dispatch("jamaah/Alljamaah",{ page: v })
         },
-        showPria(){
-            this.showform = 3;
-            this.checkopen = 6;
-            return this.detailjamaah = this.pria;
+        searchJamaah(v){
+            this.$store.dispatch('jamaah/Searchjamaah',{nama_lengkap: v});
         },
-        berkasfail(){
-            this.showform = 3;
-            this.checkopen = 7;
-            console.log(this.berkas);
-            return this.detailjamaah = this.berkas;
+        cs_Jamaah(){
+            this.$store.dispatch("jamaah/Alljamaah")
         },
-        showdetailss(){
-            this.showform = 3;
-            this.checkopen = 4;
-            return this.detailjamaah = this.$store.state.jamaah.jamaahbayar;
-        }
     },
 }
 </script>
