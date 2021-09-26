@@ -41,9 +41,6 @@
                         <FormItem prop="hotel[0].nama" label="Nama Hotel Madinnah">
                             <Input v-model="formsUmrah.hotel[0].nama" type="text" placeholder="Masukan Maskapai Umrah"></Input>
                         </FormItem>
-                        <FormItem prop="hotel[0].kota" label="Kota Hotel Madinnah">
-                            <Input v-model="formsUmrah.hotel[0].kota" type="text" placeholder="Masukan Maskapai Umrah"></Input>
-                        </FormItem>
                         <FormItem prop="hotel[0].alamat" label="Alamat Hotel Madinnah">
                             <Input v-model="formsUmrah.hotel[0].alamat" type="text" placeholder="Masukan Maskapai Umrah"></Input>
                         </FormItem>
@@ -53,12 +50,21 @@
                         <FormItem prop="hotel[1].nama" label="Nama Hotel Mekkah">
                             <Input v-model="formsUmrah.hotel[1].nama" type="text" placeholder="Masukan Maskapai Umrah"></Input>
                         </FormItem>
-                        <FormItem prop="hotel[1].kota" label="Kota Hotel Mekkah">
-                            <Input v-model="formsUmrah.hotel[1].kota" type="text" placeholder="Masukan Maskapai Umrah"></Input>
-                        </FormItem>
                         <FormItem prop="hotel[1].alamat" label="Alamat Hotel Mekkah">
                             <Input v-model="formsUmrah.hotel[1].alamat" type="text" placeholder="Masukan Maskapai Umrah"></Input>
                         </FormItem>
+                    </div>
+                    <div class="md:w-4/6 mt-10">
+                        <p class="font-bold text-sm mb-1">Assets</p>
+                        <div class="flex items-center" v-for="(input,k) in assets" v-bind:key="k">
+                            <FormItem label="Pilih Assets">
+                                <Select v-model="input.nama" placeholder="Pilih Assets" filterable :clearable="true">
+                                    <Option v-for="(dt, i) in $store.state.gudang.gudang.data" v-bind:key="i" :value="dt.nama">{{dt.nama}}</Option>
+                                </Select>
+                            </FormItem>
+                            <div class="cursor-pointer mx-1 my-auto" @click="remove(k)" v-show="k || (!k && input.length > 1)"><i class="bx bx-minus bx-xs my-auto"></i></div>
+                            <div class="cursor-pointer mx-1 my-auto" @click="add(k)" v-show="k == assets.length - 1"><i class="bx bx-plus bx-xs my-auto"></i></div>
+                        </div>
                     </div>
                 </div>
             </Form>
@@ -106,6 +112,7 @@ export default {
                     },
                 ]
             },
+            assets: [{nama: ''}],
             formRules:{
                 nama:[
                     { required: true, message: 'Harap Lengkapi Nama Paket', trigger: 'blur' }
@@ -153,17 +160,36 @@ export default {
         }
     },
     methods: {
+        add(){
+            return this.assets.push({nama: ''})
+        },
+        remove(index){
+            return this.assets.splice(index, 1);
+        },
         buatumrah(){
-            this.helper_loading("Membuat Paket...");
-            console.log(this.formsUmrah);
+            if(this.assets[0].nama.length > 0)
+                this.formsUmrah.aset = this.assets;
+            
+            let loading = this.$vs.loading({
+                text: "Membuat Paket...",
+            });
             this.$refs['form'].validate((valid) => {
                 if(valid){
                     this.formsUmrah.tanggal.berangkat = new moment(this.formsUmrah.tanggal.berangkat).format('yyyy-MM-DD');
                     this.formsUmrah.tanggal.pulang = new moment(this.formsUmrah.tanggal.pulang).format('yyyy-MM-DD');
-                    this.$store.dispatch('umrah/AddUmrah', this.formsUmrah);
-                    return this.helper_check_request("Berhasil Menambah Paket", "Refresh halaman apabila data paket belum ditambahkan pada table");
+                    this.$store.dispatch('umrah/AddUmrah', this.formsUmrah).finally(() => {
+                        loading.close();
+                        this.$vs.notification({
+                            color: "success",
+                            duration: 3000,
+                            position: "top-right",
+                            title: "Berhasil Menambah Paket",
+                            text: "Refresh halaman apabila data paket belum ditambahkan pada table",
+                        });
+                        return this.backpresed();
+                    })
                 }
-                this.loading.close();
+                loading.close();
                 return false;
             })
         },

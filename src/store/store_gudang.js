@@ -1,5 +1,4 @@
 import Gudang from "../api/Gudang";
-import cookies from "vue-cookies";
 export default {
   namespaced: true,
   state: {
@@ -9,33 +8,57 @@ export default {
   },
   actions: {
     AddBelanja({ dispatch }, form) {
-      Gudang.addbelanja(form).then((data) => {
-        if (data.data.error_code == 0) {
-          cookies.set("next", 1);
-          dispatch("AllGudang");
-          return dispatch("AllBelanja");
-        }
-        return cookies.set("next", 0);
+      return new Promise((resolve, reject) => {
+        Gudang.addbelanja(form)
+          .then((data) => {
+            if (data.data.error_code == 0) {
+              dispatch("AllGudang");
+              return resolve(data);
+            }
+          })
+          .catch((er) => {
+            reject(er);
+          });
       });
     },
     AllBelanja({ commit }, form) {
-      Gudang.allbelanja(form).then((data) => {
-        return commit("allbelanja", data.data.data);
+      return new Promise((resolve, reject) => {
+        Gudang.allbelanja(form)
+          .then((data) => {
+            commit("allbelanja", data.data);
+            return resolve(data.data);
+          })
+          .catch((er) => {
+            reject(er);
+          });
       });
     },
     CancelBelanja({ dispatch }, id) {
-      Gudang.cancelbelanja(id).then((data) => {
-        if (data.data.error_code == 0) {
-          cookies.set("next", 1);
-          dispatch("AllGudang");
-          return dispatch("AllBelanja");
-        }
-        return cookies.set("next", 0);
+      return new Promise((resolve, reject) => {
+        Gudang.cancelbelanja(id)
+          .then((data) => {
+            if (data.data.error_code == 0) {
+              resolve(data);
+              return dispatch("AllGudang");
+            }
+          })
+          .catch((er) => {
+            reject(er);
+          });
       });
     },
-    AllGudang({ commit }, page) {
-      Gudang.allgudang(page).then((data) => {
-        return commit("AllGudang", data.data.data);
+    AllGudang({ commit, dispatch }, page) {
+      return new Promise((resolve, reject) => {
+        Gudang.allgudang(page)
+          .then((data) => {
+            return dispatch("AllBelanja").finally(() => {
+              commit("AllGudang", data.data);
+              return resolve(data.data);
+            });
+          })
+          .catch((er) => {
+            reject(er);
+          });
       });
     },
     AllAkuntan({ commit }) {

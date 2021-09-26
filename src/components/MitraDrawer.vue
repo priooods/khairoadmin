@@ -36,7 +36,7 @@
                 </div>
               </div>
               <div>
-                <div v-if="data.jamaah.length > 0">
+                <!-- <div v-if="data.jamaah.length > 0">
                   <p class="font-bold mb-3">Data Jamaah</p>
                   <div v-for="(ds,i) in data.jamaah" v-bind:key="i">
                       <div class="grid grid-cols-2 gap-2">
@@ -48,7 +48,7 @@
                 <div v-if="data.jamaah.length == 0">
                   <p class="font-semibold">Data Jamaah</p>
                   <p class="mt-3">Belum Pernah Membawa Jamaah</p>
-                </div>
+                </div> -->
                 <div v-if="data.submitra.length > 0" class="mt-3">
                   <p class="font-bold mb-3">Sub Perwakilan</p>
                   <div v-for="(ds,i) in data.submitra" v-bind:key="i">
@@ -76,9 +76,9 @@
           </div>
           <h1 class="my-4 hidden md:block">Buat Perwakilan</h1>
           <Form ref="forms" class="grid grid-cols-3 gap-1" :model="formnew" :rules="ruleform"> 
-              <FormItem prop="code_agent" label="Perwakilan">
+              <FormItem label="Perwakilan">
                   <Select v-model="formnew.code_agent" placeholder="Pilih Agent Mitra" filterable :clearable="true">
-                    <Option v-for="(dt, i) in $store.state.mitra.mitrall" v-bind:key="i" :value="dt.id">{{dt.fullname}}</Option>
+                    <Option v-for="(dt, i) in $store.state.mitra.mitrall.data" v-bind:key="i" :value="dt.id">{{dt.fullname}}</Option>
                   </Select>
               </FormItem>
               <FormItem prop="username" id="lay-username" label="Username">
@@ -96,7 +96,7 @@
               <FormItem label="Alamat" prop="alamat">
                   <Input v-model="formnew.alamat" id="alamat" type="text" placeholder="Masukan Alamat Mitra"></Input>
               </FormItem>
-              <FormItem label="Lokasi Cabang" prop="cabang_id">
+              <FormItem label="Lokasi Cabang">
                   <Select v-model="formnew.cabang_id" 
                     required id="cabang" placeholder="Masukan Lokasi Cabang">
                       <Option v-for="(dt, i) in $store.state.mitra.cabangall" v-bind:key="i" :value="dt.id">{{dt.name}}</Option>
@@ -115,7 +115,7 @@
           </div>
           <h1 class="my-4 hidden md:block">Update Perwakilan</h1>
           <Form ref="data" class="grid grid-cols-3 gap-1" :model="data" :rules="dataUpdate"> 
-              <FormItem prop="code_agent" label="Perwakilan">
+              <FormItem label="Perwakilan">
                   <Select v-model="data.code_agent" placeholder="Pilih Agent Mitra" filterable :clearable="true">
                     <Option v-for="(dt, i) in listingPerwakilan" v-bind:key="i" :value="dt.id">{{dt.fullname}}</Option>
                   </Select>
@@ -135,7 +135,7 @@
               <FormItem label="Alamat" prop="alamat">
                   <Input v-model="data.alamat" id="alamat" type="text" placeholder="Masukan Alamat Perwakilan"></Input>
               </FormItem>
-              <FormItem label="Lokasi Cabang" prop="cabang_id">
+              <FormItem label="Lokasi Cabang">
                   <Select v-model="data.cabang_id" 
                     required id="cabang" placeholder="Masukan Lokasi Cabang">
                       <Option v-for="(dt, i) in $store.state.mitra.cabangall" v-bind:key="i" :value="dt.id">{{dt.name}}</Option>
@@ -169,9 +169,9 @@ export default {
           password: '',
           fullname: '',
           no_tlp: '',
-          cabang_id: '',
+          cabang_id: null,
           alamat: '',
-          code_agent: ''
+          code_agent: null
         },
         dataUpdate: {
           alamat: [
@@ -230,7 +230,7 @@ export default {
         return this.$cookies.get('type');
       },
       listingPerwakilan(){
-        return this.$store.state.mitra.mitrall.filter((e => {
+        return this.$store.state.mitra.mitrall.data.filter((e => {
           return e.id != this.data.id;
         }));
       }
@@ -257,9 +257,12 @@ export default {
           this.helper_loading("Menyimpan Data Perwakilan...");
           return this.$refs['forms'].validate((valid) => {
             if(valid){
-              this.$store.dispatch('mitra/AddMitra', this.formnew);
-              this.helper_check_request("Berhasil Menyimpan Perwakilan Baru", "Refresh ulang halaman apabila data Perwakilan belum tampil di dalam table");
-              return this.backpresed();
+              if(!this.formnew.code_agent.length && !this.formnew.cabang_id) return this.loading.close();
+              
+              this.$store.dispatch('mitra/AddMitra', this.formnew).finally(() => {
+                this.helper_check_request("Berhasil Menyimpan Perwakilan Baru", "Refresh ulang halaman apabila data Perwakilan belum tampil di dalam table");
+                return this.backpresed();
+              })
             } else {
               return this.loading.close();
             }

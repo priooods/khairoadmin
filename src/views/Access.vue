@@ -20,8 +20,8 @@
                   <Button @click="createnew" v-if="$store.state.operat.user.type == 'SuperUser' || $store.state.operat.user.type == 'Admin'" type="primary">Tambah Baru</Button>
                 </div>
                 <p class="mt-3">Lihat semua data access pengguna, tap item untuk melihat detail</p>  
-                <TableGlobal @clickrow="rowclick" :keys="'fullname'" :placeholder="'Cari Nama Operator'" 
-                :totalpage="operatorUser.length/5 * 10" :data="operatorUser" :column="Operator"></TableGlobal>
+                <TableDefault @clickrow="rowclick" @changepage="changepage" @searching="searchOperator" @clearsearch="cs_Operator" :keys="'fullname'" :placeholder="'Cari Nama Operator'" 
+                  :totalpage="$store.state.operat.userall.pages ? $store.state.operat.userall.pages.total_pages * 10 : 0" :data="operatorUser" :column="Operator"></TableDefault>
               </div>
           </div>
           <div class="md:w-2/6 w-full md:ml-2 md:mt-0 mt-4">
@@ -56,12 +56,12 @@
 <script>
 import UsersDetail from '../components/UsersView';
 import Charts from '../model/Charts';
-import TableGlobal from '../components/TableGlobal';
-import TableData from '../plugins/TableData';
+import TableDefault from '../components/TableDefault';
+import AccessData from '../plugins/AccessData';
 export default {
     name: "Access",
-    components: {UsersDetail, TableGlobal},
-    mixins: [Charts, TableData],
+    components: {UsersDetail, TableDefault},
+    mixins: [Charts, AccessData],
     data(){
       return {
         opened: false,
@@ -78,7 +78,7 @@ export default {
       }
     },
     created(){
-      this.$store.dispatch("operat/allOperator");
+      this.$store.dispatch("operat/allOperator").then(() =>{}).finally(() => {});
     },
     methods:{
       closingDrawer(value){
@@ -104,6 +104,15 @@ export default {
         this.typedetail = 1; 
         this.datas = this.formNew;
       },
+      searchOperator(v){
+        this.$store.dispatch('operat/Search',{fullname: v});
+      },
+      changepage(v){
+        this.$store.dispatch("operat/allOperator",{ page: v })
+      },
+      cs_Operator(){
+        this.$store.dispatch("operat/allOperator")
+      }
     }
 }
 </script>

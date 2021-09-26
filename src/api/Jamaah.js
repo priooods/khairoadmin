@@ -7,6 +7,9 @@ export default {
   pesananupdate(data) {
     return client.post("pesanan/update", data);
   },
+  Searchjamaah(data) {
+    return client.post("jamaah/search", data);
+  },
   alljamaah(data) {
     return client.post("jamaah/show", data);
   },

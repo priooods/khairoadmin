@@ -10,14 +10,17 @@
               <p class="my-auto mr-auto">Lihat semua data gudang</p>
               <Button type="primary" @click="Opendrawer = true; Typedrawer = 1">Tambah Persediaan</Button>
             </div>
-            <TableGlobal :keys="'nama'" :placeholder="'Cari Barang...'" :totalpage="this.gudanglist.length/5 * 10" :data="gudanglist" :column="Gudang"></TableGlobal>
+            <TableDefault :keys="'nama'" :placeholder="'Cari Barang...'" 
+              :totalpage="$store.state.gudang.gudang.pages ? $store.state.gudang.gudang.pages.total_pages * 10 : 0" 
+              :data="gudanglist" :column="Gudang">
+            </TableDefault>
           </div>
         </div>
         <div class="md:w-2/6 md:mt-0 mt-4">
           <div class="bg-gray-100 py-3 px-3 md:rounded-md">
             <p class="font-semibold">Lihat semua hitory belanja terbaru anda</p>
-            <div v-if="$store.state.gudang.belanja">
-              <ul class="list-unstyled mt-3" v-for="(data, i) in $store.state.gudang.belanja" v-bind:key="i">
+            <div v-if="$store.state.gudang.belanja.data">
+              <ul class="list-unstyled mt-3" v-for="(data, i) in $store.state.gudang.belanja.data" v-bind:key="i">
                 <li>
                   <div class="flex justify-end">
                     <p class="my-auto mr-auto text-xs">{{data.created_at | moment("DD MMMM YYYY,  hh:mm")}} WIB</p>
@@ -44,10 +47,10 @@
                         <p class="text-xs">{{ds.total}}</p>
                       </div>
                     </div>
-                    <!-- <div class="flex justify-end">
+                    <div class="flex justify-end">
                       <Button v-show="$store.state.operat.user.type === 'Operator' || $store.state.operat.user.type === 'SuperUser'
                       || $store.state.operat.user.type === 'SuperExtra'" type="error" @click="Canceled(data.id, i)">Hapus History</Button>
-                    </div> -->
+                    </div>
                   </div>
                 </li>
               </ul>
@@ -65,14 +68,14 @@
 
 <script>
 import Vue2Filters from 'vue2-filters';
-import TableGlobal from '../components/TableGlobal';
+import TableDefault from '../components/TableDefault';
 import GudangDrawer from '../components/GudangDrawer';
-import TableData from '../plugins/TableData';
+import GudangData from '../plugins/GudangData';
 import Notifikasi from '../model/Notifikasi';
 export default {
     name: "Gudang",
-    components: {GudangDrawer, TableGlobal},
-    mixins: [Notifikasi,TableData,Vue2Filters.mixin],
+    components: {GudangDrawer, TableDefault},
+    mixins: [Notifikasi,GudangData,Vue2Filters.mixin],
     data(){
       return{
         Opendrawer: false,
@@ -83,31 +86,11 @@ export default {
       }
     },
     created(){
-      this.$store.dispatch('gudang/AllBelanja');
-      this.$store.dispatch('gudang/AllGudang');
-    },
-    watch:{
-      searchtable: function (value){
-        const search = value.toLowerCase().trim();
-        if (!search) return this.setPage(1);
-        return this.datatable = this.listaccess.filter(c => c.nama.toLowerCase().indexOf(search) > -1); 
-      }
-    },
-    computed:{
-      listaccess(){
-        return this.$store.state.gudang.gudang;
-      },
-      totalpage(){
-        return this.listaccess.length/5 * 10
-      },
-    },
-    mounted(){
-      this.setPage(1);
+      this.$store.dispatch('gudang/AllGudang').then(() => {}).finally(() => {
+        this.$store.dispatch('gudang/AllBelanja').then(() => {}).finally(() => {});
+      })
     },
     methods:{
-      setPage(val){
-        return this.datatable = this.listaccess.slice((val - 1) * 5, val * 5);
-      },
       closedrawer(){
         return this.Opendrawer = false;
       },
@@ -123,8 +106,10 @@ export default {
         this.helper_loading("Cancel Belanja...")
         var vs = this.muncul[va];
         this.$set(this.muncul, va , !vs);
-        this.$store.dispatch('gudang/CancelBelanja', val);
-        return this.helper_check_request("Berhasil Menghapus Data", 'Permintaan belanja anda berhasil di cancel');
+        this.$store.dispatch('gudang/CancelBelanja', val).finally(() => {
+          this.loading.close();
+          return this.helper_global_success_notif("Berhasil Menghapus Data", 'Permintaan belanja anda berhasil di cancel');
+        });
       }
     }
 }

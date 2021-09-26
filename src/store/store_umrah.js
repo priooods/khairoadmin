@@ -7,18 +7,41 @@ export default {
   },
   actions: {
     AddUmrah({ dispatch }, form) {
-      Umrah.umrahadd(form).then((data) => {
-        console.log(data.data);
-        if (data.data.error_code == 0) {
-          dispatch("AllUmrah");
-          return cookies.set("next", 1);
-        }
-        return cookies.set("next", 0);
+      return new Promise((resolve, reject) => {
+        Umrah.umrahadd(form)
+          .then((data) => {
+            resolve(data);
+            if (data.data.error_code == 0) {
+              return dispatch("AllUmrah",{page: 1});
+            }
+          })
+          .catch((er) => {
+            reject(er);
+          });
       });
     },
-    AllUmrah({ commit }) {
-      Umrah.allpaket().then((data) => {
-        return commit("allumrah", data.data.data);
+    AllUmrah({ commit },params) {
+      return new Promise((resolve, reject) => {
+        Umrah.allpaket(params)
+          .then((data) => {
+            resolve(data);
+            return commit("allumrah", data.data);
+          })
+          .catch((er) => {
+            reject(er);
+          });
+      });
+    },
+    Searching({ commit }) {
+      return new Promise((resolve, reject) => {
+        Umrah.search()
+          .then((data) => {
+            resolve(data);
+            return commit("allumrah", data.data);
+          })
+          .catch((er) => {
+            reject(er);
+          });
       });
     },
     UpdateUmrah({ dispatch }, form) {

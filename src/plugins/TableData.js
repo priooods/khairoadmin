@@ -3,90 +3,6 @@ import moment from "moment-timezone";
 export default {
   data() {
     return {
-      Gudang: [
-        {
-          title: "No",
-          key: "index",
-          width: 55,
-        },
-        {
-          title: "Nama",
-          key: "nama",
-          minWidth: 150,
-        },
-        {
-          title: "Harga",
-          key: "harga",
-          minWidth: 100,
-        },
-        {
-          title: "Persediaan",
-          key: "stok",
-          minWidth: 100,
-        },
-      ],
-      Operator: [
-        {
-          title: "No",
-          key: "index",
-          fixed: "left",
-          width: 55,
-        },
-        {
-          title: "Nama",
-          fixed: "left",
-          key: "fullname",
-          minWidth: 150,
-        },
-        {
-          title: "Jabatan",
-          key: "jabatan",
-          minWidth: 100,
-        },
-        {
-          title: "Access",
-          key: "type",
-          minWidth: 100,
-        },
-      ],
-      Mitra: [
-        {
-          title: "No",
-          key: "index",
-          width: 55,
-        },
-        {
-          title: "Code",
-          key: "code",
-          minWidth: 100,
-        },
-        {
-          title: "Nama Lengkap",
-          key: "fullname",
-          minWidth: 150,
-        },
-        {
-          title: "No Hp",
-          key: "no_tlp",
-          minWidth: 100,
-        },
-        {
-          title: "Nama Cabang",
-          key: "namacabang",
-          minWidth: 100,
-        },
-        {
-          title: "Kota Cabang",
-          key: "kotacabang",
-          minWidth: 100,
-        },
-        {
-          title: "Alamat",
-          key: "alamat",
-          minWidth: 150,
-          ellipsis: true,
-        },
-      ],
       Cabang: [
         {
           title: "No",
@@ -118,60 +34,6 @@ export default {
           key: "alamat",
           minWidth: 140,
           ellipsis: true,
-        },
-      ],
-      Umrah: [
-        {
-          title: "No",
-          key: "index",
-          width: 55,
-        },
-        {
-          title: "Code",
-          key: "code",
-          minWidth: 100,
-          ellipsis: true,
-        },
-        {
-          title: "Nama Paket",
-          key: "nama",
-          minWidth: 110,
-        },
-        {
-          title: "Durasi",
-          key: "durasi",
-          minWidth: 100,
-          render: (h, params) => {
-            return h("div", [h("span", params.row.durasi + " Hari")]);
-          },
-        },
-        {
-          title: "Sisa Kuota",
-          key: "sisa",
-          minWidth: 100,
-        },
-        {
-          title: "Berangkat",
-          key: "berangkat",
-          minWidth: 100,
-        },
-        {
-          title: "Pulang",
-          key: "pulang",
-          minWidth: 100,
-        },
-        {
-          title: "Harga",
-          key: "biaya",
-          minWidth: 120,
-          render: (h, params) => {
-            return h("div", [
-              h(
-                "span",
-                this.$options.filters.currency(params.row.biaya, "Rp. ")
-              ),
-            ]);
-          },
         },
       ],
       Jamaah: [
@@ -245,23 +107,6 @@ export default {
     };
   },
   computed: {
-    operatorUser() {
-      return store.state.operat.userall
-        .filter((c) => {
-          return c.type !== "SuperExtra" && c.type !== "SuperUser";
-        })
-        .map((items, index) => ({
-          ...items,
-          index: index + 1,
-        }));
-    },
-    gudanglist() {
-      return store.state.gudang.gudang.map((items, index) => ({
-        ...items,
-        harga: this.$options.filters.currency(items.harga, "Rp. "),
-        index: index + 1,
-      }));
-    },
     akuntanlist() {
       return store.state.gudang.akuntan.map((items, index) => ({
         ...items,
@@ -287,33 +132,6 @@ export default {
       return store.state.mitra.cabangall.map((items, index) => ({
         ...items,
         index: index + 1,
-      }));
-    },
-    umrahlist() {
-      return store.state.umrah.umrahall.map((items, index) => ({
-        ...items,
-        berangkat: items.jadwal ? items.jadwal.berangkat : "--",
-        pulang: items.jadwal ? items.jadwal.pulang : "--",
-        sisa: items.sisa + " Orang",
-        index: index + 1,
-        cellClassName: {
-          sisa:
-            items.sisa == 0
-              ? "sisa-style-danger"
-              : items.sisa <= 5 && items.sisa > 0
-              ? "sisa-style-warning"
-              : "",
-          berangkat: moment(items.jadwal.berangkat).isBefore(
-            moment().format("yyyy-MM-DD")
-          )
-            ? "berangkat-style-green"
-            : "",
-          pulang:
-            items.jadwal.pulang == moment().format("yyyy-MM-DD") ||
-            moment(items.jadwal.pulang).isBefore(moment().format("yyyy-MM-DD"))
-              ? "sisa-style-danger"
-              : "",
-        },
       }));
     },
     jamaahlist() {
