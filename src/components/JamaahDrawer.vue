@@ -235,6 +235,10 @@ export default {
                 email: '',
                 kapasitas: '',
             },
+            ttl: {
+                tanggal: '',
+                tempat: '',
+            },
             disabled: true,
             showkamar:false,
             formrules:{

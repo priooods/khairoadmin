@@ -1,4 +1,6 @@
 import Jamaah from "../api/Jamaah";
+// import cookies from "vue-cookies";
+// import iView from "iview";
 export default {
   namespaced: true,
   state: {

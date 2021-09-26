@@ -174,6 +174,13 @@ export default {
           code_agent: null
         },
         dataUpdate: {
+          // cabang_id: [
+          //   {
+          //     required: true,
+          //     message: "Harap pilih Cabang Terdaftar",
+          //     trigger: "change",
+          //   },
+          // ],
           alamat: [
             {
               required: true,
